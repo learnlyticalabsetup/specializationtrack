@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Practical Assignments - Part 2 | Question Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #232f3e, #ff9900);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .assignment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .topic-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .assignment-title {
+            color: #232f3e;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, #e8f4fd, #d1ecff);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .case-study h4 {
+            color: #2c5aa0;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .case-study h4:before {
+            content: "📋";
+            font-size: 1.5em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h4 {
+            color: #232f3e;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tasks h4:before { content: "⚙️"; }
+        .assessment h4:before { content: "📊"; }
+        .deliverables h4:before { content: "📦"; }
+
+        .task-list, .criteria-list, .deliverable-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-list li, .criteria-list li, .deliverable-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .criteria-list li {
+            border-left-color: #764ba2;
+        }
+
+        .deliverable-list li {
+            border-left-color: #ff6b6b;
+        }
+
+        .task-list li:hover, .criteria-list li:hover, .deliverable-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .navigation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .separator {
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .assignment-card {
+                padding: 20px;
+            }
+            
+            .nav-button {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AWS Practical Assignments - Part 2</h1>
+            <p>Advanced Infrastructure as Code and CI/CD (Topics 12-25)</p>
+        </div>
+
+        <div class="navigation">
+            <a href="#" onclick="protectLink(event, './index.html')" class="nav-button">🏠 Home</a>
+            <a href="#" onclick="protectLink(event, './aws_mcq_review.html')" class="nav-button">📝 MCQ Review</a>
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments.html')" class="nav-button">📚 Part 1</a>
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments_part3.html')" class="nav-button">🔮 Part 3</a>
+        </div>
+
+        <div class="topic-header">
+            <h2>⚙️ Topics 12-25: Advanced Infrastructure and DevOps</h2>
+            <p>Infrastructure as Code, CI/CD, Containers, and Advanced Analytics</p>
+        </div>
+
+        <!-- Topic 12: AWS CloudFormation Advanced -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 12: AWS CloudFormation Advanced</div>
+            
+            <h3>🏗️ Practical Assignment 1: Multi-Region Infrastructure Deployment</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>GlobalApp Inc. needs to deploy their three-tier web application across 4 AWS regions (us-east-1, us-west-2, eu-west-1, ap-southeast-1) with region-specific configurations for compliance and performance. The infrastructure must support blue-green deployments and automatic failover between regions.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Create master CloudFormation template with cross-region capabilities</li>
+                    <li>Implement region-specific parameter configurations</li>
+                    <li>Design nested stack architecture for modularity</li>
+                    <li>Configure cross-stack references and exports</li>
+                    <li>Implement stack sets for multi-region deployment</li>
+                    <li>Create custom resources with Lambda for complex logic</li>
+                    <li>Set up stack drift detection and remediation</li>
+                    <li>Implement automated rollback strategies</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Multi-region architecture (30%)</li>
+                    <li>Template modularity and reusability (25%)</li>
+                    <li>Custom resource implementation (20%)</li>
+                    <li>Drift detection and remediation (15%)</li>
+                    <li>Documentation quality (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>Master and nested CloudFormation templates</li>
+                    <li>Region-specific parameter files</li>
+                    <li>Custom resource Lambda functions</li>
+                    <li>Deployment automation scripts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 13: AWS CDK -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 13: AWS CDK (Cloud Development Kit)</div>
+            
+            <h3>⚡ Practical Assignment 2: Enterprise CDK Application Framework</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>TechScale Corp needs a standardized CDK framework that development teams can use to deploy applications consistently. The framework should include common patterns for web applications, databases, monitoring, and security while allowing team-specific customizations.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Create CDK constructs library for common patterns</li>
+                    <li>Implement high-level application constructs</li>
+                    <li>Build configuration management system</li>
+                    <li>Create automated testing framework for constructs</li>
+                    <li>Implement CI/CD pipeline integration</li>
+                    <li>Set up construct versioning and publishing</li>
+                    <li>Create documentation and usage examples</li>
+                    <li>Implement cost estimation and optimization features</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Construct library design and usability (30%)</li>
+                    <li>Testing framework completeness (25%)</li>
+                    <li>Configuration management (20%)</li>
+                    <li>CI/CD integration (15%)</li>
+                    <li>Documentation and examples (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>CDK constructs library source code</li>
+                    <li>Testing framework and test cases</li>
+                    <li>CI/CD pipeline configurations</li>
+                    <li>Usage documentation and tutorials</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 14: CI/CD -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 14: CI/CD with CodeCommit, CodeBuild, CodeDeploy, CodePipeline</div>
+            
+            <h3>🔄 Practical Assignment 3: Enterprise-Grade CI/CD Pipeline</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>MicroServices Corp has 15 microservices that need independent deployment pipelines with automated testing, security scanning, and blue-green deployments. The pipeline must support feature branches, pull request validation, and automated rollbacks with comprehensive monitoring and notifications.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design multi-service pipeline architecture</li>
+                    <li>Implement parallel build and test stages</li>
+                    <li>Configure automated security and vulnerability scanning</li>
+                    <li>Set up blue-green deployment with traffic shifting</li>
+                    <li>Create automated rollback mechanisms</li>
+                    <li>Implement comprehensive monitoring and alerting</li>
+                    <li>Configure approval workflows for production</li>
+                    <li>Set up cross-account deployment strategies</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Pipeline architecture and scalability (30%)</li>
+                    <li>Security integration and scanning (25%)</li>
+                    <li>Deployment strategies and rollback (20%)</li>
+                    <li>Monitoring and notification setup (15%)</li>
+                    <li>Cross-account configuration (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>CodePipeline configurations</li>
+                    <li>CodeBuild project specifications</li>
+                    <li>Deployment scripts and strategies</li>
+                    <li>Monitoring dashboard configurations</li>
+                    <li>Security scanning integration</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 16: ECS and EKS -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 16: ECS, EKS, and Container Orchestration</div>
+            
+            <h3>🐳 Practical Assignment 4: Hybrid Container Platform</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>CloudNative Corp runs both legacy applications requiring ECS and cloud-native applications needing Kubernetes features. Design a hybrid container platform that supports both ECS and EKS with shared networking, security policies, and observability while enabling seamless migration paths between platforms.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design shared networking architecture for ECS and EKS</li>
+                    <li>Implement unified service discovery and load balancing</li>
+                    <li>Configure shared security policies and RBAC</li>
+                    <li>Set up centralized logging and monitoring</li>
+                    <li>Create application migration strategies</li>
+                    <li>Implement auto-scaling for both platforms</li>
+                    <li>Configure cross-platform service communication</li>
+                    <li>Set up disaster recovery and backup strategies</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Architecture design and integration (30%)</li>
+                    <li>Security and compliance implementation (25%)</li>
+                    <li>Monitoring and observability (20%)</li>
+                    <li>Performance optimization (15%)</li>
+                    <li>Migration strategy feasibility (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>ECS and EKS cluster configurations</li>
+                    <li>Shared networking and security policies</li>
+                    <li>Monitoring and logging setup</li>
+                    <li>Migration playbooks and procedures</li>
+                    <li>Performance benchmarking reports</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 20: Machine Learning and AI -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 20: Machine Learning and AI Services</div>
+            
+            <h3>🤖 Practical Assignment 5: ML/AI Pipeline and Model Management</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>AIFirst Corp needs an end-to-end ML platform that supports data scientists experimenting with models, automated training pipelines, model versioning, A/B testing for model performance, and real-time inference with auto-scaling. The platform must handle both batch and real-time predictions while maintaining model governance and compliance.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design ML data pipeline with SageMaker Processing</li>
+                    <li>Implement automated model training and hyperparameter tuning</li>
+                    <li>Set up model registry with versioning and metadata</li>
+                    <li>Create A/B testing framework for model performance</li>
+                    <li>Configure real-time inference endpoints with auto-scaling</li>
+                    <li>Implement model monitoring and drift detection</li>
+                    <li>Set up batch prediction workflows</li>
+                    <li>Create ML governance and compliance framework</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>End-to-end pipeline design (30%)</li>
+                    <li>Model management and versioning (25%)</li>
+                    <li>Performance monitoring and optimization (20%)</li>
+                    <li>Governance and compliance framework (15%)</li>
+                    <li>Cost optimization strategies (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>SageMaker pipeline configurations</li>
+                    <li>Model registry and metadata management</li>
+                    <li>A/B testing framework implementation</li>
+                    <li>Monitoring and alerting setup</li>
+                    <li>Governance policies and procedures</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments_part3.html')" class="nav-button">➡️ Continue to Part 3</a>
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments.html')" class="nav-button">⬅️ Back to Part 1</a>
+            <a href="#" onclick="protectLink(event, './index.html')" class="nav-button">🏠 Home</a>
+        </div>
+    </div>
+
+    <button class="back-to-top" onclick="scrollToTop()">⬆️</button>
+
+    <script>
+        // Authentication and navigation functions
+        function checkAuthentication() {
+            const isAuthenticated = sessionStorage.getItem('aws_authenticated');
+            if (!isAuthenticated) {
+                window.location.href = './index.html';
+                return false;
+            }
+            return true;
+        }
+
+        function protectLink(event, url) {
+            event.preventDefault();
+            if (checkAuthentication()) {
+                window.open(url, '_self');
+            }
+        }
+
+        // Back to top functionality
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuthentication()) {
+                document.body.style.display = 'none';
+            } else {
+                const userRole = sessionStorage.getItem('aws_user_role');
+                if (userRole === 'admin') {
+                    addAdminButton();
+                }
+                addCommentSections();
+            }
+        });
+
+        // Add comment sections to each assignment
+        function addCommentSections() {
+            const assignmentCards = document.querySelectorAll('.assignment-card');
+            assignmentCards.forEach((card, index) => {
+                const assignmentId = index + 12; // Part 2 starts from assignment 12
+                const assignmentTitle = card.querySelector('h3')?.textContent || `Assignment ${assignmentId}`;
+                
+                const commentSection = document.createElement('div');
+                commentSection.className = 'comment-section';
+                commentSection.style.cssText = `
+                    margin-top: 30px; 
+                    padding: 25px; 
+                    background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+                    border-radius: 15px; 
+                    border-left: 5px solid #667eea;
+                `;
+                
+                commentSection.innerHTML = `
+                    <h4 style="color: #232f3e; margin-bottom: 15px; font-size: 1.2em;">💬 Assignment Review & Feedback</h4>
+                    <textarea 
+                        id="assignment-comment-${assignmentId}" 
+                        placeholder="Share your feedback about this assignment (clarity, complexity, relevance, time estimation, etc.)"
+                        style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px;"
+                    ></textarea>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <select id="assignment-rating-${assignmentId}" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; min-width: 200px;">
+                            <option value="">Rate this assignment</option>
+                            <option value="excellent">⭐⭐⭐⭐⭐ Excellent</option>
+                            <option value="good">⭐⭐⭐⭐ Good</option>
+                            <option value="average">⭐⭐⭐ Average</option>
+                            <option value="poor">⭐⭐ Poor</option>
+                            <option value="very-poor">⭐ Very Poor</option>
+                        </select>
+                        <select id="assignment-difficulty-${assignmentId}" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; min-width: 150px;">
+                            <option value="">Difficulty Level</option>
+                            <option value="very-easy">Very Easy</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="very-hard">Very Hard</option>
+                        </select>
+                        <button 
+                            onclick="submitComment('assignment', ${assignmentId}, 'Part 2', 'Topic ${assignmentId}', '${assignmentTitle.replace(/'/g, "\\'")}', 'assignment-difficulty-${assignmentId}')"
+                            style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">
+                            Submit Feedback
+                        </button>
+                    </div>
+                `;
+                
+                card.appendChild(commentSection);
+            });
+        }
+
+        // Comment System Functions (same as Part 1)
+        function submitComment(type, itemId, category, topic, title, difficultyElementId = null) {
+            const commentText = document.getElementById(`${type}-comment-${itemId}`).value.trim();
+            const rating = document.getElementById(`${type}-rating-${itemId}`).value;
+            const difficulty = difficultyElementId ? document.getElementById(difficultyElementId).value : '';
+            const username = sessionStorage.getItem('aws_username');
+            
+            if (!commentText) {
+                alert('Please enter a comment before submitting.');
+                return;
+            }
+            
+            const comment = {
+                timestamp: new Date().toISOString(),
+                user: username,
+                type: type,
+                itemId: itemId,
+                category: category,
+                topic: topic,
+                title: title,
+                comment: commentText,
+                rating: rating,
+                difficulty: difficulty,
+                id: Date.now() + Math.random()
+            };
+            
+            saveComment(comment);
+            
+            // Clear form
+            document.getElementById(`${type}-comment-${itemId}`).value = '';
+            document.getElementById(`${type}-rating-${itemId}`).value = '';
+            if (difficultyElementId) {
+                document.getElementById(difficultyElementId).value = '';
+            }
+            
+            showSuccessMessage('Feedback submitted successfully!');
+        }
+
+        function saveComment(comment) {
+            const existingComments = JSON.parse(localStorage.getItem('aws_review_comments') || '[]');
+            existingComments.push(comment);
+            localStorage.setItem('aws_review_comments', JSON.stringify(existingComments));
+        }
+
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+            `;
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.remove();
+                }
+            }, 3000);
+        }
+
+        function addAdminButton() {
+            const header = document.querySelector('.header');
+            const adminButton = document.createElement('button');
+            adminButton.style.cssText = `
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+            `;
+            adminButton.textContent = '👤 Admin Panel';
+            adminButton.onclick = () => window.open('./aws_mcq_review.html', '_blank');
+            header.appendChild(adminButton);
+        }
+    </script>
+</body>
+</html>

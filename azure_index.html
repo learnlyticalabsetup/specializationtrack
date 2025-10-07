@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Question Review Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0078d4, #106ebe, #005a9e);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #0078d4;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .platform-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #0078d4;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .navigation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .nav-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .nav-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .nav-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #0078d4;
+            margin-bottom: 15px;
+        }
+
+        .nav-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .nav-stats {
+            font-size: 0.9em;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-form {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #0078d4, #106ebe);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #106ebe, #005a9e);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 120, 212, 0.3);
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .platform-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .nav-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🚀 Azure Question Review Platform</h1>
+            <p class="subtitle">Comprehensive Azure Cloud Specialization Track - Professional Review System</p>
+        </div>
+        <button class="logout-btn" onclick="logout()" style="display: none;" id="logoutBtn">Logout</button>
+    </div>
+
+    <div id="loginSection" class="login-container">
+        <div class="login-form">
+            <h2 style="color: #0078d4; margin-bottom: 30px; text-align: center;">🔐 Platform Access</h2>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="login-btn">Access Azure Platform</button>
+            </form>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <div id="mainContent" style="display: none;">
+        <div class="main-content">
+            <div class="platform-stats">
+                <div class="stat-card">
+                    <div class="stat-number">650</div>
+                    <div class="stat-label">Azure MCQ Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">33</div>
+                    <div class="stat-label">Practical Assignments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Capstone Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Days Per Capstone</div>
+                </div>
+            </div>
+
+            <div class="navigation-grid">
+                <div class="nav-card" onclick="navigateToMCQ()">
+                    <div class="nav-icon">❓</div>
+                    <div class="nav-title">Azure MCQ Review</div>
+                    <div class="nav-description">
+                        Comprehensive multiple-choice questions covering all Azure specialization tracks. Interactive filtering, search capabilities, and professional case study scenarios.
+                    </div>
+                    <div class="nav-stats">
+                        650 Questions • 3 Difficulty Levels • Topic-based Organization
+                    </div>
+                </div>
+
+                <div class="nav-card" onclick="navigateToAssignments()">
+                    <div class="nav-icon">🛠️</div>
+                    <div class="nav-title">Practical Assignments</div>
+                    <div class="nav-description">
+                        Hands-on Azure assignments across Identity & Governance, Security, FinOps, DevOps, and AI specialization tracks with detailed case studies.
+                    </div>
+                    <div class="nav-stats">
+                        33 Assignments • 5 Specialization Tracks • Professional Standards
+                    </div>
+                </div>
+
+                <div class="nav-card" onclick="navigateToCapstone()">
+                    <div class="nav-icon">🎓</div>
+                    <div class="nav-title">Capstone Projects</div>
+                    <div class="nav-description">
+                        Enterprise-level Azure projects demonstrating complete mastery of cloud architecture, security, and modern Azure services integration.
+                    </div>
+                    <div class="nav-stats">
+                        3 Enterprise Projects • 6 Days Each • Real-world Scenarios
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication Configuration
+        const AZURE_CREDENTIALS = {
+            'reviewer': 'AzureReview2025!',
+            'admin': 'AzureAdmin2025!'
+        };
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuthentication()) {
+                showMainContent();
+            }
+        });
+
+        function login(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            if (AZURE_CREDENTIALS[username] && AZURE_CREDENTIALS[username] === password) {
+                // Store session
+                sessionStorage.setItem('azure_authenticated', 'true');
+                sessionStorage.setItem('azure_username', username);
+                sessionStorage.setItem('azure_user_role', username);
+                sessionStorage.setItem('azure_login_time', new Date().getTime());
+                
+                showMainContent();
+                errorDiv.textContent = '';
+            } else {
+                errorDiv.textContent = 'Invalid credentials. Please check your username and password.';
+            }
+        }
+
+        function checkAuthentication() {
+            const authenticated = sessionStorage.getItem('azure_authenticated');
+            const loginTime = sessionStorage.getItem('azure_login_time');
+            
+            if (!authenticated || !loginTime) {
+                return false;
+            }
+            
+            // Check if session expired (24 hours)
+            const currentTime = new Date().getTime();
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours
+            
+            if (currentTime - parseInt(loginTime) > sessionDuration) {
+                logout();
+                return false;
+            }
+            
+            return true;
+        }
+
+        function showMainContent() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'block';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('azure_authenticated');
+            sessionStorage.removeItem('azure_username');
+            sessionStorage.removeItem('azure_user_role');
+            sessionStorage.removeItem('azure_login_time');
+            
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function navigateToMCQ() {
+            window.location.href = './azure_mcq_review.html';
+        }
+
+        function navigateToAssignments() {
+            window.location.href = './azure_practical_assignments.html';
+        }
+
+        function navigateToCapstone() {
+            window.location.href = './azure_capstone_projects.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Practical Assignments - Question Review Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0078d4, #106ebe, #005a9e);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #0078d4;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #0078d4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #106ebe;
+            transform: translateY(-2px);
+        }
+
+        .admin-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #106ebe;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .admin-button:hover {
+            background: #005a9e;
+            transform: translateY(-2px);
+        }
+
+        .assignment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        .assignment-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .assignment-content.expanded {
+            max-height: 2000px;
+        }
+
+        .expand-indicator {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+            color: #0078d4;
+        }
+
+        .expand-indicator.expanded {
+            transform: rotate(180deg);
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #0078d4;
+            padding-bottom: 15px;
+        }
+
+        .assignment-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #0078d4;
+            flex: 1;
+        }
+
+        .assignment-meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .track {
+            background: linear-gradient(135deg, #106ebe, #0078d4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .complexity {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .complexity.foundation {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .complexity.intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .complexity.advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #106ebe;
+            margin-bottom: 25px;
+        }
+
+        .case-study h4 {
+            color: #106ebe;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .case-study p {
+            line-height: 1.8;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h4 {
+            color: #0078d4;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-list, .criteria-list, .deliverable-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-list li, .criteria-list li, .deliverable-list li {
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0078d4;
+            transition: all 0.3s ease;
+        }
+
+        .task-list li:hover, .criteria-list li:hover, .deliverable-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .comment-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        .comment-btn {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .comment-btn:hover {
+            background: #106ebe;
+            transform: translateY(-2px);
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #106ebe;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .no-comments {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .assignment-card {
+                padding: 20px;
+            }
+            
+            .assignment-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .assignment-meta {
+                flex-wrap: wrap;
+            }
+            
+            .assignment-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="./azure_index.html" class="back-btn">← Back to Azure Platform</a>
+        <button class="admin-button" id="adminBtn" onclick="openAdminPanel()" style="display: none;">👤 Admin Panel</button>
+        <div class="container">
+            <h1>🛠️ Azure Practical Assignments</h1>
+            <p class="subtitle">33 Comprehensive Case-Driven Azure Assignments Across All Specialization Tracks</p>
+        </div>
+    </div>
+
+    <div class="container" id="assignmentsContainer">
+        <!-- Assignments will be loaded here -->
+    </div>
+
+    <script>
+        const azureAssignments = [
+            {
+                id: 1,
+                title: "Enterprise Azure AD and RBAC Implementation",
+                track: "Identity & Governance",
+                complexity: "Advanced",
+                caseStudy: "GlobalTech Corp is migrating 15,000 employees from on-premises Active Directory to Azure AD across 25 countries. They need comprehensive identity governance with role-based access control, compliance monitoring for SOX and GDPR, and integrated monitoring across all Azure resources. The solution must support different regional compliance requirements while maintaining centralized governance and automated policy enforcement.",
+                tasks: [
+                    "Design and implement Azure AD tenant architecture with custom domain configuration",
+                    "Create organizational unit structure reflecting business hierarchy and geographical regions",
+                    "Implement comprehensive RBAC with custom roles for different business functions and regions",
+                    "Deploy Azure Policy initiatives for SOX, GDPR, and ISO 27001 compliance automation",
+                    "Configure Azure Monitor with custom dashboards for governance and compliance metrics",
+                    "Integrate Application Insights for 10+ critical business applications with custom telemetry",
+                    "Create automated compliance reporting workflows with Power BI integration",
+                    "Implement conditional access policies for privileged accounts with risk-based authentication",
+                    "Set up automated user lifecycle management with approval workflows",
+                    "Configure Azure AD audit logs with long-term retention and automated analysis"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Identity architecture design and scalability for global deployment", weight: "30%" },
+                    { criterion: "RBAC implementation following security principles and regional requirements", weight: "25%" },
+                    { criterion: "Compliance monitoring, automation, and reporting capabilities", weight: "20%" },
+                    { criterion: "Monitoring strategy, dashboard design, and telemetry integration", weight: "15%" },
+                    { criterion: "Documentation, operational procedures, and knowledge transfer", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure AD architecture diagram with global topology and role mappings",
+                    "Complete RBAC implementation with custom role definitions and assignments",
+                    "Azure Policy compliance dashboard with automated remediation workflows",
+                    "Application Insights integration for 10 sample applications with custom metrics",
+                    "Comprehensive governance framework documentation with operational procedures",
+                    "Automated compliance monitoring reports with executive dashboards",
+                    "Identity lifecycle management workflows with approval and audit trails",
+                    "Performance benchmarking results and optimization recommendations"
+                ]
+            },
+            {
+                id: 2,
+                title: "Multi-Region Data Storage and Backup Architecture",
+                track: "Data Storage",
+                complexity: "Advanced",
+                caseStudy: "DataCorp Analytics processes 200TB of data daily across multiple regions for real-time analytics and long-term retention. They need a storage architecture providing 99.99% availability, automatic failover, cross-region replication, and cost-optimized tiering. The solution must support structured and unstructured data with different retention policies, performance requirements, and regulatory compliance across different geographies.",
+                tasks: [
+                    "Design comprehensive storage account architecture with performance tiers and geo-distribution",
+                    "Implement cross-region replication with RA-GZRS for mission-critical data",
+                    "Configure automated lifecycle management policies with intelligent tiering",
+                    "Deploy Azure SQL Database with auto-failover groups and read replicas",
+                    "Implement Azure Cosmos DB with multi-region writes and conflict resolution",
+                    "Configure Azure Backup with long-term retention and cross-region backup policies",
+                    "Create comprehensive data archival strategy with cost optimization analysis",
+                    "Implement monitoring and alerting for storage performance, availability, and costs",
+                    "Configure Azure Data Lake Storage with hierarchical namespace and access controls",
+                    "Set up disaster recovery testing procedures with automated failover validation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "High availability and disaster recovery architecture design and testing", weight: "35%" },
+                    { criterion: "Cost optimization strategies and lifecycle management implementation", weight: "25%" },
+                    { criterion: "Performance optimization, scalability, and throughput management", weight: "20%" },
+                    { criterion: "Security implementation, encryption, and compliance controls", weight: "15%" },
+                    { criterion: "Monitoring, alerting, and operational excellence practices", weight: "5%" }
+                ],
+                deliverables: [
+                    "Comprehensive storage architecture design with multi-region topology and cost analysis",
+                    "Lifecycle management policies with automated tier transitions and retention rules",
+                    "Cross-region replication configuration with failover testing documentation",
+                    "Backup and restore procedures with RTO/RPO compliance validation",
+                    "Performance testing results with optimization recommendations and benchmarks",
+                    "Disaster recovery runbook with automated testing schedules and procedures",
+                    "Security implementation plan with encryption and access control documentation",
+                    "Cost optimization analysis with projected savings and monitoring dashboards"
+                ]
+            },
+            {
+                id: 3,
+                title: "Mission-Critical Business Continuity Framework",
+                track: "Business Continuity",
+                complexity: "Advanced",
+                caseStudy: "FinanceSecure Corp operates high-frequency trading platforms requiring 99.999% uptime with RTO of 30 seconds and RPO of 5 seconds. They need comprehensive business continuity across multiple Azure regions with automated failover, real-time data replication, and regular disaster recovery testing without production impact. The solution must include financial regulatory compliance and real-time monitoring of all DR components.",
+                tasks: [
+                    "Design multi-region architecture with Azure Site Recovery for mission-critical workloads",
+                    "Implement automated failover for trading applications with sub-minute RTO",
+                    "Configure Azure SQL Always On availability groups with synchronous replication",
+                    "Set up cross-region virtual network connectivity with optimized routing",
+                    "Create comprehensive automated backup strategies with point-in-time recovery",
+                    "Implement disaster recovery testing procedures with production isolation",
+                    "Design business continuity communication plans and escalation procedures",
+                    "Configure comprehensive monitoring and alerting for all DR components",
+                    "Implement automated compliance reporting for financial regulations",
+                    "Create runbooks for various disaster scenarios with automated response workflows"
+                ],
+                assessmentCriteria: [
+                    { criterion: "DR architecture design, automation, and RTO/RPO compliance", weight: "40%" },
+                    { criterion: "Automated failover implementation and testing procedures", weight: "25%" },
+                    { criterion: "Network connectivity, routing optimization, and performance", weight: "15%" },
+                    { criterion: "Monitoring, alerting, and incident response automation", weight: "15%" },
+                    { criterion: "Documentation, compliance reporting, and operational procedures", weight: "5%" }
+                ],
+                deliverables: [
+                    "Business continuity architecture diagram with multi-region failover topology",
+                    "Azure Site Recovery implementation with automated testing and validation",
+                    "Comprehensive failover procedures and scripts with performance benchmarks",
+                    "DR testing schedule, procedures, and results documentation",
+                    "Network connectivity configuration with routing optimization analysis",
+                    "Business impact analysis with recovery strategies for different scenarios",
+                    "Automated monitoring dashboards with real-time DR health status",
+                    "Compliance reporting framework for financial regulatory requirements"
+                ]
+            },
+            {
+                id: 4,
+                title: "Enterprise Hub-and-Spoke Network Infrastructure",
+                track: "Infrastructure Solutions",
+                complexity: "Advanced",
+                caseStudy: "CloudFirst Enterprise needs to connect 50 business units across 12 Azure regions with centralized security, shared services, and optimized routing. The network must support 25,000+ virtual machines, provide micro-segmentation, integrate with multiple on-premises networks via ExpressRoute, and maintain sub-5ms latency for critical applications while ensuring comprehensive security and monitoring.",
+                tasks: [
+                    "Design comprehensive hub-and-spoke topology with Azure Virtual WAN",
+                    "Implement Network Security Groups with Application Security Groups for micro-segmentation",
+                    "Configure Azure Firewall Premium for centralized network security and threat protection",
+                    "Set up multiple ExpressRoute connections with redundancy and load balancing",
+                    "Deploy Application Gateway with Web Application Firewall and SSL termination",
+                    "Implement Azure Load Balancer with cross-region load balancing capabilities",
+                    "Configure Network Watcher for comprehensive monitoring, diagnostics, and flow analysis",
+                    "Create network automation using Azure Resource Manager templates and PowerShell",
+                    "Implement network performance monitoring with latency and throughput analysis",
+                    "Set up network security monitoring with Azure Sentinel integration"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Network architecture design, scalability, and performance optimization", weight: "30%" },
+                    { criterion: "Security implementation, micro-segmentation, and threat protection", weight: "25%" },
+                    { criterion: "Hybrid connectivity, routing optimization, and latency management", weight: "20%" },
+                    { criterion: "Monitoring, diagnostics, and operational excellence implementation", weight: "15%" },
+                    { criterion: "Automation, documentation, and maintainability", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive network architecture diagram with detailed traffic flows and security zones",
+                    "NSG and ASG configuration with detailed security rules and micro-segmentation documentation",
+                    "Azure Firewall policies, routing tables, and threat protection configuration",
+                    "ExpressRoute connectivity setup with redundancy testing and performance validation",
+                    "Load balancing configuration with health checks and failover testing results",
+                    "Network monitoring dashboard with real-time metrics and automated alerting rules",
+                    "Network automation scripts and Infrastructure as Code templates",
+                    "Performance optimization report with latency analysis and recommendations"
+                ]
+            },
+            {
+                id: 5,
+                title: "Zero Trust Identity and Access Management",
+                track: "Identity & Access Management",
+                complexity: "Advanced",
+                caseStudy: "SecureGov Agency requires zero-trust security model for 25,000 users accessing classified resources across multiple security levels. The solution must include just-in-time access, risk-based authentication, comprehensive audit trails, integration with existing PKI infrastructure, and real-time behavioral analysis. All access must be continuously monitored and analyzed for suspicious behavior patterns with automated threat response.",
+                tasks: [
+                    "Implement Azure AD Privileged Identity Management (PIM) with multi-level approval workflows",
+                    "Configure advanced Conditional Access policies with risk-based authentication and device compliance",
+                    "Deploy Azure AD Identity Protection with machine learning-based risk detection and automated responses",
+                    "Set up comprehensive Multi-Factor Authentication with hardware tokens and biometric authentication",
+                    "Create detailed access review workflows for privileged accounts with automated remediation",
+                    "Implement Certificate-based authentication integration with existing PKI infrastructure",
+                    "Configure Azure AD audit logs with long-term retention and automated analysis",
+                    "Deploy automated response playbooks for identity threats and suspicious activities",
+                    "Implement continuous access evaluation with real-time policy enforcement",
+                    "Set up identity governance with automated user lifecycle management and attestation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Zero-trust architecture implementation and policy enforcement", weight: "35%" },
+                    { criterion: "Risk-based authentication, threat detection, and automated responses", weight: "25%" },
+                    { criterion: "Privileged access management and just-in-time access controls", weight: "20%" },
+                    { criterion: "Monitoring, audit capabilities, and behavioral analysis", weight: "15%" },
+                    { criterion: "Compliance frameworks and regulatory alignment", weight: "5%" }
+                ],
+                deliverables: [
+                    "Zero-trust identity architecture design with detailed policy framework",
+                    "PIM configuration with approval workflows and automated access reviews",
+                    "Conditional Access policies documentation with risk assessment matrices",
+                    "Identity Protection risk policies with automated response configurations",
+                    "MFA deployment plan with user training materials and adoption metrics",
+                    "Identity security monitoring dashboard with behavioral analytics",
+                    "Audit and compliance reporting framework with automated attestation",
+                    "Incident response playbooks for identity-related security events"
+                ]
+            },
+            {
+                id: 6,
+                title: "Defense-in-Depth Security Platform",
+                track: "Platform Protection",
+                complexity: "Advanced",
+                caseStudy: "CyberShield Corp protects critical infrastructure for government clients requiring the highest security standards and compliance with FISMA, NIST, and FedRAMP frameworks. They need comprehensive defense-in-depth security with network segmentation, advanced threat protection, secrets management, and real-time threat detection and response. The platform must detect and respond to advanced persistent threats with automated remediation.",
+                tasks: [
+                    "Design comprehensive network segmentation with Azure Firewall Premium and TLS inspection",
+                    "Implement Azure Defender for all resource types with custom security policies",
+                    "Deploy Azure Key Vault with HSM-backed keys and automated rotation policies",
+                    "Configure Microsoft Defender for Cloud with advanced threat protection and compliance scoring",
+                    "Set up Azure DDoS Protection Standard with attack analytics and mitigation",
+                    "Implement Azure Sentinel with custom analytics rules and threat intelligence integration",
+                    "Create automated threat response workflows with Logic Apps and security orchestration",
+                    "Deploy Azure Information Protection for comprehensive data classification and protection",
+                    "Implement just-in-time VM access with automated approval and audit workflows",
+                    "Set up security baseline enforcement with Azure Policy and configuration management"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Defense-in-depth architecture design and implementation", weight: "30%" },
+                    { criterion: "Advanced threat protection and detection capabilities", weight: "25%" },
+                    { criterion: "Secrets management, encryption, and key protection", weight: "20%" },
+                    { criterion: "Automated security responses and incident orchestration", weight: "15%" },
+                    { criterion: "Compliance frameworks and security governance", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive security architecture diagram with threat modeling and attack vectors",
+                    "Azure Defender configuration with custom policies and compliance scoring",
+                    "Key Vault implementation with HSM integration and automated rotation policies",
+                    "Network security configuration with segmentation and inspection capabilities",
+                    "Threat detection and response playbooks with automated orchestration workflows",
+                    "Security compliance assessment report with FISMA and NIST alignment",
+                    "Security operations procedures with incident response and escalation matrix",
+                    "Continuous security monitoring dashboard with real-time threat intelligence"
+                ]
+            },
+            {
+                id: 7,
+                title: "Enterprise SIEM and Security Operations Center",
+                track: "Security Operations",
+                complexity: "Advanced",
+                caseStudy: "ThreatWatch Security manages SOC operations for 100+ enterprise clients, processing 5M+ security events daily across hybrid and multi-cloud environments. They need a scalable SIEM solution with automated threat hunting, custom detection rules, incident orchestration, integration with external threat intelligence feeds, and 24/7 monitoring capabilities with automated tier-1 response and escalation procedures.",
+                tasks: [
+                    "Deploy Azure Sentinel with multi-workspace architecture for client segregation",
+                    "Configure comprehensive data connectors for 25+ different security sources including on-premises and cloud",
+                    "Create advanced KQL analytics rules for threat detection with machine learning integration",
+                    "Implement comprehensive automated incident response with Logic Apps and security orchestration",
+                    "Set up threat intelligence feeds integration with automated IOC processing",
+                    "Create custom workbooks for security operations with executive reporting dashboards",
+                    "Deploy advanced hunting queries for sophisticated threats and APT detection",
+                    "Configure comprehensive SOAR playbooks for common incident types with automated remediation",
+                    "Implement security metrics and KPIs with automated reporting and alerting",
+                    "Set up client-specific security dashboards with customizable threat landscapes"
+                ],
+                assessmentCriteria: [
+                    { criterion: "SIEM architecture design, scalability, and data ingestion capabilities", weight: "30%" },
+                    { criterion: "Advanced analytics, threat detection, and machine learning integration", weight: "25%" },
+                    { criterion: "Incident response automation and security orchestration", weight: "20%" },
+                    { criterion: "Threat hunting capabilities and investigation workflows", weight: "15%" },
+                    { criterion: "Security operations processes and client service delivery", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure Sentinel multi-workspace configuration with client segregation architecture",
+                    "Comprehensive analytics rules library with tuning documentation and performance metrics",
+                    "Automated incident response playbooks with escalation and notification workflows",
+                    "Advanced threat hunting workbook with custom queries and investigation procedures",
+                    "Security operations dashboard with real-time metrics and client-specific views",
+                    "Incident response procedures with escalation matrix and SLA documentation",
+                    "Threat intelligence integration framework with automated processing workflows",
+                    "SOC operations manual with procedures, training materials, and quality assurance"
+                ]
+            },
+            {
+                id: 8,
+                title: "Comprehensive Data Protection and Compliance Framework",
+                track: "Data & Application Security",
+                complexity: "Advanced",
+                caseStudy: "HealthData Solutions processes sensitive medical records for 500+ healthcare organizations across multiple countries, requiring compliance with HIPAA, GDPR, HITECH, and local regulations. They need comprehensive data protection including classification, encryption, access controls, audit trails, and automated compliance reporting while maintaining data utility for research and analytics with privacy-preserving technologies.",
+                tasks: [
+                    "Implement Azure Information Protection with automated sensitivity labeling and policy enforcement",
+                    "Deploy Azure Key Vault with customer-managed keys and hardware security module integration",
+                    "Configure Always Encrypted for Azure SQL Database with secure enclave processing",
+                    "Set up Microsoft Purview for comprehensive data governance, discovery, and classification",
+                    "Create advanced data loss prevention policies with automated incident response",
+                    "Implement Azure Policy for automated compliance validation and remediation",
+                    "Configure comprehensive audit logging with long-term retention and automated analysis",
+                    "Deploy Microsoft Defender for Cloud Apps for SaaS application protection and monitoring",
+                    "Implement privacy-preserving analytics with differential privacy and secure computation",
+                    "Set up automated compliance reporting with regulatory framework mapping"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Data classification, protection policies, and automated enforcement", weight: "35%" },
+                    { criterion: "Encryption implementation, key management, and secure processing", weight: "25%" },
+                    { criterion: "Compliance automation, reporting, and regulatory alignment", weight: "20%" },
+                    { criterion: "Access controls, data governance, and privacy protection", weight: "15%" },
+                    { criterion: "Audit capabilities, monitoring, and incident response", weight: "5%" }
+                ],
+                deliverables: [
+                    "Comprehensive data classification taxonomy with automated labeling policies",
+                    "Encryption architecture with key management and secure processing implementation",
+                    "Microsoft Purview data map with governance policies and compliance scoring",
+                    "Automated compliance monitoring dashboard with regulatory framework alignment",
+                    "Data loss prevention implementation with incident response and remediation workflows",
+                    "Security and compliance audit framework with automated reporting capabilities",
+                    "Privacy-preserving analytics implementation with differential privacy configuration",
+                    "Data governance operational procedures with training and awareness programs"
+                ]
+            },
+            {
+                id: 9,
+                title: "Well-Architected Framework Enterprise Assessment",
+                track: "Well-Architected Framework",
+                complexity: "Advanced",
+                caseStudy: "OptimizeCloud Consulting conducts comprehensive Azure environment assessments for Fortune 500 clients with complex multi-subscription architectures, performance challenges, security concerns, and cost optimization opportunities. Using the Azure Well-Architected Framework, they must provide detailed recommendations across all five pillars with implementation priorities, cost-benefit analysis, and transformation roadmaps.",
+                tasks: [
+                    "Conduct comprehensive Well-Architected Review using Azure Assessment tools and methodologies",
+                    "Analyze current architecture against all five pillars with detailed scoring and gap analysis",
+                    "Identify performance bottlenecks and optimization opportunities with quantitative analysis",
+                    "Review cost optimization potential with detailed savings analysis and implementation roadmap",
+                    "Assess security posture and compliance gaps with threat modeling and risk analysis",
+                    "Evaluate reliability and availability improvements with SLA analysis and recommendations",
+                    "Create operational excellence improvement plan with DevOps maturity assessment",
+                    "Develop prioritized implementation roadmap with business impact and resource requirements",
+                    "Create executive presentation with business case and transformation strategy",
+                    "Implement pilot optimization projects to demonstrate value and methodology"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Comprehensive architecture assessment and gap analysis across all pillars", weight: "30%" },
+                    { criterion: "Performance optimization and cost reduction analysis with quantitative benefits", weight: "25%" },
+                    { criterion: "Security and compliance improvements with risk mitigation strategies", weight: "20%" },
+                    { criterion: "Reliability and operational excellence enhancement recommendations", weight: "15%" },
+                    { criterion: "Implementation planning, prioritization, and business case development", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive Well-Architected Framework assessment report with scoring and recommendations",
+                    "Architecture optimization blueprint with detailed technical specifications",
+                    "Cost optimization analysis with projected savings and ROI calculations",
+                    "Security improvement implementation plan with threat mitigation strategies",
+                    "Performance optimization testing results with before/after benchmarks",
+                    "Operational excellence maturity assessment with DevOps transformation roadmap",
+                    "Executive presentation with business case and transformation strategy",
+                    "Pilot project implementation with demonstrated value and lessons learned"
+                ]
+            },
+            {
+                id: 10,
+                title: "Enterprise FinOps Implementation and Optimization",
+                track: "FinOps",
+                complexity: "Advanced",
+                caseStudy: "GlobalCorp Enterprise spends $10M annually on Azure across 200+ subscriptions with significant cost optimization opportunities. They need comprehensive FinOps implementation including culture transformation, cost visibility, optimization automation, and governance frameworks. The solution must provide real-time cost control, predictive analytics, and cross-functional collaboration between Finance, IT, and Engineering teams.",
+                tasks: [
+                    "Establish FinOps center of excellence with cross-functional governance structure",
+                    "Implement comprehensive cost allocation model with automated tagging and chargeback",
+                    "Deploy Azure Cost Management with advanced budgeting, forecasting, and anomaly detection",
+                    "Configure automated rightsizing and optimization recommendations with approval workflows",
+                    "Implement reserved instance and savings plan optimization with portfolio management",
+                    "Create cost optimization automation with Policy-driven resource lifecycle management",
+                    "Set up predictive cost analytics with machine learning and capacity planning",
+                    "Develop FinOps KPIs and metrics with executive dashboards and reporting",
+                    "Implement showback and chargeback mechanisms with business unit accountability",
+                    "Create FinOps training program with certification and continuous education"
+                ],
+                assessmentCriteria: [
+                    { criterion: "FinOps culture and organizational transformation with governance framework", weight: "30%" },
+                    { criterion: "Cost visibility, allocation, and accountability implementation", weight: "25%" },
+                    { criterion: "Optimization automation and policy-driven cost controls", weight: "20%" },
+                    { criterion: "Predictive analytics, forecasting, and capacity planning capabilities", weight: "15%" },
+                    { criterion: "Training, adoption, and continuous improvement processes", weight: "10%" }
+                ],
+                deliverables: [
+                    "FinOps organizational structure with roles, responsibilities, and governance framework",
+                    "Comprehensive cost allocation model with automated tagging and chargeback implementation",
+                    "Cost optimization dashboard with real-time monitoring and predictive analytics",
+                    "Automated optimization workflows with policy enforcement and approval processes",
+                    "FinOps KPI framework with executive reporting and business unit scorecards",
+                    "Training curriculum with certification program and adoption metrics",
+                    "Cost optimization playbook with best practices and continuous improvement processes",
+                    "Business case documentation with ROI analysis and value demonstration"
+                ]
+            },
+            {
+                id: 11,
+                title: "DevOps Transformation and CI/CD Excellence",
+                track: "DevOps",
+                complexity: "Advanced",
+                caseStudy: "SoftwareHouse Inc. needs to transform from waterfall development to DevOps practices for 500+ developers across 50+ applications. They require comprehensive CI/CD pipelines, infrastructure as code, automated testing, security integration, and cultural transformation. The solution must accelerate release cycles from quarterly to daily while improving quality, security, and operational stability.",
+                tasks: [
+                    "Design DevOps transformation strategy with organizational change management",
+                    "Implement Azure DevOps with comprehensive CI/CD pipeline architecture",
+                    "Configure Infrastructure as Code using ARM templates, Bicep, and Terraform",
+                    "Set up comprehensive automated testing framework with quality gates",
+                    "Implement security scanning and compliance automation in pipelines",
+                    "Deploy container orchestration with Azure Kubernetes Service and DevOps integration",
+                    "Configure monitoring and observability with Application Insights and Azure Monitor",
+                    "Implement deployment strategies including blue-green and canary deployments",
+                    "Set up automated rollback and recovery mechanisms with incident response",
+                    "Create DevOps metrics and KPIs with continuous improvement processes"
+                ],
+                assessmentCriteria: [
+                    { criterion: "DevOps transformation strategy and cultural change management", weight: "30%" },
+                    { criterion: "CI/CD pipeline architecture and automation implementation", weight: "25%" },
+                    { criterion: "Infrastructure as Code and container orchestration", weight: "20%" },
+                    { criterion: "Quality assurance, security integration, and compliance automation", weight: "15%" },
+                    { criterion: "Monitoring, metrics, and continuous improvement processes", weight: "10%" }
+                ],
+                deliverables: [
+                    "DevOps transformation roadmap with organizational change management plan",
+                    "Comprehensive CI/CD pipeline implementation with automated quality gates",
+                    "Infrastructure as Code templates and container orchestration configuration",
+                    "Automated testing framework with security scanning and compliance validation",
+                    "Monitoring and observability implementation with alerting and incident response",
+                    "DevOps metrics dashboard with KPIs and continuous improvement tracking",
+                    "Deployment strategy documentation with rollback and recovery procedures",
+                    "Training materials and adoption metrics with success measurement framework"
+                ]
+            },
+            {
+                id: 12,
+                title: "Kubernetes Production Platform",
+                track: "Kubernetes",
+                complexity: "Advanced", 
+                caseStudy: "ContainerCorp operates a microservices platform serving 10M+ users with 200+ services requiring auto-scaling, service mesh, advanced networking, and comprehensive security. The platform must support multi-tenancy, provide observability across all services, implement GitOps workflows, and maintain 99.99% availability with disaster recovery across multiple regions.",
+                tasks: [
+                    "Deploy production-grade Azure Kubernetes Service with multiple node pools and availability zones",
+                    "Implement comprehensive container security with image scanning, admission controllers, and runtime protection",
+                    "Configure service mesh with Istio for traffic management, security, and observability",
+                    "Set up GitOps workflows with ArgoCD for automated application deployment and configuration management",
+                    "Implement horizontal pod autoscaling, vertical pod autoscaling, and cluster autoscaling",
+                    "Configure ingress controllers with SSL termination, rate limiting, and traffic routing",
+                    "Set up comprehensive monitoring with Prometheus, Grafana, and Azure Monitor for containers",
+                    "Implement network policies for micro-segmentation and security isolation",
+                    "Configure backup and disaster recovery for stateful applications and cluster configuration",
+                    "Set up multi-cluster management with cross-cluster service discovery and load balancing"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Kubernetes architecture design and production readiness", weight: "30%" },
+                    { criterion: "Container security implementation and runtime protection", weight: "25%" },
+                    { criterion: "Service mesh configuration and traffic management", weight: "20%" },
+                    { criterion: "Monitoring, observability, and troubleshooting capabilities", weight: "15%" },
+                    { criterion: "Scalability, performance, and disaster recovery implementation", weight: "10%" }
+                ],
+                deliverables: [
+                    "Production-grade AKS cluster configuration with security and networking",
+                    "Container security implementation with scanning, policies, and runtime protection",
+                    "Service mesh deployment with traffic management and security policies",
+                    "GitOps workflow implementation with automated deployment and rollback capabilities",
+                    "Comprehensive monitoring and observability stack with custom dashboards",
+                    "Auto-scaling configuration with performance testing and validation",
+                    "Disaster recovery procedures with backup and restore automation",
+                    "Multi-cluster management configuration with cross-cluster communication"
+                ]
+            },
+            {
+                id: 13,
+                title: "Azure AI Services Integration Platform",
+                track: "AI Services",
+                complexity: "Advanced",
+                caseStudy: "IntelliCorp develops AI-powered applications serving healthcare, finance, and manufacturing clients requiring computer vision, natural language processing, machine learning, and responsible AI practices. The platform must integrate multiple Azure AI services, provide real-time inference, ensure data privacy, and maintain regulatory compliance across different industries.",
+                tasks: [
+                    "Design comprehensive Azure AI services architecture with cognitive services integration",
+                    "Implement Azure Machine Learning workspace with MLOps pipelines and model management",
+                    "Configure Azure Cognitive Services for computer vision, speech, and language processing",
+                    "Deploy Azure OpenAI services with responsible AI controls and content filtering",
+                    "Implement custom machine learning models with Azure ML Studio and automated retraining",
+                    "Set up real-time inference endpoints with auto-scaling and load balancing",
+                    "Configure AI model monitoring with drift detection and performance tracking",
+                    "Implement responsible AI practices with bias detection, explainability, and fairness",
+                    "Set up data privacy controls with differential privacy and secure computation",
+                    "Create AI governance framework with ethics review and compliance validation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "AI services architecture and integration design", weight: "30%" },
+                    { criterion: "Machine learning operations and model lifecycle management", weight: "25%" },
+                    { criterion: "Real-time inference implementation and performance optimization", weight: "20%" },
+                    { criterion: "Responsible AI practices and governance framework", weight: "15%" },
+                    { criterion: "Data privacy, security, and regulatory compliance", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure AI services architecture with integration patterns and data flows",
+                    "MLOps pipeline implementation with automated training and deployment",
+                    "Cognitive services configuration with custom models and fine-tuning",
+                    "Real-time inference platform with auto-scaling and monitoring",
+                    "AI model monitoring dashboard with performance and drift tracking",
+                    "Responsible AI framework with bias detection and explainability tools",
+                    "Data privacy implementation with encryption and access controls",
+                    "AI governance documentation with ethics guidelines and compliance procedures"
+                ]
+            },
+            {
+                id: 14,
+                title: "Infrastructure as Code and Automation Platform",
+                track: "Infrastructure as Code",
+                complexity: "Advanced",
+                caseStudy: "AutoCloud Systems manages infrastructure for 300+ applications requiring consistent deployment, configuration management, and compliance automation. They need comprehensive Infrastructure as Code with ARM templates, Bicep, Terraform, and configuration management. The platform must support multi-environment deployments, automated testing, policy enforcement, and drift detection.",
+                tasks: [
+                    "Design comprehensive Infrastructure as Code strategy with multiple deployment technologies",
+                    "Implement ARM templates and Bicep for Azure-native resource provisioning",
+                    "Deploy Terraform with remote state management and module architecture",
+                    "Configure Azure DevOps pipelines for infrastructure deployment and testing",
+                    "Implement infrastructure testing with validation, compliance scanning, and drift detection",
+                    "Set up configuration management with Azure Automation and Desired State Configuration",
+                    "Configure policy enforcement with Azure Policy and governance automation",
+                    "Implement infrastructure monitoring with change tracking and compliance reporting",
+                    "Set up multi-environment promotion with approval workflows and rollback capabilities",
+                    "Create infrastructure documentation with automated diagram generation and dependency mapping"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Infrastructure as Code architecture and technology integration", weight: "30%" },
+                    { criterion: "Deployment automation and pipeline implementation", weight: "25%" },
+                    { criterion: "Testing, validation, and compliance automation", weight: "20%" },
+                    { criterion: "Configuration management and drift detection", weight: "15%" },
+                    { criterion: "Documentation, monitoring, and operational excellence", weight: "10%" }
+                ],
+                deliverables: [
+                    "Infrastructure as Code strategy with technology selection and architecture",
+                    "ARM templates and Bicep modules with parameterization and reusability",
+                    "Terraform configuration with state management and module library",
+                    "CI/CD pipeline implementation with automated testing and deployment",
+                    "Infrastructure testing framework with compliance validation and drift detection",
+                    "Configuration management implementation with automated remediation",
+                    "Policy enforcement configuration with governance and compliance automation",
+                    "Infrastructure documentation with automated diagrams and operational procedures"
+                ]
+            },
+            {
+                id: 15,
+                title: "Comprehensive Monitoring and Observability Platform",
+                track: "Monitoring & Observability",
+                complexity: "Advanced",
+                caseStudy: "ObserveTech Enterprise monitors critical infrastructure for multiple clients requiring comprehensive observability across applications, infrastructure, and user experience. The platform must provide distributed tracing, log aggregation, metrics collection, alerting, and automated remediation. The solution needs to support multi-tenant architecture with client isolation and customizable dashboards.",
+                tasks: [
+                    "Design comprehensive monitoring architecture with Azure Monitor and Application Insights",
+                    "Implement distributed tracing for microservices with dependency mapping and performance analysis",
+                    "Configure log aggregation with Azure Log Analytics and custom KQL queries",
+                    "Set up metrics collection with custom telemetry and performance counters",
+                    "Implement intelligent alerting with machine learning-based anomaly detection",
+                    "Create automated remediation workflows with Azure Logic Apps and runbooks",
+                    "Deploy synthetic monitoring for user experience and availability testing",
+                    "Set up infrastructure monitoring with Network Watcher and performance diagnostics",
+                    "Configure security monitoring integration with Azure Sentinel and threat detection",
+                    "Create customizable dashboards with Azure Workbooks and Power BI integration"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Monitoring architecture design and data collection strategy", weight: "30%" },
+                    { criterion: "Observability implementation with tracing, logging, and metrics", weight: "25%" },
+                    { criterion: "Alerting intelligence and automated remediation capabilities", weight: "20%" },
+                    { criterion: "Dashboard design and reporting functionality", weight: "15%" },
+                    { criterion: "Integration capabilities and operational workflows", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive monitoring architecture with data collection and retention strategy",
+                    "Application Insights implementation with distributed tracing and dependency mapping",
+                    "Log Analytics workspace with custom queries and automated analysis",
+                    "Intelligent alerting configuration with anomaly detection and escalation procedures",
+                    "Automated remediation workflows with testing and validation procedures",
+                    "Synthetic monitoring implementation with user experience tracking",
+                    "Infrastructure monitoring dashboard with real-time performance metrics",
+                    "Multi-tenant monitoring platform with client isolation and customization"
+                ]
+            },
+            {
+                id: 16,
+                title: "FinOps Lifecycle Management Implementation",
+                track: "FinOps Lifecycle",
+                complexity: "Intermediate",
+                caseStudy: "CloudOps Enterprise needs to implement comprehensive FinOps lifecycle management across their $5M annual Azure spend. They require structured Inform, Optimize, and Operate phases with clear processes, stakeholder alignment, and continuous improvement. The solution must support different organizational maturity levels and provide measurable business outcomes.",
+                tasks: [
+                    "Design FinOps lifecycle framework with phase definitions and success criteria",
+                    "Implement Inform phase with comprehensive cost visibility and allocation",
+                    "Deploy Optimize phase with automated rightsizing and reservation management",
+                    "Configure Operate phase with governance, forecasting, and continuous improvement",
+                    "Set up cross-functional collaboration processes between Finance and Engineering",
+                    "Create FinOps maturity assessment and progression tracking",
+                    "Implement KPI frameworks for each lifecycle phase",
+                    "Design stakeholder communication and reporting strategies"
+                ],
+                assessmentCriteria: [
+                    { criterion: "FinOps lifecycle design and phase implementation", weight: "35%" },
+                    { criterion: "Cross-functional collaboration and process integration", weight: "25%" },
+                    { criterion: "Maturity assessment and progression tracking", weight: "20%" },
+                    { criterion: "KPI frameworks and success measurement", weight: "15%" },
+                    { criterion: "Stakeholder engagement and communication", weight: "5%" }
+                ],
+                deliverables: [
+                    "FinOps lifecycle framework with phase definitions and processes",
+                    "Inform phase implementation with cost visibility dashboards",
+                    "Optimize phase automation with rightsizing and reservation workflows",
+                    "Operate phase governance with forecasting and improvement processes",
+                    "Cross-functional collaboration framework and communication plans",
+                    "FinOps maturity assessment tool and progression roadmap"
+                ]
+            },
+            {
+                id: 17,
+                title: "Advanced Cost Management and Optimization",
+                track: "FinOps Tools",
+                complexity: "Advanced",
+                caseStudy: "TechScale Corp manages Azure costs across 150+ subscriptions with complex billing hierarchies, reserved instances, and spot instance usage. They need advanced cost management including automated tagging, chargeback mechanisms, anomaly detection, and integration with third-party FinOps platforms for comprehensive cost optimization.",
+                tasks: [
+                    "Implement comprehensive tagging strategy with automated enforcement",
+                    "Configure Azure Cost Management with advanced budgeting and forecasting",
+                    "Set up automated chargeback and showback mechanisms",
+                    "Deploy cost anomaly detection with machine learning analytics",
+                    "Integrate third-party FinOps platforms (CloudHealth, Cloudability)",
+                    "Implement reserved instance optimization with portfolio management",
+                    "Configure spot instance automation with workload optimization",
+                    "Create executive cost reporting with predictive analytics"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Cost management architecture and automation", weight: "30%" },
+                    { criterion: "Tagging strategy and chargeback implementation", weight: "25%" },
+                    { criterion: "Optimization automation and reserved instance management", weight: "20%" },
+                    { criterion: "Third-party platform integration and analytics", weight: "15%" },
+                    { criterion: "Reporting and forecasting capabilities", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive tagging strategy with automated enforcement policies",
+                    "Azure Cost Management configuration with advanced budgeting",
+                    "Chargeback and showback mechanism implementation",
+                    "Cost anomaly detection system with automated alerting",
+                    "Third-party FinOps platform integration and optimization workflows",
+                    "Reserved instance optimization strategy with portfolio management"
+                ]
+            },
+            {
+                id: 18,
+                title: "Source Control and Branching Strategy",
+                track: "DevOps Source Control",
+                complexity: "Intermediate",
+                caseStudy: "DevTeam Solutions manages 200+ repositories for 100+ developers across multiple product lines. They need comprehensive source control strategy with Git workflows, Azure Repos integration, branch protection policies, and automated code quality enforcement. The solution must support both centralized and distributed development models.",
+                tasks: [
+                    "Design Git branching strategy with GitFlow and feature branch workflows",
+                    "Implement Azure Repos with advanced repository management",
+                    "Configure branch protection policies with required reviewers and status checks",
+                    "Set up automated code quality gates with SonarQube integration",
+                    "Implement pull request workflows with automated testing",
+                    "Configure merge policies with conflict resolution strategies",
+                    "Set up repository access controls with team-based permissions",
+                    "Create code review processes with quality assurance workflows"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Branching strategy design and workflow implementation", weight: "30%" },
+                    { criterion: "Repository management and access control", weight: "25%" },
+                    { criterion: "Code quality enforcement and automated testing", weight: "20%" },
+                    { criterion: "Pull request workflows and review processes", weight: "15%" },
+                    { criterion: "Merge policies and conflict resolution", weight: "10%" }
+                ],
+                deliverables: [
+                    "Git branching strategy documentation with workflow diagrams",
+                    "Azure Repos configuration with repository structure and permissions",
+                    "Branch protection policies with automated enforcement",
+                    "Code quality gates integration with automated testing",
+                    "Pull request workflow implementation with review automation",
+                    "Repository management procedures with team collaboration guidelines"
+                ]
+            },
+            {
+                id: 19,
+                title: "Terraform Enterprise Infrastructure Management",
+                track: "Infrastructure as Code - Terraform",
+                complexity: "Advanced",
+                caseStudy: "InfraCorp Enterprise provisions 1000+ Azure resources daily using Terraform across multiple environments and business units. They need enterprise-grade Terraform implementation with remote state management, module architecture, CI/CD integration, and policy enforcement. The solution must support multi-tenancy and compliance automation.",
+                tasks: [
+                    "Design Terraform enterprise architecture with workspace management",
+                    "Implement remote state management with Azure Storage backend",
+                    "Create reusable Terraform modules with versioning and documentation",
+                    "Configure Terraform CI/CD pipelines with automated testing",
+                    "Implement policy as code with Sentinel and Azure Policy integration",
+                    "Set up multi-environment promotion with approval workflows",
+                    "Configure drift detection and automated remediation",
+                    "Implement Terraform security scanning with compliance validation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Terraform architecture and enterprise scalability", weight: "30%" },
+                    { criterion: "Module design, reusability, and version management", weight: "25%" },
+                    { criterion: "CI/CD integration and automated testing", weight: "20%" },
+                    { criterion: "Policy enforcement and compliance automation", weight: "15%" },
+                    { criterion: "Security scanning and drift detection", weight: "10%" }
+                ],
+                deliverables: [
+                    "Terraform enterprise architecture with workspace and state management",
+                    "Reusable module library with versioning and documentation",
+                    "CI/CD pipeline implementation with automated testing framework",
+                    "Policy as code implementation with compliance validation",
+                    "Multi-environment promotion workflow with approval gates",
+                    "Security scanning integration with compliance reporting"
+                ]
+            },
+            {
+                id: 20,
+                title: "Configuration Management and Automation",
+                track: "Configuration Management",
+                complexity: "Advanced",
+                caseStudy: "AutoManage Corp manages 5000+ Azure VMs across multiple environments requiring consistent configuration, compliance monitoring, and automated remediation. They need comprehensive configuration management using Azure Automation DSC, PowerShell DSC, and integration with Azure Policy for drift detection and remediation.",
+                tasks: [
+                    "Design configuration management architecture with Azure Automation DSC",
+                    "Implement PowerShell DSC configurations for Windows and Linux systems",
+                    "Configure Azure Policy integration for configuration compliance",
+                    "Set up automated configuration drift detection and remediation",
+                    "Implement configuration testing and validation frameworks",
+                    "Configure compliance reporting with automated assessment",
+                    "Set up configuration change management with approval workflows",
+                    "Create configuration monitoring dashboards with real-time status"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Configuration management architecture and automation", weight: "30%" },
+                    { criterion: "DSC implementation and cross-platform support", weight: "25%" },
+                    { criterion: "Drift detection and automated remediation", weight: "20%" },
+                    { criterion: "Compliance monitoring and reporting", weight: "15%" },
+                    { criterion: "Testing frameworks and validation processes", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure Automation DSC configuration with PowerShell DSC implementations",
+                    "Configuration compliance framework with Azure Policy integration",
+                    "Automated drift detection and remediation workflows",
+                    "Configuration testing and validation automation",
+                    "Compliance reporting dashboard with real-time monitoring",
+                    "Configuration change management procedures with approval workflows"
+                ]
+            },
+            {
+                id: 21,
+                title: "Advanced Deployment Strategies",
+                track: "Release Strategy",
+                complexity: "Advanced",
+                caseStudy: "DeployTech Solutions manages high-frequency deployments for mission-critical applications serving 50M+ users. They need advanced deployment strategies including canary deployments, blue-green deployments, feature flags, and automated rollback mechanisms. The solution must minimize risk while enabling rapid feature delivery.",
+                tasks: [
+                    "Implement canary deployment strategy with automated traffic splitting",
+                    "Configure blue-green deployment with zero-downtime switching",
+                    "Set up feature flag management with runtime configuration",
+                    "Create automated rollback mechanisms with health monitoring",
+                    "Implement deployment rings with gradual rollout strategies",
+                    "Configure A/B testing integration with deployment pipelines",
+                    "Set up deployment monitoring with real-time health checks",
+                    "Create deployment approval workflows with stakeholder validation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Deployment strategy design and implementation", weight: "35%" },
+                    { criterion: "Risk mitigation and automated rollback capabilities", weight: "25%" },
+                    { criterion: "Feature flag management and runtime configuration", weight: "20%" },
+                    { criterion: "Monitoring and health check integration", weight: "15%" },
+                    { criterion: "Approval workflows and stakeholder validation", weight: "5%" }
+                ],
+                deliverables: [
+                    "Canary deployment implementation with automated traffic management",
+                    "Blue-green deployment configuration with zero-downtime switching",
+                    "Feature flag management system with runtime controls",
+                    "Automated rollback mechanisms with health monitoring integration",
+                    "Deployment ring strategy with gradual rollout procedures",
+                    "A/B testing framework integrated with deployment pipelines"
+                ]
+            },
+            {
+                id: 22,
+                title: "Azure Cognitive Services Integration",
+                track: "Azure AI Services",
+                complexity: "Advanced",
+                caseStudy: "CognitiveAI Corp develops multi-modal AI applications for healthcare, finance, and retail clients requiring computer vision, natural language processing, speech recognition, and decision APIs. The platform must provide real-time inference, custom model training, and integration with existing business applications.",
+                tasks: [
+                    "Implement Computer Vision API for image analysis and OCR processing",
+                    "Configure Language Understanding (LUIS) for natural language processing",
+                    "Set up Speech Services for speech-to-text and text-to-speech conversion",
+                    "Deploy Form Recognizer for automated document processing",
+                    "Implement Text Analytics for sentiment analysis and entity recognition",
+                    "Configure Custom Vision for specialized image classification",
+                    "Set up real-time inference endpoints with auto-scaling",
+                    "Create multi-modal AI workflows with service orchestration"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Cognitive services integration and orchestration", weight: "30%" },
+                    { criterion: "Custom model training and fine-tuning", weight: "25%" },
+                    { criterion: "Real-time inference and performance optimization", weight: "20%" },
+                    { criterion: "Multi-modal AI workflow implementation", weight: "15%" },
+                    { criterion: "Business application integration and user experience", weight: "10%" }
+                ],
+                deliverables: [
+                    "Computer Vision implementation with OCR and image analysis capabilities",
+                    "Natural language processing pipeline with LUIS and Text Analytics",
+                    "Speech services integration with real-time audio processing",
+                    "Form Recognizer configuration for automated document workflows",
+                    "Custom Vision model training and deployment",
+                    "Multi-modal AI application with service orchestration and user interface"
+                ]
+            },
+            {
+                id: 23,
+                title: "Azure Machine Learning Studio Implementation",
+                track: "Azure ML",
+                complexity: "Advanced",
+                caseStudy: "MLOps Enterprise develops and deploys machine learning models for predictive analytics, fraud detection, and recommendation systems. They need comprehensive MLOps implementation with Azure ML Studio, automated model training, hyperparameter tuning, model deployment, and monitoring with drift detection.",
+                tasks: [
+                    "Set up Azure ML Studio workspace with compute clusters and data stores",
+                    "Implement automated machine learning (AutoML) for model development",
+                    "Configure hyperparameter tuning with distributed training",
+                    "Create ML pipelines with automated data preprocessing and feature engineering",
+                    "Deploy models as real-time and batch inference endpoints",
+                    "Implement model monitoring with performance and drift detection",
+                    "Set up A/B testing for model comparison and validation",
+                    "Configure MLOps workflows with CI/CD integration for model deployment"
+                ],
+                assessmentCriteria: [
+                    { criterion: "ML workspace setup and compute resource management", weight: "25%" },
+                    { criterion: "AutoML implementation and hyperparameter optimization", weight: "25%" },
+                    { criterion: "ML pipeline development and automation", weight: "20%" },
+                    { criterion: "Model deployment and inference endpoint configuration", weight: "20%" },
+                    { criterion: "Model monitoring and MLOps workflow integration", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure ML Studio workspace with compute and storage configuration",
+                    "AutoML implementation with automated model selection and tuning",
+                    "ML pipeline development with data preprocessing and feature engineering",
+                    "Model deployment configuration with real-time and batch endpoints",
+                    "Model monitoring dashboard with performance and drift tracking",
+                    "MLOps workflow integration with CI/CD pipelines"
+                ]
+            },
+            {
+                id: 24,
+                title: "OpenAI on Azure Implementation",
+                track: "OpenAI Integration",
+                complexity: "Advanced",
+                caseStudy: "GenerativeAI Solutions implements OpenAI services on Azure for enterprise clients requiring GPT-based applications, content generation, code assistance, and conversational AI. The platform must ensure responsible AI practices, content filtering, usage monitoring, and integration with existing business workflows.",
+                tasks: [
+                    "Deploy Azure OpenAI Service with GPT model provisioning",
+                    "Implement prompt engineering strategies for different use cases",
+                    "Configure content filtering and safety measures for production use",
+                    "Set up usage monitoring and cost optimization for API calls",
+                    "Create REST API integration with authentication and rate limiting",
+                    "Implement conversational AI with context management and memory",
+                    "Configure fine-tuning workflows for domain-specific applications",
+                    "Set up responsible AI governance with usage analytics and compliance"
+                ],
+                assessmentCriteria: [
+                    { criterion: "OpenAI service deployment and model configuration", weight: "25%" },
+                    { criterion: "Prompt engineering and optimization strategies", weight: "25%" },
+                    { criterion: "Content filtering and responsible AI implementation", weight: "20%" },
+                    { criterion: "API integration and performance optimization", weight: "20%" },
+                    { criterion: "Usage monitoring and governance framework", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure OpenAI Service deployment with GPT model configuration",
+                    "Prompt engineering library with optimized templates and strategies",
+                    "Content filtering implementation with safety and compliance controls",
+                    "REST API integration with authentication and rate limiting",
+                    "Conversational AI application with context management",
+                    "Usage monitoring dashboard with cost optimization and governance reporting"
+                ]
+            },
+            {
+                id: 25,
+                title: "Responsible AI and Ethics Framework",
+                track: "Responsible AI",
+                complexity: "Advanced",
+                caseStudy: "EthicsAI Corp develops AI governance framework for regulated industries requiring fairness, transparency, accountability, and safety in AI systems. The framework must include bias detection, explainability tools, ethics review processes, and compliance with regulatory requirements across different jurisdictions.",
+                tasks: [
+                    "Implement AI fairness assessment with bias detection and mitigation",
+                    "Configure model explainability tools with LIME and SHAP integration",
+                    "Set up AI ethics review board with governance processes",
+                    "Create responsible AI toolbox with automated testing and validation",
+                    "Implement transparency reporting with model cards and documentation",
+                    "Configure safety measures with robustness testing and monitoring",
+                    "Set up regulatory compliance framework with audit trails",
+                    "Create AI risk assessment and management procedures"
+                ],
+                assessmentCriteria: [
+                    { criterion: "AI fairness and bias detection implementation", weight: "30%" },
+                    { criterion: "Model explainability and transparency measures", weight: "25%" },
+                    { criterion: "Ethics governance and review processes", weight: "20%" },
+                    { criterion: "Safety measures and robustness testing", weight: "15%" },
+                    { criterion: "Regulatory compliance and audit capabilities", weight: "10%" }
+                ],
+                deliverables: [
+                    "AI fairness assessment framework with bias detection and mitigation tools",
+                    "Model explainability implementation with LIME and SHAP integration",
+                    "AI ethics governance framework with review board procedures",
+                    "Responsible AI toolbox with automated testing and validation",
+                    "Transparency reporting system with model cards and documentation",
+                    "Regulatory compliance framework with audit trails and risk assessment"
+                ]
+            },
+            {
+                id: 26,
+                title: "AI Monitoring and Security Implementation",
+                track: "AI Security",
+                complexity: "Advanced",
+                caseStudy: "SecureAI Systems protects AI models and data for government and healthcare clients requiring advanced security measures, model protection, adversarial attack prevention, and comprehensive monitoring. The platform must ensure data privacy, model integrity, and compliance with security frameworks.",
+                tasks: [
+                    "Implement AI model security with encryption and access controls",
+                    "Configure adversarial attack detection and prevention mechanisms",
+                    "Set up differential privacy for data protection in ML training",
+                    "Create AI model versioning with integrity verification",
+                    "Implement secure model deployment with container security",
+                    "Configure AI system monitoring with anomaly detection",
+                    "Set up data lineage tracking with privacy-preserving analytics",
+                    "Create incident response procedures for AI security events"
+                ],
+                assessmentCriteria: [
+                    { criterion: "AI security architecture and model protection", weight: "30%" },
+                    { criterion: "Adversarial attack prevention and detection", weight: "25%" },
+                    { criterion: "Data privacy and differential privacy implementation", weight: "20%" },
+                    { criterion: "Secure deployment and container security", weight: "15%" },
+                    { criterion: "Monitoring and incident response capabilities", weight: "10%" }
+                ],
+                deliverables: [
+                    "AI security architecture with model encryption and access controls",
+                    "Adversarial attack detection and prevention system",
+                    "Differential privacy implementation for data protection",
+                    "Secure model deployment pipeline with container security",
+                    "AI system monitoring dashboard with anomaly detection",
+                    "Incident response framework for AI security events"
+                ]
+            },
+            {
+                id: 27,
+                title: "Conversational AI and Bot Development",
+                track: "AI Application Integration",
+                complexity: "Advanced",
+                caseStudy: "BotTech Solutions develops enterprise conversational AI platform supporting customer service, internal helpdesk, and process automation for Fortune 500 clients. The platform must integrate Azure Bot Framework, QnA Maker, Language Understanding, and provide omnichannel deployment with analytics.",
+                tasks: [
+                    "Develop conversational AI bot using Azure Bot Framework",
+                    "Integrate QnA Maker for knowledge base and FAQ automation",
+                    "Configure Language Understanding (LUIS) for intent recognition",
+                    "Implement multi-channel deployment (Teams, Web, Mobile)",
+                    "Set up conversation analytics with user behavior tracking",
+                    "Create bot testing and quality assurance frameworks",
+                    "Configure bot security with authentication and authorization",
+                    "Implement bot monitoring with performance and usage analytics"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Conversational AI development and integration", weight: "30%" },
+                    { criterion: "Knowledge base integration and intent recognition", weight: "25%" },
+                    { criterion: "Multi-channel deployment and user experience", weight: "20%" },
+                    { criterion: "Analytics and monitoring implementation", weight: "15%" },
+                    { criterion: "Security and quality assurance frameworks", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure Bot Framework implementation with conversational AI capabilities",
+                    "QnA Maker integration with knowledge base and FAQ automation",
+                    "LUIS configuration for intent recognition and natural language processing",
+                    "Multi-channel bot deployment with web, mobile, and Teams integration",
+                    "Conversation analytics dashboard with user behavior tracking",
+                    "Bot testing framework with quality assurance and security implementation"
+                ]
+            },
+            {
+                id: 28,
+                title: "Computer Vision and OCR Platform",
+                track: "Vision AI",
+                complexity: "Advanced",
+                caseStudy: "VisionAI Corp develops computer vision platform for manufacturing quality control, healthcare diagnostics, and document processing. The platform must provide real-time image analysis, OCR processing, custom vision models, and integration with existing business systems for automated decision-making.",
+                tasks: [
+                    "Implement Computer Vision API for image analysis and object detection",
+                    "Configure Form Recognizer for automated document and invoice processing",
+                    "Develop Custom Vision models for specialized image classification",
+                    "Set up OCR processing pipeline with text extraction and validation",
+                    "Create real-time image processing with streaming analytics",
+                    "Implement image quality assessment and preprocessing",
+                    "Configure vision model training with transfer learning",
+                    "Set up vision analytics dashboard with processing metrics and insights"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Computer vision implementation and object detection", weight: "30%" },
+                    { criterion: "OCR and document processing automation", weight: "25%" },
+                    { criterion: "Custom vision model development and training", weight: "20%" },
+                    { criterion: "Real-time processing and streaming analytics", weight: "15%" },
+                    { criterion: "Analytics and business system integration", weight: "10%" }
+                ],
+                deliverables: [
+                    "Computer Vision API implementation with image analysis and object detection",
+                    "Form Recognizer configuration for automated document processing",
+                    "Custom Vision model development with specialized classification",
+                    "OCR processing pipeline with text extraction and validation",
+                    "Real-time image processing system with streaming analytics",
+                    "Vision analytics dashboard with processing metrics and business insights"
+                ]
+            },
+            {
+                id: 29,
+                title: "Azure Key Vault and Security Management",
+                track: "Security & Compliance",
+                complexity: "Advanced",
+                caseStudy: "SecureVault Enterprise manages encryption keys, certificates, and secrets for 500+ applications across multiple environments. They need comprehensive Azure Key Vault implementation with HSM integration, automated rotation, access policies, and compliance with security frameworks including FIPS 140-2 and Common Criteria.",
+                tasks: [
+                    "Deploy Azure Key Vault with HSM-backed key protection",
+                    "Implement comprehensive access policies with RBAC integration",
+                    "Configure automated key and certificate rotation policies",
+                    "Set up secrets management with application integration",
+                    "Implement Key Vault monitoring with audit logging and alerting",
+                    "Configure cross-region key replication and disaster recovery",
+                    "Set up compliance reporting with security framework alignment",
+                    "Create key lifecycle management with approval workflows"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Key Vault architecture and HSM integration", weight: "30%" },
+                    { criterion: "Access policies and RBAC implementation", weight: "25%" },
+                    { criterion: "Automated rotation and lifecycle management", weight: "20%" },
+                    { criterion: "Monitoring, auditing, and compliance reporting", weight: "15%" },
+                    { criterion: "Disaster recovery and cross-region replication", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure Key Vault deployment with HSM integration and security policies",
+                    "Comprehensive access control implementation with RBAC integration",
+                    "Automated rotation policies for keys, certificates, and secrets",
+                    "Key Vault monitoring dashboard with audit logging and alerting",
+                    "Cross-region replication and disaster recovery procedures",
+                    "Compliance reporting framework with security framework alignment"
+                ]
+            },
+            {
+                id: 30,
+                title: "Advanced Network Security Implementation",
+                track: "Network Security",
+                complexity: "Advanced",
+                caseStudy: "NetworkSecure Corp protects critical infrastructure with advanced network security requiring micro-segmentation, threat detection, DDoS protection, and compliance with security frameworks. The solution must provide real-time threat analysis, automated response, and comprehensive network monitoring.",
+                tasks: [
+                    "Implement advanced Network Security Groups with Application Security Groups",
+                    "Configure Azure Firewall Premium with threat intelligence and TLS inspection",
+                    "Set up Azure DDoS Protection with attack analytics and mitigation",
+                    "Deploy network micro-segmentation with Zero Trust principles",
+                    "Configure Web Application Firewall with custom rules and bot protection",
+                    "Implement network threat detection with Azure Sentinel integration",
+                    "Set up network monitoring with Network Watcher and traffic analytics",
+                    "Create automated incident response for network security events"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Network security architecture and micro-segmentation", weight: "30%" },
+                    { criterion: "Advanced firewall and threat protection implementation", weight: "25%" },
+                    { criterion: "DDoS protection and attack mitigation", weight: "20%" },
+                    { criterion: "Network monitoring and threat detection", weight: "15%" },
+                    { criterion: "Automated response and incident management", weight: "10%" }
+                ],
+                deliverables: [
+                    "Advanced NSG and ASG configuration with micro-segmentation",
+                    "Azure Firewall Premium deployment with threat intelligence and TLS inspection",
+                    "DDoS Protection implementation with attack analytics and mitigation",
+                    "Network threat detection system with Azure Sentinel integration",
+                    "Network monitoring dashboard with traffic analytics and alerting",
+                    "Automated incident response framework for network security events"
+                ]
+            },
+            {
+                id: 31,
+                title: "Comprehensive Backup and Archive Strategy",
+                track: "Data Protection",
+                complexity: "Advanced",
+                caseStudy: "DataProtect Corp manages backup and archival for enterprise clients requiring long-term retention, compliance with regulations, and cost-optimized storage tiers. The solution must provide automated backup policies, cross-region replication, and point-in-time recovery with different RPO/RTO requirements.",
+                tasks: [
+                    "Design comprehensive backup strategy with Azure Backup services",
+                    "Implement automated backup policies for VMs, databases, and applications",
+                    "Configure cross-region backup replication with geo-redundant storage",
+                    "Set up long-term retention policies with archive tier optimization",
+                    "Implement point-in-time recovery with granular restore capabilities",
+                    "Configure backup monitoring with success/failure alerting and reporting",
+                    "Set up backup compliance reporting with regulatory requirements",
+                    "Create disaster recovery testing procedures with automated validation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Backup strategy design and policy implementation", weight: "30%" },
+                    { criterion: "Cross-region replication and geo-redundancy", weight: "25%" },
+                    { criterion: "Long-term retention and cost optimization", weight: "20%" },
+                    { criterion: "Recovery capabilities and testing procedures", weight: "15%" },
+                    { criterion: "Monitoring, reporting, and compliance", weight: "10%" }
+                ],
+                deliverables: [
+                    "Comprehensive backup strategy with Azure Backup implementation",
+                    "Automated backup policies for multi-workload protection",
+                    "Cross-region replication configuration with geo-redundant storage",
+                    "Long-term retention policies with archive tier optimization",
+                    "Point-in-time recovery procedures with granular restore testing",
+                    "Backup monitoring dashboard with compliance reporting"
+                ]
+            },
+            {
+                id: 32,
+                title: "Cloud Cost Explorer and Financial Analytics",
+                track: "Cost Analytics",
+                complexity: "Intermediate",
+                caseStudy: "FinAnalytics Corp provides cost analytics and optimization recommendations for enterprise Azure environments. They need advanced cost analysis tools, predictive modeling, resource utilization analytics, and executive reporting with drill-down capabilities for different organizational hierarchies.",
+                tasks: [
+                    "Configure Azure Cost Management with advanced filtering and grouping",
+                    "Implement cost allocation with detailed tagging and hierarchy mapping",
+                    "Set up budget management with automated alerting and threshold monitoring",
+                    "Create cost forecasting models with trend analysis and predictive analytics",
+                    "Develop resource utilization analytics with rightsizing recommendations",
+                    "Configure reservation analysis with optimization suggestions",
+                    "Set up executive dashboards with drill-down capabilities and cost attribution",
+                    "Implement cost anomaly detection with automated investigation workflows"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Cost management configuration and data analysis", weight: "30%" },
+                    { criterion: "Forecasting and predictive analytics implementation", weight: "25%" },
+                    { criterion: "Resource utilization analysis and optimization", weight: "20%" },
+                    { criterion: "Executive reporting and dashboard development", weight: "15%" },
+                    { criterion: "Anomaly detection and automated workflows", weight: "10%" }
+                ],
+                deliverables: [
+                    "Azure Cost Management configuration with advanced analytics",
+                    "Cost allocation framework with tagging and hierarchy implementation",
+                    "Budget management system with automated alerting and monitoring",
+                    "Cost forecasting models with predictive analytics and trend analysis",
+                    "Resource utilization dashboard with rightsizing recommendations",
+                    "Executive cost reporting platform with drill-down and attribution capabilities"
+                ]
+            },
+            {
+                id: 33,
+                title: "Multi-Tenant SaaS Security Architecture",
+                track: "SaaS Security",
+                complexity: "Advanced",
+                caseStudy: "SaaSTech Platform serves 10,000+ enterprise customers with strict tenant isolation, data privacy, and compliance requirements. The architecture must provide comprehensive security controls, audit capabilities, and scalable tenant management while maintaining performance and cost efficiency.",
+                tasks: [
+                    "Design multi-tenant security architecture with tenant isolation strategies",
+                    "Implement Azure AD B2C for customer identity and access management",
+                    "Configure tenant-specific data encryption with customer-managed keys",
+                    "Set up comprehensive audit logging with tenant-specific compliance reporting",
+                    "Implement data residency controls with geo-specific tenant placement",
+                    "Configure tenant-specific security policies with Azure Policy",
+                    "Set up automated compliance validation with regulatory framework mapping",
+                    "Create tenant onboarding and lifecycle management automation"
+                ],
+                assessmentCriteria: [
+                    { criterion: "Multi-tenant architecture design and isolation implementation", weight: "35%" },
+                    { criterion: "Identity management and access control", weight: "25%" },
+                    { criterion: "Data encryption and privacy protection", weight: "20%" },
+                    { criterion: "Compliance automation and audit capabilities", weight: "15%" },
+                    { criterion: "Tenant lifecycle management and automation", weight: "5%" }
+                ],
+                deliverables: [
+                    "Multi-tenant security architecture with isolation and data protection",
+                    "Azure AD B2C implementation for customer identity management",
+                    "Tenant-specific encryption and key management system",
+                    "Comprehensive audit logging with tenant-specific compliance reporting",
+                    "Data residency controls with geo-specific tenant placement",
+                    "Automated tenant onboarding and lifecycle management platform"
+                ]
+            }
+        ];
+
+        function renderAssignments() {
+            const container = document.getElementById('assignmentsContainer');
+            
+            azureAssignments.forEach(assignment => {
+                const assignmentDiv = document.createElement('div');
+                assignmentDiv.className = 'assignment-card';
+                
+                let innerHTML = '<div class="assignment-header">';
+                innerHTML += '<div class="assignment-title">' + assignment.title + '</div>';
+                innerHTML += '<div class="assignment-meta">';
+                innerHTML += '<span class="track">' + assignment.track + '</span>';
+                innerHTML += '<span class="complexity ' + assignment.complexity.toLowerCase() + '">' + assignment.complexity + '</span>';
+                innerHTML += '<span class="expand-indicator">▼</span>';
+                innerHTML += '</div></div>';
+                
+                innerHTML += '<div class="assignment-content">';
+                innerHTML += '<div class="case-study">';
+                innerHTML += '<h4>🏢 Case Study</h4>';
+                innerHTML += '<p>' + assignment.caseStudy + '</p>';
+                innerHTML += '</div>';
+                
+                innerHTML += '<div class="section tasks">';
+                innerHTML += '<h4>📋 Tasks to Complete</h4>';
+                innerHTML += '<ul class="task-list">';
+                assignment.tasks.forEach(task => {
+                    innerHTML += '<li>' + task + '</li>';
+                });
+                innerHTML += '</ul></div>';
+                
+                innerHTML += '<div class="section assessment">';
+                innerHTML += '<h4>📊 Assessment Criteria</h4>';
+                innerHTML += '<ul class="criteria-list">';
+                assignment.assessmentCriteria.forEach(criteria => {
+                    innerHTML += '<li>' + criteria.criterion + ' (' + criteria.weight + ')</li>';
+                });
+                innerHTML += '</ul></div>';
+                
+                innerHTML += '<div class="section deliverables">';
+                innerHTML += '<h4>📦 Deliverables</h4>';
+                innerHTML += '<ul class="deliverable-list">';
+                assignment.deliverables.forEach(deliverable => {
+                    innerHTML += '<li>' + deliverable + '</li>';
+                });
+                innerHTML += '</ul></div>';
+                
+                innerHTML += '<div class="comment-section">';
+                innerHTML += '<h4>💬 Reviewer Comments</h4>';
+                innerHTML += '<div class="comment-form">';
+                innerHTML += '<textarea id="comment-' + assignment.id + '" placeholder="Add your review comments for this assignment..."></textarea>';
+                innerHTML += '<button onclick="addComment(' + assignment.id + ')" class="comment-btn">Add Comment</button>';
+                innerHTML += '</div>';
+                innerHTML += '<div id="comments-' + assignment.id + '" class="comments-display"></div>';
+                innerHTML += '</div>';
+                innerHTML += '</div>'; // Close assignment-content
+                
+                assignmentDiv.innerHTML = innerHTML;
+                
+                // Add click handler to toggle expansion
+                assignmentDiv.addEventListener('click', function(e) {
+                    // Don't toggle if clicking on buttons or textareas
+                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA') {
+                        return;
+                    }
+                    
+                    const content = this.querySelector('.assignment-content');
+                    const indicator = this.querySelector('.expand-indicator');
+                    
+                    content.classList.toggle('expanded');
+                    indicator.classList.toggle('expanded');
+                });
+                
+                container.appendChild(assignmentDiv);
+            });
+            
+            loadComments();
+        }
+
+        function addComment(assignmentId) {
+            const commentText = document.getElementById('comment-' + assignmentId).value.trim();
+            if (!commentText) return;
+
+            const comment = {
+                id: Date.now(),
+                assignmentId: assignmentId,
+                text: commentText,
+                timestamp: new Date().toISOString(),
+                reviewer: 'reviewer'
+            };
+
+            let comments = JSON.parse(localStorage.getItem('azure_assignment_comments') || '[]');
+            comments.push(comment);
+            localStorage.setItem('azure_assignment_comments', JSON.stringify(comments));
+
+            document.getElementById('comment-' + assignmentId).value = '';
+            loadComments();
+        }
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('azure_assignment_comments') || '[]');
+            
+            azureAssignments.forEach(assignment => {
+                const assignmentComments = comments.filter(c => c.assignmentId === assignment.id);
+                const commentsDiv = document.getElementById('comments-' + assignment.id);
+                
+                if (assignmentComments.length === 0) {
+                    commentsDiv.innerHTML = '<p class="no-comments">No comments yet.</p>';
+                } else {
+                    commentsDiv.innerHTML = assignmentComments.map(comment => {
+                        return '<div class="comment">' +
+                            '<div class="comment-header">' +
+                            '<strong>' + comment.reviewer + '</strong>' +
+                            '<span class="comment-date">' + new Date(comment.timestamp).toLocaleString() + '</span>' +
+                            '<button onclick="deleteComment(' + comment.id + ')" class="delete-btn">×</button>' +
+                            '</div>' +
+                            '<div class="comment-text">' + comment.text + '</div>' +
+                            '</div>';
+                    }).join('');
+                }
+            });
+        }
+
+        function deleteComment(commentId) {
+            let comments = JSON.parse(localStorage.getItem('azure_assignment_comments') || '[]');
+            comments = comments.filter(c => c.id !== commentId);
+            localStorage.setItem('azure_assignment_comments', JSON.stringify(comments));
+            loadComments();
+        }
+
+        function deleteComment(commentId) {
+            let comments = JSON.parse(localStorage.getItem('azure_assignment_comments') || '[]');
+            comments = comments.filter(comment => comment.id !== commentId);
+            localStorage.setItem('azure_assignment_comments', JSON.stringify(comments));
+            loadComments();
+        }
+
+        function openAdminPanel() {
+            const comments = JSON.parse(localStorage.getItem('azure_assignment_comments') || '[]');
+            let content = 'Azure Assignment Comments:\\n\\n';
+            comments.forEach(comment => {
+                content += 'Assignment ' + comment.assignmentId + ' - ' + comment.reviewer + '\\n';
+                content += new Date(comment.timestamp).toLocaleString() + '\\n';
+                content += comment.text + '\\n\\n';
+            });
+            alert(content || 'No comments found.');
+        }
+
+        // Check if user is logged in
+        if (sessionStorage.getItem('azure_authenticated') !== 'true') {
+            window.location.href = './azure_index.html';
+        }
+
+        // Check for admin access
+        if (sessionStorage.getItem('azure_user_role') === 'admin') {
+            document.getElementById('adminBtn').style.display = 'inline-block';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', renderAssignments);
+    </script>
+</body>
+</html>

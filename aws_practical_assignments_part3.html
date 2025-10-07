@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Practical Assignments - Part 3 | Question Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b6b 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #232f3e, #ff9900, #667eea);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .assignment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border-left: 5px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, #ff6b6b, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .topic-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .assignment-title {
+            color: #232f3e;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b6b;
+        }
+
+        .case-study {
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .case-study h4 {
+            color: #c53030;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .case-study h4:before {
+            content: "🎯";
+            font-size: 1.5em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h4 {
+            color: #232f3e;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tasks h4:before { content: "🚀"; }
+        .assessment h4:before { content: "📊"; }
+        .deliverables h4:before { content: "🎁"; }
+
+        .task-list, .criteria-list, .deliverable-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-list li, .criteria-list li, .deliverable-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-left: 4px solid #ff6b6b;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .criteria-list li {
+            border-left-color: #667eea;
+        }
+
+        .deliverable-list li {
+            border-left-color: #764ba2;
+        }
+
+        .task-list li:hover, .criteria-list li:hover, .deliverable-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .navigation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #ff6b6b, #667eea);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .separator {
+            height: 3px;
+            background: linear-gradient(135deg, #ff6b6b, #667eea, #764ba2);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .highlight-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .assignment-card {
+                padding: 20px;
+            }
+            
+            .nav-button {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 AWS Practical Assignments - Part 3</h1>
+            <p>Advanced and Emerging Technologies (Topics 26-33)</p>
+        </div>
+
+        <div class="navigation">
+            <a href="#" onclick="protectLink(event, './index.html')" class="nav-button">🏠 Home</a>
+            <a href="#" onclick="protectLink(event, './aws_mcq_review.html')" class="nav-button">📝 MCQ Review</a>
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments.html')" class="nav-button">📚 Part 1</a>
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments_part2.html')" class="nav-button">🚀 Part 2</a>
+        </div>
+
+        <div class="topic-header">
+            <h2>🌟 Topics 26-33: Cutting-Edge Cloud Technologies</h2>
+            <p>Advanced Serverless, Security, Integration, and Emerging Technologies</p>
+        </div>
+
+        <div class="highlight-card">
+            <h3>🎯 Advanced Learning Path</h3>
+            <p>These assignments focus on emerging technologies and advanced patterns for cloud architects and senior engineers</p>
+        </div>
+
+        <!-- Topic 26: Route 53 and Global Infrastructure -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 26: Route 53 and Global Infrastructure Optimization</div>
+            
+            <h3>🌐 Practical Assignment 1: Global DNS and Traffic Management</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>GlobalStreaming Corp operates a video streaming service with users in 6 continents. They experience latency issues during peak hours and need intelligent traffic routing based on user location, server health, and real-time performance metrics. During major sporting events, traffic can spike 50x normal levels in specific regions within minutes.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design global DNS architecture using Route 53 hosted zones</li>
+                    <li>Implement geolocation and latency-based routing policies</li>
+                    <li>Configure health checks with CloudWatch integration</li>
+                    <li>Set up weighted routing for gradual traffic shifting</li>
+                    <li>Implement DNS failover with automated recovery</li>
+                    <li>Create traffic flow policies for complex routing scenarios</li>
+                    <li>Set up DNS query logging and analytics</li>
+                    <li>Optimize global infrastructure placement using latency data</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Global routing architecture design (30%)</li>
+                    <li>Health check and failover implementation (25%)</li>
+                    <li>Performance optimization results (20%)</li>
+                    <li>Traffic analytics and insights (15%)</li>
+                    <li>Automation and self-healing capabilities (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>Route 53 configuration documentation</li>
+                    <li>Health check and monitoring setup</li>
+                    <li>Performance benchmark reports</li>
+                    <li>Global traffic optimization strategy</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 27: Advanced Serverless -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 27: Advanced Serverless Architectures</div>
+            
+            <h3>⚡ Practical Assignment 2: Enterprise Serverless Data Processing Pipeline</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>DataFlow Inc. processes 10TB of structured and unstructured data daily from multiple sources including APIs, file uploads, database changes, and streaming data. They need a completely serverless architecture that automatically scales, handles errors gracefully, maintains exactly-once processing guarantees, and provides real-time insights.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design event-driven serverless architecture using Lambda</li>
+                    <li>Implement Step Functions for complex workflow orchestration</li>
+                    <li>Configure SQS and SNS for reliable message processing</li>
+                    <li>Set up DynamoDB Streams for real-time data changes</li>
+                    <li>Create EventBridge rules for cross-service communication</li>
+                    <li>Implement error handling and retry mechanisms</li>
+                    <li>Configure CloudWatch dashboards for serverless monitoring</li>
+                    <li>Optimize costs through right-sizing and scheduling</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Serverless architecture design and scalability (30%)</li>
+                    <li>Error handling and reliability (25%)</li>
+                    <li>Cost optimization strategies (20%)</li>
+                    <li>Performance and monitoring (15%)</li>
+                    <li>Event-driven integration quality (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>Serverless architecture documentation</li>
+                    <li>Step Functions workflow definitions</li>
+                    <li>Cost optimization analysis</li>
+                    <li>Performance monitoring setup</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 28: Zero Trust Security -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 28: Zero Trust Security Architecture</div>
+            
+            <h3>🔒 Practical Assignment 3: Enterprise Zero Trust Implementation</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>SecureFirst Corp needs to implement a zero trust security model across their AWS infrastructure supporting 10,000 employees, 500 applications, and hybrid cloud environments. The solution must provide continuous verification, least privilege access, and real-time threat detection while maintaining user productivity and meeting compliance requirements.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design identity-centric security architecture</li>
+                    <li>Implement continuous authentication and authorization</li>
+                    <li>Configure micro-segmentation with Security Groups and NACLs</li>
+                    <li>Set up real-time threat detection and response</li>
+                    <li>Create policy-based access controls</li>
+                    <li>Implement device compliance and trust scoring</li>
+                    <li>Configure comprehensive audit logging</li>
+                    <li>Set up automated incident response workflows</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Zero trust architecture design (30%)</li>
+                    <li>Security controls implementation (25%)</li>
+                    <li>Threat detection and response (20%)</li>
+                    <li>Compliance and audit capabilities (15%)</li>
+                    <li>User experience and productivity impact (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>Zero trust architecture blueprint</li>
+                    <li>Security policy configurations</li>
+                    <li>Threat detection rule sets</li>
+                    <li>Compliance monitoring framework</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 30: Advanced MLOps -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 30: Advanced MLOps and AI Governance</div>
+            
+            <h3>🤖 Practical Assignment 4: Enterprise AI/ML Platform with Governance</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>AI-Driven Corp operates 200+ ML models in production serving real-time predictions to 50 million users. They need a comprehensive MLOps platform with automated model training, testing, deployment, monitoring, and governance. The platform must ensure model fairness, explainability, and compliance with AI regulations while supporting multiple ML frameworks and deployment patterns.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design end-to-end MLOps platform architecture</li>
+                    <li>Implement automated model training and validation pipelines</li>
+                    <li>Create model registry with lineage tracking</li>
+                    <li>Set up multi-environment model deployment strategies</li>
+                    <li>Implement model monitoring and drift detection</li>
+                    <li>Create AI governance and compliance framework</li>
+                    <li>Set up model explainability and fairness testing</li>
+                    <li>Configure automated model retraining workflows</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>MLOps platform architecture and scalability (30%)</li>
+                    <li>Governance and compliance implementation (25%)</li>
+                    <li>Model monitoring and performance management (20%)</li>
+                    <li>Automation and CI/CD integration (15%)</li>
+                    <li>Explainability and fairness features (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>MLOps platform architecture documentation</li>
+                    <li>Model governance policies and procedures</li>
+                    <li>Monitoring and alerting configurations</li>
+                    <li>Compliance reporting framework</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Topic 33: Quantum Computing Integration -->
+        <div class="assignment-card">
+            <div class="assignment-title">Topic 33: Quantum Computing Integration</div>
+            
+            <h3>⚛️ Practical Assignment 5: Quantum-Classical Hybrid Computing Platform</h3>
+            
+            <div class="case-study">
+                <h4>Case Study</h4>
+                <p>QuantumLeap Corp is developing optimization algorithms for supply chain management that could benefit from quantum computing advantages. They need a hybrid platform that seamlessly integrates Amazon Braket quantum computing services with classical AWS compute for preprocessing, quantum algorithm execution, and post-processing while maintaining cost efficiency and scalability.</p>
+            </div>
+
+            <div class="section tasks">
+                <h4>Tasks to Complete</h4>
+                <ul class="task-list">
+                    <li>Design hybrid quantum-classical computing architecture</li>
+                    <li>Implement quantum algorithm development workflow</li>
+                    <li>Create cost optimization strategies for quantum computing</li>
+                    <li>Set up quantum simulation and testing environments</li>
+                    <li>Configure classical preprocessing and post-processing pipelines</li>
+                    <li>Implement result validation and benchmarking</li>
+                    <li>Create quantum computing resource scheduling</li>
+                    <li>Set up performance monitoring and cost tracking</li>
+                </ul>
+            </div>
+
+            <div class="section assessment">
+                <h4>Assessment Criteria</h4>
+                <ul class="criteria-list">
+                    <li>Hybrid architecture design and integration (30%)</li>
+                    <li>Quantum algorithm implementation quality (25%)</li>
+                    <li>Cost optimization and resource management (20%)</li>
+                    <li>Performance benchmarking and validation (15%)</li>
+                    <li>Innovation and future scalability (10%)</li>
+                </ul>
+            </div>
+
+            <div class="section deliverables">
+                <h4>Deliverables</h4>
+                <ul class="deliverable-list">
+                    <li>Hybrid computing platform architecture</li>
+                    <li>Quantum algorithm implementations</li>
+                    <li>Performance benchmarking reports</li>
+                    <li>Cost optimization analysis and recommendations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-card">
+            <h3>🎉 Congratulations!</h3>
+            <p>You've completed all advanced assignments covering cutting-edge AWS technologies and emerging patterns</p>
+        </div>
+
+        <div class="navigation">
+            <a href="#" onclick="protectLink(event, './aws_practical_assignments_part2.html')" class="nav-button">⬅️ Back to Part 2</a>
+            <a href="#" onclick="protectLink(event, './index.html')" class="nav-button">🏠 Home</a>
+            <a href="#" onclick="protectLink(event, './aws_mcq_review.html')" class="nav-button">📝 Test Your Knowledge</a>
+        </div>
+    </div>
+
+    <button class="back-to-top" onclick="scrollToTop()">⬆️</button>
+
+    <script>
+        // Authentication and navigation functions
+        function checkAuthentication() {
+            const isAuthenticated = sessionStorage.getItem('aws_authenticated');
+            if (!isAuthenticated) {
+                window.location.href = './index.html';
+                return false;
+            }
+            return true;
+        }
+
+        function protectLink(event, url) {
+            event.preventDefault();
+            if (checkAuthentication()) {
+                window.open(url, '_self');
+            }
+        }
+
+        // Back to top functionality
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuthentication()) {
+                document.body.style.display = 'none';
+            } else {
+                const userRole = sessionStorage.getItem('aws_user_role');
+                if (userRole === 'admin') {
+                    addAdminButton();
+                }
+                addCommentSections();
+            }
+        });
+
+        // Add comment sections to each assignment
+        function addCommentSections() {
+            const assignmentCards = document.querySelectorAll('.assignment-card');
+            assignmentCards.forEach((card, index) => {
+                const assignmentId = index + 26; // Part 3 starts from assignment 26
+                const assignmentTitle = card.querySelector('h3')?.textContent || `Assignment ${assignmentId}`;
+                
+                const commentSection = document.createElement('div');
+                commentSection.className = 'comment-section';
+                commentSection.style.cssText = `
+                    margin-top: 30px; 
+                    padding: 25px; 
+                    background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+                    border-radius: 15px; 
+                    border-left: 5px solid #ff6b6b;
+                `;
+                
+                commentSection.innerHTML = `
+                    <h4 style="color: #232f3e; margin-bottom: 15px; font-size: 1.2em;">💬 Assignment Review & Feedback</h4>
+                    <textarea 
+                        id="assignment-comment-${assignmentId}" 
+                        placeholder="Share your feedback about this assignment (clarity, complexity, relevance, time estimation, etc.)"
+                        style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px;"
+                    ></textarea>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <select id="assignment-rating-${assignmentId}" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; min-width: 200px;">
+                            <option value="">Rate this assignment</option>
+                            <option value="excellent">⭐⭐⭐⭐⭐ Excellent</option>
+                            <option value="good">⭐⭐⭐⭐ Good</option>
+                            <option value="average">⭐⭐⭐ Average</option>
+                            <option value="poor">⭐⭐ Poor</option>
+                            <option value="very-poor">⭐ Very Poor</option>
+                        </select>
+                        <select id="assignment-difficulty-${assignmentId}" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; min-width: 150px;">
+                            <option value="">Difficulty Level</option>
+                            <option value="very-easy">Very Easy</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="very-hard">Very Hard</option>
+                        </select>
+                        <button 
+                            onclick="submitComment('assignment', ${assignmentId}, 'Part 3', 'Topic ${assignmentId}', '${assignmentTitle.replace(/'/g, "\\'")}', 'assignment-difficulty-${assignmentId}')"
+                            style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">
+                            Submit Feedback
+                        </button>
+                    </div>
+                `;
+                
+                card.appendChild(commentSection);
+            });
+        }
+
+        // Comment System Functions (same as other parts)
+        function submitComment(type, itemId, category, topic, title, difficultyElementId = null) {
+            const commentText = document.getElementById(`${type}-comment-${itemId}`).value.trim();
+            const rating = document.getElementById(`${type}-rating-${itemId}`).value;
+            const difficulty = difficultyElementId ? document.getElementById(difficultyElementId).value : '';
+            const username = sessionStorage.getItem('aws_username');
+            
+            if (!commentText) {
+                alert('Please enter a comment before submitting.');
+                return;
+            }
+            
+            const comment = {
+                timestamp: new Date().toISOString(),
+                user: username,
+                type: type,
+                itemId: itemId,
+                category: category,
+                topic: topic,
+                title: title,
+                comment: commentText,
+                rating: rating,
+                difficulty: difficulty,
+                id: Date.now() + Math.random()
+            };
+            
+            saveComment(comment);
+            
+            // Clear form
+            document.getElementById(`${type}-comment-${itemId}`).value = '';
+            document.getElementById(`${type}-rating-${itemId}`).value = '';
+            if (difficultyElementId) {
+                document.getElementById(difficultyElementId).value = '';
+            }
+            
+            showSuccessMessage('Feedback submitted successfully!');
+        }
+
+        function saveComment(comment) {
+            const existingComments = JSON.parse(localStorage.getItem('aws_review_comments') || '[]');
+            existingComments.push(comment);
+            localStorage.setItem('aws_review_comments', JSON.stringify(existingComments));
+        }
+
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+            `;
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.remove();
+                }
+            }, 3000);
+        }
+
+        function addAdminButton() {
+            const header = document.querySelector('.header');
+            const adminButton = document.createElement('button');
+            adminButton.style.cssText = `
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+            `;
+            adminButton.textContent = '👤 Admin Panel';
+            adminButton.onclick = () => window.open('./aws_mcq_review.html', '_blank');
+            header.appendChild(adminButton);
+        }
+    </script>
+</body>
+</html>

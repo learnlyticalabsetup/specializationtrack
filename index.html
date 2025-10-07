@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Review Platform - Track Selection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .track-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .track-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .track-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .track-icon {
+            font-size: 5em;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .track-title {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .aws-card .track-title {
+            color: #232f3e;
+        }
+
+        .azure-card .track-title {
+            color: #0078d4;
+        }
+
+        .track-description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .track-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .aws-card .stat-item {
+            border-left-color: #ff9900;
+        }
+
+        .azure-card .stat-item {
+            border-left-color: #0078d4;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .aws-card .stat-number {
+            color: #232f3e;
+        }
+
+        .azure-card .stat-number {
+            color: #0078d4;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .track-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .track-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+        }
+
+        .track-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .access-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .aws-card .access-button {
+            background: linear-gradient(135deg, #ff9900, #cc7a00);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.3);
+        }
+
+        .azure-card .access-button {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+            box-shadow: 0 6px 20px rgba(0, 120, 212, 0.3);
+        }
+
+        .access-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        }
+
+        .aws-card .access-button:hover {
+            box-shadow: 0 12px 32px rgba(255, 153, 0, 0.4);
+        }
+
+        .azure-card .access-button:hover {
+            box-shadow: 0 12px 32px rgba(0, 120, 212, 0.4);
+        }
+
+        .platform-info {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .platform-info h3 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .platform-info p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .track-selection {
+                grid-template-columns: 1fr;
+            }
+            
+            .track-card {
+                padding: 30px;
+            }
+            
+            .track-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🎯 Question Review Platform</h1>
+            <p class="subtitle">Choose Your Cloud Specialization Track</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="track-selection">
+            <div class="track-card aws-card" onclick="accessTrack('aws')">
+                <div class="track-icon">☁️</div>
+                <h2 class="track-title">AWS Specialization Track</h2>
+                <p class="track-description">
+                    Comprehensive AWS cloud solutions covering networking, compute, storage, security, and emerging technologies with real-world professional scenarios.
+                </p>
+                
+                <div class="track-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">650</div>
+                        <div class="stat-label">MCQ Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">66</div>
+                        <div class="stat-label">Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Capstone Projects</div>
+                    </div>
+                </div>
+
+                <ul class="track-features">
+                    <li>VPC Design & Networking Fundamentals</li>
+                    <li>EC2, Auto Scaling & Compute Services</li>
+                    <li>Storage Solutions (S3, EBS, EFS)</li>
+                    <li>Security & Identity Management</li>
+                    <li>Database & Analytics Services</li>
+                    <li>DevOps & Infrastructure as Code</li>
+                    <li>Machine Learning & AI Services</li>
+                    <li>Serverless & Container Technologies</li>
+                    <li>Cost Optimization & Well-Architected Framework</li>
+                    <li>Emerging Technologies & Innovation</li>
+                </ul>
+
+                <button class="access-button">Access AWS Track</button>
+            </div>
+
+            <div class="track-card azure-card" onclick="accessTrack('azure')">
+                <div class="track-icon">🚀</div>
+                <h2 class="track-title">Azure Specialization Track</h2>
+                <p class="track-description">
+                    Advanced Azure cloud platform covering identity, data, DevOps, AI services, and enterprise solutions with mission-critical implementation challenges.
+                </p>
+                
+                <div class="track-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">650</div>
+                        <div class="stat-label">MCQ Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">33</div>
+                        <div class="stat-label">Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Capstone Projects</div>
+                    </div>
+                </div>
+
+                <ul class="track-features">
+                    <li>Identity, Governance & Monitoring Solutions</li>
+                    <li>Data Storage & Business Continuity</li>
+                    <li>Infrastructure Solutions & Networking</li>
+                    <li>Identity & Access Management (PIM)</li>
+                    <li>Platform Protection & Security Operations</li>
+                    <li>Data & Application Security</li>
+                    <li>FinOps Principles & Lifecycle Management</li>
+                    <li>DevOps Fundamentals & Kubernetes</li>
+                    <li>CI/CD Pipeline Design & Infrastructure as Code</li>
+                    <li>Azure AI Services & Cognitive Services</li>
+                </ul>
+
+                <button class="access-button">Access Azure Track</button>
+            </div>
+        </div>
+
+        <div class="platform-info">
+            <h3>🔐 Secure Professional Review Platform</h3>
+            <p>
+                Each track provides comprehensive learning assessment with interactive MCQ reviews, detailed practical assignments, 
+                and enterprise-level capstone projects. The platform includes role-based authentication, comprehensive feedback 
+                collection systems, and admin panels for review management. All content is designed to meet professional 
+                industry standards with real-world applicable scenarios.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function accessTrack(track) {
+            if (track === 'aws') {
+                window.location.href = './aws_index.html';
+            } else if (track === 'azure') {
+                window.location.href = './azure_index.html';
+            }
+        }
+    </script>
+</body>
+</html>

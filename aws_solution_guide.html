@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Practical Assignment Solutions - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Amazon Ember', 'Helvetica Neue', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9900, #ff7700, #232F3E);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #FF9900;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .nav-pills {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .nav-pill {
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            margin: 2px;
+        }
+
+        .nav-pill.active {
+            background: #FF9900;
+            color: white;
+        }
+
+        .nav-pill:hover {
+            background: #fff3e0;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: none;
+        }
+
+        .solution-card.active {
+            display: block;
+        }
+
+        .solution-header {
+            border-bottom: 3px solid #FF9900;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .solution-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FF9900;
+            margin-bottom: 10px;
+        }
+
+        .solution-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            background: #fff3e0;
+            color: #FF9900;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .step-section {
+            margin-bottom: 40px;
+        }
+
+        .step-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #FF9900;
+        }
+
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #232F3E;
+            margin-bottom: 5px;
+        }
+
+        .step-description {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .step-content {
+            padding-left: 20px;
+        }
+
+        .substep {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .substep-number {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #FF9900;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .substep-title {
+            font-weight: bold;
+            color: #232F3E;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+
+        .code-block {
+            background: #232F3E;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #FF9900;
+        }
+
+        .command {
+            background: #1a1a1a;
+            color: #50C878;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .tip {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .screenshot-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 40px;
+            text-align: center;
+            color: #6c757d;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .resource-links {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .resource-links h4 {
+            color: #232F3E;
+            margin-bottom: 15px;
+        }
+
+        .resource-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resource-links li {
+            margin-bottom: 8px;
+        }
+
+        .resource-links a {
+            color: #FF9900;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-links a:hover {
+            text-decoration: underline;
+        }
+
+        .time-estimate {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #FF9900;
+        }
+
+        .prerequisites {
+            background: #f1f3f4;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .prerequisites h4 {
+            color: #232F3E;
+            margin-bottom: 15px;
+        }
+
+        .prerequisites ul {
+            margin-left: 20px;
+        }
+
+        .prerequisites li {
+            margin-bottom: 8px;
+        }
+
+        .validation-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid #28a745;
+        }
+
+        .troubleshooting {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .aws-service-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #FF9900;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .solution-meta {
+                flex-direction: column;
+            }
+            
+            .nav-pills {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .substep {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>☁️ AWS Practical Assignment Solutions</h1>
+            <p class="subtitle">Complete Step-by-Step Guide for Cloud Infrastructure</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation Pills -->
+        <div class="nav-pills">
+            <button class="nav-pill active" onclick="showSolution(1)">Assignment 1: VPC & Networking</button>
+            <button class="nav-pill" onclick="showSolution(2)">Assignment 2: EC2 & Auto Scaling</button>
+            <button class="nav-pill" onclick="showSolution(3)">Assignment 3: RDS Database</button>
+            <button class="nav-pill" onclick="showSolution(4)">Assignment 4: S3 & CloudFront</button>
+            <button class="nav-pill" onclick="showSolution(5)">Assignment 5: Load Balancer</button>
+        </div>
+
+        <!-- Assignment 1: VPC and Networking -->
+        <div id="solution1" class="solution-card active">
+            <div class="solution-header">
+                <div class="solution-title">Assignment 1: AWS VPC and Networking Setup</div>
+                <div class="solution-meta">
+                    <span class="meta-tag">🌐 VPC & Networking</span>
+                    <span class="meta-tag">⏱️ 90 minutes</span>
+                    <span class="meta-tag">📊 Foundational</span>
+                </div>
+            </div>
+
+            <div class="time-estimate">
+                <strong>⏱️ Estimated Time:</strong> 90 minutes<br>
+                <strong>🎯 Learning Objective:</strong> Create a production-ready VPC with public and private subnets
+            </div>
+
+            <div class="prerequisites">
+                <h4>📋 Prerequisites</h4>
+                <ul>
+                    <li>AWS Account with appropriate permissions</li>
+                    <li>Basic understanding of IP addressing and CIDR notation</li>
+                    <li>Familiarity with networking concepts (subnets, routing, gateways)</li>
+                    <li>AWS Management Console access</li>
+                </ul>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 1: Creating the VPC</div>
+                    <div class="step-description">Set up the foundational network infrastructure</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Access VPC Dashboard</div>
+                        <p>Log into the AWS Management Console:</p>
+                        <ol>
+                            <li>Navigate to <span class="command">https://console.aws.amazon.com</span></li>
+                            <li>Sign in with your AWS credentials</li>
+                            <li>In the services menu, search for "VPC"</li>
+                            <li>Click on "VPC" under Networking & Content Delivery</li>
+                        </ol>
+                        
+                        <div class="tip">
+                            <strong>💡 Quick Access:</strong> You can also use the search bar at the top and type "VPC" for faster navigation.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Create the VPC</div>
+                        <p>In the VPC Dashboard:</p>
+                        <ol>
+                            <li>Click "Create VPC" button</li>
+                            <li>Select "VPC and more" for a comprehensive setup</li>
+                            <li>Configure the VPC settings:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Resources to create: VPC and more
+Name tag auto-generation: Auto-generate
+IPv4 CIDR block: 10.0.0.0/16
+
+Number of Availability Zones: 2
+Number of public subnets: 2
+Number of private subnets: 2
+
+NAT gateways: 1 per AZ
+VPC endpoints: None
+
+DNS hostnames: Enable
+DNS resolution: Enable
+                        </div>
+                        
+                        <div class="warning">
+                            <strong>⚠️ Cost Notice:</strong> NAT Gateways incur charges (~$45/month each). For learning, you can start with 1 NAT Gateway and add more later.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Review and Create</div>
+                        <p>Review your configuration:</p>
+                        <ul>
+                            <li><strong>VPC CIDR:</strong> 10.0.0.0/16 (65,536 IP addresses)</li>
+                            <li><strong>Public Subnets:</strong> 10.0.1.0/24 and 10.0.2.0/24</li>
+                            <li><strong>Private Subnets:</strong> 10.0.3.0/24 and 10.0.4.0/24</li>
+                            <li><strong>Availability Zones:</strong> Two different AZs for high availability</li>
+                        </ul>
+                        
+                        <p>Click "Create VPC" and wait for creation to complete (usually 2-3 minutes).</p>
+                        
+                        <div class="success">
+                            <strong>✅ Success:</strong> You should see "Successfully created VPC" message with all resources listed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 2: Configuring Security Groups</div>
+                    <div class="step-description">Create security groups to control traffic flow</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Create Web Server Security Group</div>
+                        <p>In the VPC Dashboard:</p>
+                        <ol>
+                            <li>Click "Security Groups" in the left navigation</li>
+                            <li>Click "Create security group"</li>
+                            <li>Configure the web server security group:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Security group name: WebServer-SG
+Description: Security group for web servers
+VPC: Select your newly created VPC
+
+Inbound Rules:
+Rule 1:
+  Type: HTTP
+  Protocol: TCP
+  Port Range: 80
+  Source: 0.0.0.0/0 (Anywhere)
+
+Rule 2:
+  Type: HTTPS
+  Protocol: TCP
+  Port Range: 443
+  Source: 0.0.0.0/0 (Anywhere)
+
+Rule 3:
+  Type: SSH
+  Protocol: TCP
+  Port Range: 22
+  Source: Your IP address (will auto-populate)
+                        </div>
+                        
+                        <p>Click "Create security group".</p>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Create Database Security Group</div>
+                        <p>Create a more restrictive security group for databases:</p>
+                        
+                        <div class="code-block">
+Security group name: Database-SG
+Description: Security group for database servers
+VPC: Select your newly created VPC
+
+Inbound Rules:
+Rule 1:
+  Type: MySQL/Aurora
+  Protocol: TCP
+  Port Range: 3306
+  Source: Custom (select WebServer-SG from dropdown)
+
+Rule 2:
+  Type: PostgreSQL
+  Protocol: TCP
+  Port Range: 5432
+  Source: Custom (select WebServer-SG from dropdown)
+                        </div>
+                        
+                        <div class="tip">
+                            <strong>💡 Security Best Practice:</strong> Database security groups should only allow access from application servers, never directly from the internet.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Create Application Load Balancer Security Group</div>
+                        <p>Create a security group for the load balancer:</p>
+                        
+                        <div class="code-block">
+Security group name: ALB-SG
+Description: Security group for Application Load Balancer
+VPC: Select your newly created VPC
+
+Inbound Rules:
+Rule 1:
+  Type: HTTP
+  Protocol: TCP
+  Port Range: 80
+  Source: 0.0.0.0/0 (Anywhere)
+
+Rule 2:
+  Type: HTTPS
+  Protocol: TCP
+  Port Range: 443
+  Source: 0.0.0.0/0 (Anywhere)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 3: Setting Up Network ACLs</div>
+                    <div class="step-description">Configure additional subnet-level security</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Create Custom Network ACL</div>
+                        <p>Add an extra layer of security:</p>
+                        <ol>
+                            <li>Click "Network ACLs" in the VPC dashboard</li>
+                            <li>Click "Create network ACL"</li>
+                            <li>Configure:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Name: WebTier-NACL
+VPC: Select your VPC
+                        </div>
+                        
+                        <p>Click "Create network ACL".</p>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Configure NACL Rules</div>
+                        <p>Add inbound rules to the NACL:</p>
+                        
+                        <div class="code-block">
+Inbound Rules:
+Rule 100:
+  Type: HTTP (80)
+  Source: 0.0.0.0/0
+  Allow/Deny: Allow
+
+Rule 110:
+  Type: HTTPS (443)
+  Source: 0.0.0.0/0
+  Allow/Deny: Allow
+
+Rule 120:
+  Type: SSH (22)
+  Source: Your IP/32
+  Allow/Deny: Allow
+
+Rule 130:
+  Type: Custom TCP
+  Port Range: 32768-61000
+  Source: 0.0.0.0/0
+  Allow/Deny: Allow
+                        </div>
+                        
+                        <div class="tip">
+                            <strong>💡 Ephemeral Ports:</strong> Rule 130 allows response traffic on ephemeral ports that applications use for return traffic.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Associate NACL with Subnets</div>
+                        <p>Link the NACL to public subnets:</p>
+                        <ol>
+                            <li>Select your newly created NACL</li>
+                            <li>Go to "Subnet associations" tab</li>
+                            <li>Click "Edit subnet associations"</li>
+                            <li>Select both public subnets</li>
+                            <li>Click "Save changes"</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 4: Testing Network Connectivity</div>
+                    <div class="step-description">Verify that network routing and connectivity work correctly</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Launch Test Instance in Public Subnet</div>
+                        <p>Create a test EC2 instance:</p>
+                        <ol>
+                            <li>Go to EC2 Dashboard</li>
+                            <li>Click "Launch Instance"</li>
+                            <li>Configure:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Name: PublicSubnet-Test
+AMI: Amazon Linux 2023 AMI (Free Tier)
+Instance Type: t2.micro
+Key Pair: Create new or use existing
+Network Settings:
+  VPC: Your VPC
+  Subnet: Public subnet (10.0.1.0/24)
+  Auto-assign public IP: Enable
+  Security Group: WebServer-SG
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Test Internet Connectivity</div>
+                        <p>Verify the instance can reach the internet:</p>
+                        <ol>
+                            <li>Wait for instance to be in "Running" state</li>
+                            <li>Select the instance and click "Connect"</li>
+                            <li>Use "Session Manager" or SSH to connect</li>
+                            <li>Run connectivity tests:</li>
+                        </ol>
+                        
+                        <div class="command">ping -c 4 8.8.8.8</div>
+                        <div class="command">curl -I https://aws.amazon.com</div>
+                        
+                        <div class="success">
+                            <strong>✅ Expected Result:</strong> Both commands should complete successfully, indicating internet connectivity.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Launch Test Instance in Private Subnet</div>
+                        <p>Test the private subnet configuration:</p>
+                        
+                        <div class="code-block">
+Name: PrivateSubnet-Test
+AMI: Amazon Linux 2023 AMI
+Instance Type: t2.micro
+Network Settings:
+  VPC: Your VPC
+  Subnet: Private subnet (10.0.3.0/24)
+  Auto-assign public IP: Disable
+  Security Group: Database-SG
+                        </div>
+                        
+                        <p>Connect via Session Manager and test that it can reach the internet through NAT Gateway:</p>
+                        
+                        <div class="command">ping -c 4 8.8.8.8</div>
+                        
+                        <div class="tip">
+                            <strong>💡 Troubleshooting:</strong> If the private instance can't reach the internet, check that the NAT Gateway is properly configured and route tables are correct.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation Section -->
+            <div class="validation-section">
+                <h4>🔍 Validation Checklist</h4>
+                <ol>
+                    <li><strong>VPC Created:</strong> Verify VPC exists with correct CIDR (10.0.0.0/16)</li>
+                    <li><strong>Subnets:</strong> 2 public and 2 private subnets in different AZs</li>
+                    <li><strong>Internet Gateway:</strong> Attached to VPC and routes configured</li>
+                    <li><strong>NAT Gateway:</strong> Created in public subnet with proper routing</li>
+                    <li><strong>Security Groups:</strong> All 3 security groups created with correct rules</li>
+                    <li><strong>Network ACL:</strong> Custom NACL associated with public subnets</li>
+                    <li><strong>Connectivity:</strong> Public instance has internet access, private instance has outbound access via NAT</li>
+                </ol>
+            </div>
+
+            <div class="troubleshooting">
+                <h4>🛠️ Common Issues & Solutions</h4>
+                <ul>
+                    <li><strong>Instance can't connect to internet:</strong> Check route table has 0.0.0.0/0 pointing to Internet Gateway</li>
+                    <li><strong>Private instance no internet:</strong> Verify NAT Gateway exists and private route table points to it</li>
+                    <li><strong>SSH connection fails:</strong> Ensure security group allows SSH (port 22) from your IP</li>
+                    <li><strong>High NAT Gateway costs:</strong> Consider using single NAT Gateway for learning environments</li>
+                </ul>
+            </div>
+
+            <div class="resource-links">
+                <h4>📚 Additional Resources</h4>
+                <ul>
+                    <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/" target="_blank">VPC User Guide</a></li>
+                    <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html" target="_blank">Security Groups Guide</a></li>
+                    <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" target="_blank">Network ACLs Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Assignment 2: EC2 and Auto Scaling -->
+        <div id="solution2" class="solution-card">
+            <div class="solution-header">
+                <div class="solution-title">Assignment 2: EC2 Instances and Auto Scaling Setup</div>
+                <div class="solution-meta">
+                    <span class="meta-tag">🖥️ Compute</span>
+                    <span class="meta-tag">⏱️ 105 minutes</span>
+                    <span class="meta-tag">📊 Intermediate</span>
+                </div>
+            </div>
+
+            <div class="time-estimate">
+                <strong>⏱️ Estimated Time:</strong> 105 minutes<br>
+                <strong>🎯 Learning Objective:</strong> Deploy scalable compute infrastructure with auto scaling
+            </div>
+
+            <div class="prerequisites">
+                <h4>📋 Prerequisites</h4>
+                <ul>
+                    <li>Completed Assignment 1 (VPC Setup)</li>
+                    <li>Understanding of EC2 instance types and pricing</li>
+                    <li>Basic knowledge of load balancing concepts</li>
+                    <li>Familiarity with user data scripts</li>
+                </ul>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 1: Creating Launch Template</div>
+                    <div class="step-description">Define the configuration for EC2 instances</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Access EC2 Launch Templates</div>
+                        <p>In the AWS Console:</p>
+                        <ol>
+                            <li>Navigate to EC2 Dashboard</li>
+                            <li>In the left menu, click "Launch Templates"</li>
+                            <li>Click "Create launch template"</li>
+                        </ol>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Configure Launch Template</div>
+                        <p>Set up the template with these specifications:</p>
+                        
+                        <div class="code-block">
+Launch template name: WebServer-LaunchTemplate
+Template version description: Initial version for web servers
+
+Application and OS Images:
+  AMI: Amazon Linux 2023 AMI (ami-xxxxxxxxx)
+  
+Instance type: t3.micro
+
+Key pair: Create new or select existing
+
+Network settings:
+  Subnet: Don't include in launch template
+  Security groups: WebServer-SG (from Assignment 1)
+  
+Storage (volumes):
+  Volume 1 (AMI Root): 8 GiB, gp3, Encrypted
+
+Resource tags:
+  Key: Name, Value: WebServer-AutoScaling
+  Key: Environment, Value: Production
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Add User Data Script</div>
+                        <p>In the "Advanced details" section, add this user data script:</p>
+                        
+                        <div class="code-block">
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+
+# Create a simple web page with instance information
+echo "<html><head><title>Web Server</title></head><body>" > /var/www/html/index.html
+echo "<h1>Hello from $(hostname -f)</h1>" >> /var/www/html/index.html
+echo "<p>Instance ID: $(curl -s http://169.254.169.254/latest/meta-data/instance-id)</p>" >> /var/www/html/index.html
+echo "<p>Availability Zone: $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)</p>" >> /var/www/html/index.html
+echo "<p>Private IP: $(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)</p>" >> /var/www/html/index.html
+echo "<p>Server Time: $(date)</p>" >> /var/www/html/index.html
+echo "</body></html>" >> /var/www/html/index.html
+
+# Install CloudWatch agent
+yum install -y amazon-cloudwatch-agent
+                        </div>
+                        
+                        <p>Click "Create launch template".</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 2: Creating Auto Scaling Group</div>
+                    <div class="step-description">Set up automatic scaling based on demand</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Create Auto Scaling Group</div>
+                        <p>In the EC2 Dashboard:</p>
+                        <ol>
+                            <li>Click "Auto Scaling Groups" in the left menu</li>
+                            <li>Click "Create Auto Scaling group"</li>
+                            <li>Configure the auto scaling group:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Auto Scaling group name: WebServer-ASG
+Launch template: WebServer-LaunchTemplate
+Version: Latest
+                        </div>
+                        
+                        <p>Click "Next".</p>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Configure Network Settings</div>
+                        <p>Set up network and availability zones:</p>
+                        
+                        <div class="code-block">
+VPC: Your VPC (from Assignment 1)
+Availability Zones and subnets:
+  ✅ Select both public subnets:
+    - Public subnet 1 (10.0.1.0/24)
+    - Public subnet 2 (10.0.2.0/24)
+                        </div>
+                        
+                        <div class="tip">
+                            <strong>💡 High Availability:</strong> Using multiple AZs ensures your application remains available even if one AZ experiences issues.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Configure Group Size and Scaling</div>
+                        <p>Set up the scaling parameters:</p>
+                        
+                        <div class="code-block">
+Group size:
+  Desired capacity: 2
+  Minimum capacity: 1
+  Maximum capacity: 4
+
+Scaling policies:
+  Target tracking scaling policy: ✅ Enabled
+  Metric type: Average CPU utilization
+  Target value: 70
+  
+Instance scale-in protection: Disabled
+                        </div>
+                        
+                        <p>This configuration will maintain 2 instances normally, but can scale up to 4 if CPU usage exceeds 70%.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 3: Setting Up Application Load Balancer</div>
+                    <div class="step-description">Distribute traffic across multiple instances</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Create Application Load Balancer</div>
+                        <p>In the EC2 Dashboard:</p>
+                        <ol>
+                            <li>Click "Load Balancers" in the left menu</li>
+                            <li>Click "Create Load Balancer"</li>
+                            <li>Choose "Application Load Balancer"</li>
+                            <li>Configure:</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Load balancer name: WebServer-ALB
+Scheme: Internet-facing
+IP address type: IPv4
+
+Network mapping:
+  VPC: Your VPC
+  Mappings: Select both Availability Zones
+    - Public subnet 1
+    - Public subnet 2
+
+Security groups:
+  Remove default security group
+  Add: ALB-SG (from Assignment 1)
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Configure Target Group</div>
+                        <p>Create a target group for the load balancer:</p>
+                        
+                        <div class="code-block">
+Target type: Instances
+Target group name: WebServer-TG
+Protocol: HTTP
+Port: 80
+VPC: Your VPC
+
+Health checks:
+  Health check protocol: HTTP
+  Health check path: /
+  Healthy threshold: 2
+  Unhealthy threshold: 5
+  Timeout: 5 seconds
+  Interval: 10 seconds
+  Success codes: 200
+                        </div>
+                        
+                        <p>Don't register targets yet - the Auto Scaling Group will handle this.</p>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Complete Load Balancer Creation</div>
+                        <p>Finish the load balancer setup:</p>
+                        <ol>
+                            <li>Review all settings</li>
+                            <li>Click "Create load balancer"</li>
+                            <li>Wait for the load balancer to become "Active" (2-3 minutes)</li>
+                        </ol>
+                        
+                        <div class="success">
+                            <strong>✅ Verification:</strong> Load balancer state should show "Active" and all target groups should be healthy.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-title">Step 4: Integrating Auto Scaling with Load Balancer</div>
+                    <div class="step-description">Connect the auto scaling group to the load balancer</div>
+                </div>
+                <div class="step-content">
+                    <div class="substep">
+                        <div class="substep-number">1</div>
+                        <div class="substep-title">Update Auto Scaling Group</div>
+                        <p>Modify the ASG to use the load balancer:</p>
+                        <ol>
+                            <li>Go to Auto Scaling Groups</li>
+                            <li>Select "WebServer-ASG"</li>
+                            <li>Go to "Details" tab</li>
+                            <li>Click "Edit"</li>
+                        </ol>
+                        
+                        <div class="code-block">
+Load balancing:
+  ✅ Application Load Balancer target groups
+  Choose from your load balancer target groups: WebServer-TG
+
+Health checks:
+  Health check type: ELB
+  Health check grace period: 300 seconds
+                        </div>
+                        
+                        <p>Click "Update".</p>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">2</div>
+                        <div class="substep-title">Verify Instance Registration</div>
+                        <p>Check that instances are registering with the target group:</p>
+                        <ol>
+                            <li>Go to Load Balancers > WebServer-ALB</li>
+                            <li>Click on "Target groups" tab</li>
+                            <li>Click on "WebServer-TG"</li>
+                            <li>Check the "Targets" tab</li>
+                        </ol>
+                        
+                        <p>You should see your ASG instances listed with "healthy" status after a few minutes.</p>
+                        
+                        <div class="tip">
+                            <strong>💡 Health Check Time:</strong> Initial health checks may take 2-3 minutes to show "healthy" status.
+                        </div>
+                    </div>
+
+                    <div class="substep">
+                        <div class="substep-number">3</div>
+                        <div class="substep-title">Test Load Balancer</div>
+                        <p>Verify the load balancer is distributing traffic:</p>
+                        <ol>
+                            <li>Get the load balancer DNS name from the ALB details</li>
+                            <li>Open the DNS name in a web browser</li>
+                            <li>Refresh the page multiple times</li>
+                            <li>You should see different instance IDs and AZs</li>
+                        </ol>
+                        
+                        <div class="command">curl http://your-alb-dns-name.region.elb.amazonaws.com</div>
+                        
+                        <div class="success">
+                            <strong>✅ Expected Result:</strong> Each refresh should show different instance information, proving load balancing is working.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation Section -->
+            <div class="validation-section">
+                <h4>🔍 Validation Checklist</h4>
+                <ol>
+                    <li><strong>Launch Template:</strong> Created with correct AMI, instance type, and user data</li>
+                    <li><strong>Auto Scaling Group:</strong> Running with 2 instances across multiple AZs</li>
+                    <li><strong>Load Balancer:</strong> Active and accessible via DNS name</li>
+                    <li><strong>Target Group:</strong> Shows healthy instances from ASG</li>
+                    <li><strong>Web Application:</strong> Displays different instance info on refresh</li>
+                    <li><strong>Scaling Policy:</strong> Configured to scale based on CPU utilization</li>
+                </ol>
+            </div>
+
+            <div class="resource-links">
+                <h4>📚 Additional Resources</h4>
+                <ul>
+                    <li><a href="https://docs.aws.amazon.com/ec2/latest/userguide/" target="_blank">EC2 User Guide</a></li>
+                    <li><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/" target="_blank">Auto Scaling Documentation</a></li>
+                    <li><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/" target="_blank">Application Load Balancer Guide</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Assignment 3: RDS Database -->
+        <div id="solution3" class="solution-card">
+            <div class="solution-header">
+                <div class="solution-title">Assignment 3: RDS Database Configuration</div>
+                <div class="solution-meta">
+                    <span class="meta-tag">🗄️ Database</span>
+                    <span class="meta-tag">⏱️ 80 minutes</span>
+                    <span class="meta-tag">📊 Intermediate</span>
+                </div>
+            </div>
+            
+            <div class="time-estimate">
+                <strong>⏱️ Estimated Time:</strong> 80 minutes<br>
+                <strong>🎯 Learning Objective:</strong> Set up highly available RDS database with backup and monitoring
+            </div>
+            
+            <p style="text-align: center; color: #666; font-style: italic; padding: 40px;">
+                📝 Complete solution guide coming in next update...<br>
+                This will cover RDS creation, Multi-AZ deployment, parameter groups, and backup configuration.
+            </p>
+        </div>
+
+        <!-- Assignment 4: S3 and CloudFront -->
+        <div id="solution4" class="solution-card">
+            <div class="solution-header">
+                <div class="solution-title">Assignment 4: S3 Storage and CloudFront CDN</div>
+                <div class="solution-meta">
+                    <span class="meta-tag">📦 Storage & CDN</span>
+                    <span class="meta-tag">⏱️ 70 minutes</span>
+                    <span class="meta-tag">📊 Beginner</span>
+                </div>
+            </div>
+            
+            <div class="time-estimate">
+                <strong>⏱️ Estimated Time:</strong> 70 minutes<br>
+                <strong>🎯 Learning Objective:</strong> Configure global content delivery with S3 and CloudFront
+            </div>
+            
+            <p style="text-align: center; color: #666; font-style: italic; padding: 40px;">
+                📝 Complete solution guide coming in next update...<br>
+                This will cover S3 bucket creation, static website hosting, CloudFront distribution setup, and SSL configuration.
+            </p>
+        </div>
+
+        <!-- Assignment 5: Load Balancer Advanced -->
+        <div id="solution5" class="solution-card">
+            <div class="solution-header">
+                <div class="solution-title">Assignment 5: Advanced Load Balancer Configuration</div>
+                <div class="solution-meta">
+                    <span class="meta-tag">⚖️ Load Balancing</span>
+                    <span class="meta-tag">⏱️ 95 minutes</span>
+                    <span class="meta-tag">📊 Advanced</span>
+                </div>
+            </div>
+            
+            <div class="time-estimate">
+                <strong>⏱️ Estimated Time:</strong> 95 minutes<br>
+                <strong>🎯 Learning Objective:</strong> Implement advanced routing and SSL termination
+            </div>
+            
+            <p style="text-align: center; color: #666; font-style: italic; padding: 40px;">
+                📝 Complete solution guide coming in next update...<br>
+                This will cover path-based routing, host-based routing, SSL certificates, and WAF integration.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showSolution(solutionNumber) {
+            // Hide all solution cards
+            document.querySelectorAll('.solution-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Remove active class from all nav pills
+            document.querySelectorAll('.nav-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            
+            // Show selected solution
+            document.getElementById(`solution${solutionNumber}`).classList.add('active');
+            
+            // Add active class to clicked nav pill
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Add copy functionality for code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.code-block, .command').forEach(block => {
+                block.addEventListener('click', function() {
+                    navigator.clipboard.writeText(this.textContent).then(() => {
+                        const originalBg = this.style.background;
+                        this.style.background = '#d4edda';
+                        setTimeout(() => {
+                            this.style.background = originalBg;
+                        }, 1000);
+                    });
+                });
+                
+                // Add click hint
+                block.style.cursor = 'pointer';
+                block.title = 'Click to copy to clipboard';
+            });
+        });
+    </script>
+</body>
+</html>
