@@ -255,6 +255,11 @@
         <div class="header">
             <h1>🚀 Cloud Specialization Track</h1>
             <p>Comprehensive Review Dashboard for AWS & Azure Learning Materials</p>
+            <div style="margin-top: 15px;">
+                <a href="../index.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">
+                    ← Back to Main Portal
+                </a>
+            </div>
         </div>
 
         <div class="platform-grid">
@@ -267,28 +272,28 @@
                 
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <div class="stat-number">45</div>
+                        <div class="stat-number" id="aws-assignments">24</div>
                         <div class="stat-label">Total Assignments</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">84.4%</div>
+                        <div class="stat-number" id="aws-progress">0%</div>
                         <div class="stat-label">Review Complete</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">4.3</div>
+                        <div class="stat-number" id="aws-rating">--</div>
                         <div class="stat-label">Avg Rating</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">156</div>
+                        <div class="stat-number" id="aws-comments">0</div>
                         <div class="stat-label">Total Comments</div>
                     </div>
                 </div>
 
                 <div class="review-links">
-                    <a href="aws_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
-                    <a href="aws_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
-                    <a href="aws_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
-                    <a href="aws_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
+                    <a href="../aws_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
+                    <a href="../aws_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
+                    <a href="../aws_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
+                    <a href="../aws_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
                 </div>
             </div>
 
@@ -301,28 +306,28 @@
                 
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <div class="stat-number">33</div>
+                        <div class="stat-number" id="azure-assignments">24</div>
                         <div class="stat-label">Total Assignments</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">84.8%</div>
+                        <div class="stat-number" id="azure-progress">0%</div>
                         <div class="stat-label">Review Complete</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">4.5</div>
+                        <div class="stat-number" id="azure-rating">--</div>
                         <div class="stat-label">Avg Rating</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">142</div>
+                        <div class="stat-number" id="azure-comments">0</div>
                         <div class="stat-label">Total Comments</div>
                     </div>
                 </div>
 
                 <div class="review-links">
-                    <a href="azure_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
-                    <a href="azure_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
-                    <a href="azure_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
-                    <a href="azure_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
+                    <a href="../azure_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
+                    <a href="../azure_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
+                    <a href="../azure_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
+                    <a href="../azure_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
                 </div>
             </div>
         </div>
@@ -338,8 +343,8 @@
                 <div class="file-card">
                     <div class="file-name">📁 AWS Comments Database</div>
                     <div class="file-stats">
-                        <span>156 total comments</span>
-                        <span>23 action items</span>
+                        <span id="aws-total-comments">0 total comments</span>
+                        <span id="aws-action-items">0 action items</span>
                     </div>
                     <a href="deployment/comments_tracking/aws_comments.csv" class="download-link" download>
                         💾 Download AWS Comments CSV
@@ -349,8 +354,8 @@
                 <div class="file-card">
                     <div class="file-name">📁 Azure Comments Database</div>
                     <div class="file-stats">
-                        <span>142 total comments</span>
-                        <span>18 action items</span>
+                        <span id="azure-total-comments">0 total comments</span>
+                        <span id="azure-action-items">0 action items</span>
                     </div>
                     <a href="deployment/comments_tracking/azure_comments.csv" class="download-link" download>
                         💾 Download Azure Comments CSV
@@ -361,7 +366,7 @@
                     <div class="file-name">📁 Review Summary Report</div>
                     <div class="file-stats">
                         <span>Both platforms</span>
-                        <span>Updated: Oct 8, 2025</span>
+                        <span id="last-updated">Updated: Oct 8, 2025</span>
                     </div>
                     <a href="deployment/comments_tracking/review_summary.csv" class="download-link" download>
                         💾 Download Summary CSV
@@ -372,22 +377,100 @@
     </div>
 
     <script>
+        // Function to load real data from CSV files
+        async function loadRealData() {
+            try {
+                // Try to load AWS comments
+                const awsResponse = await fetch('deployment/comments_tracking/aws_comments.csv');
+                if (awsResponse.ok) {
+                    const awsText = await awsResponse.text();
+                    const awsLines = awsText.split('\n').filter(line => line.trim());
+                    const awsCommentCount = Math.max(0, awsLines.length - 1); // Exclude header
+                    const awsActionItems = awsText.toLowerCase().split('yes').length - 1;
+                    
+                    document.getElementById('aws-comments').textContent = awsCommentCount;
+                    document.getElementById('aws-total-comments').textContent = `${awsCommentCount} total comments`;
+                    document.getElementById('aws-action-items').textContent = `${awsActionItems} action items`;
+                    
+                    if (awsCommentCount > 0) {
+                        document.getElementById('aws-progress').textContent = `${Math.round((awsCommentCount / 24) * 100)}%`;
+                    }
+                }
+
+                // Try to load Azure comments
+                const azureResponse = await fetch('deployment/comments_tracking/azure_comments.csv');
+                if (azureResponse.ok) {
+                    const azureText = await azureResponse.text();
+                    const azureLines = azureText.split('\n').filter(line => line.trim());
+                    const azureCommentCount = Math.max(0, azureLines.length - 1); // Exclude header
+                    const azureActionItems = azureText.toLowerCase().split('yes').length - 1;
+                    
+                    document.getElementById('azure-comments').textContent = azureCommentCount;
+                    document.getElementById('azure-total-comments').textContent = `${azureCommentCount} total comments`;
+                    document.getElementById('azure-action-items').textContent = `${azureActionItems} action items`;
+                    
+                    if (azureCommentCount > 0) {
+                        document.getElementById('azure-progress').textContent = `${Math.round((azureCommentCount / 24) * 100)}%`;
+                    }
+                }
+
+                // Update last modified date
+                document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleDateString()}`;
+
+            } catch (error) {
+                console.log('CSV files not yet available. Using default values.');
+                // Show that the system is ready but no comments yet
+                document.getElementById('aws-progress').textContent = 'Ready';
+                document.getElementById('azure-progress').textContent = 'Ready';
+                document.getElementById('aws-rating').textContent = 'N/A';
+                document.getElementById('azure-rating').textContent = 'N/A';
+            }
+        }
+
         function exportAllComments() {
             // Create a comprehensive export of all comments
             const timestamp = new Date().toISOString().split('T')[0];
             
-            // This would trigger a server-side export in a real deployment
-            alert(`Exporting all comments and feedback data as of ${timestamp}...\\n\\nFiles will be available in the comments_tracking folder:\\n- aws_comments.csv\\n- azure_comments.csv\\n- review_summary.csv`);
+            // Check if files exist before attempting download
+            const awsLink = document.createElement('a');
+            awsLink.href = 'deployment/comments_tracking/aws_comments.csv';
+            awsLink.download = `aws_comments_${timestamp}.csv`;
             
-            // In a real deployment, this would call an API endpoint
-            console.log('Export triggered for all review comments');
+            const azureLink = document.createElement('a');
+            azureLink.href = 'deployment/comments_tracking/azure_comments.csv';
+            azureLink.download = `azure_comments_${timestamp}.csv`;
+            
+            const summaryLink = document.createElement('a');
+            summaryLink.href = 'deployment/comments_tracking/review_summary.csv';
+            summaryLink.download = `review_summary_${timestamp}.csv`;
+            
+            // Trigger downloads
+            awsLink.click();
+            azureLink.click();
+            summaryLink.click();
+            
+            alert(`Exporting all comments and feedback data as of ${timestamp}...\\n\\nDownloading:\\n- aws_comments.csv\\n- azure_comments.csv\\n- review_summary.csv`);
         }
 
-        // Auto-refresh stats every 5 minutes in a real deployment
-        setInterval(function() {
-            // This would fetch updated stats from the server
-            console.log('Refreshing review statistics...');
-        }, 300000);
+        // Load real data when page loads
+        document.addEventListener('DOMContentLoaded', loadRealData);
+
+        // Auto-refresh stats every 5 minutes
+        setInterval(loadRealData, 300000);
+
+        // Add click handlers for assignment links
+        document.addEventListener('DOMContentLoaded', function() {
+            // All links now point to actual existing files
+            const assignmentLinks = document.querySelectorAll('.review-btn');
+            assignmentLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // All links should work since they point to existing files
+                    // Just add a loading indicator
+                    this.style.opacity = '0.7';
+                    this.innerHTML += ' <span style="font-size: 0.8em;">⟳</span>';
+                });
+            });
+        });
     </script>
 </body>
 </html>
