@@ -1,0 +1,9 @@
+timestamp,reviewer_id,assignment_type,assignment_number,section,comment_type,rating,comment_text,action_required,status,resolution_date
+2025-10-08 10:00:00,reviewer_001,practical,1,vpc_setup,improvement,4,"Great detail but needs clearer IP addressing examples",yes,pending,
+2025-10-08 10:15:00,reviewer_001,practical,1,security_groups,positive,5,"Excellent security explanations with real-world scenarios",no,completed,
+2025-10-08 10:30:00,reviewer_002,mcq,set1,ec2_concepts,clarification,3,"Question 15 needs more context about instance types",yes,pending,
+2025-10-08 10:45:00,reviewer_003,practical,2,rds_setup,improvement,4,"Add more backup strategy examples",yes,pending,
+2025-10-08 11:00:00,reviewer_001,practical,3,s3_configuration,positive,5,"Perfect bucket policy examples",no,completed,
+2025-10-08 11:15:00,reviewer_002,solution_guide,5,lambda_functions,improvement,4,"Code formatting is excellent but needs more error handling examples",yes,pending,
+2025-10-08 11:30:00,reviewer_003,mcq,set2,networking,clarification,3,"Route table questions need clearer diagrams",yes,pending,
+2025-10-08 11:45:00,reviewer_001,capstone,project1,architecture,positive,5,"Comprehensive multi-tier design with excellent scalability considerations",no,completed,

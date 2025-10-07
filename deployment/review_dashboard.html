@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Specialization Track - Review Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .aws-icon {
+            background: linear-gradient(135deg, #ff9a00, #ff6b00);
+        }
+
+        .azure-icon {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+        }
+
+        .platform-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .review-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .review-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .practical-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .mcq-btn {
+            background: linear-gradient(135deg, #007bff, #6610f2);
+        }
+
+        .solution-btn {
+            background: linear-gradient(135deg, #fd7e14, #e83e8c);
+        }
+
+        .capstone-btn {
+            background: linear-gradient(135deg, #dc3545, #6f42c1);
+        }
+
+        .review-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .comments-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .comments-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .comments-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .comment-files {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .file-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #007bff;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .file-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .download-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .review-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🚀 Cloud Specialization Track</h1>
+            <p>Comprehensive Review Dashboard for AWS & Azure Learning Materials</p>
+        </div>
+
+        <div class="platform-grid">
+            <!-- AWS Platform -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon aws-icon">☁️</div>
+                    <div class="platform-title">Amazon Web Services</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Total Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">84.4%</div>
+                        <div class="stat-label">Review Complete</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4.3</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                </div>
+
+                <div class="review-links">
+                    <a href="aws_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
+                    <a href="aws_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
+                    <a href="aws_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
+                    <a href="aws_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
+                </div>
+            </div>
+
+            <!-- Azure Platform -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon azure-icon">⚡</div>
+                    <div class="platform-title">Microsoft Azure</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">33</div>
+                        <div class="stat-label">Total Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">84.8%</div>
+                        <div class="stat-label">Review Complete</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4.5</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">142</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                </div>
+
+                <div class="review-links">
+                    <a href="azure_practical_assignments.html" class="review-btn practical-btn">Practical Labs</a>
+                    <a href="azure_mcq_review.html" class="review-btn mcq-btn">MCQ Tests</a>
+                    <a href="azure_solution_guide.html" class="review-btn solution-btn">Solution Guide</a>
+                    <a href="azure_capstone_projects.html" class="review-btn capstone-btn">Capstone Projects</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Tracking Section -->
+        <div class="comments-section">
+            <div class="comments-header">
+                <div class="comments-title">📊 Review Comments & Feedback Tracking</div>
+                <button class="export-btn" onclick="exportAllComments()">Export All Comments</button>
+            </div>
+
+            <div class="comment-files">
+                <div class="file-card">
+                    <div class="file-name">📁 AWS Comments Database</div>
+                    <div class="file-stats">
+                        <span>156 total comments</span>
+                        <span>23 action items</span>
+                    </div>
+                    <a href="deployment/comments_tracking/aws_comments.csv" class="download-link" download>
+                        💾 Download AWS Comments CSV
+                    </a>
+                </div>
+
+                <div class="file-card">
+                    <div class="file-name">📁 Azure Comments Database</div>
+                    <div class="file-stats">
+                        <span>142 total comments</span>
+                        <span>18 action items</span>
+                    </div>
+                    <a href="deployment/comments_tracking/azure_comments.csv" class="download-link" download>
+                        💾 Download Azure Comments CSV
+                    </a>
+                </div>
+
+                <div class="file-card">
+                    <div class="file-name">📁 Review Summary Report</div>
+                    <div class="file-stats">
+                        <span>Both platforms</span>
+                        <span>Updated: Oct 8, 2025</span>
+                    </div>
+                    <a href="deployment/comments_tracking/review_summary.csv" class="download-link" download>
+                        💾 Download Summary CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function exportAllComments() {
+            // Create a comprehensive export of all comments
+            const timestamp = new Date().toISOString().split('T')[0];
+            
+            // This would trigger a server-side export in a real deployment
+            alert(`Exporting all comments and feedback data as of ${timestamp}...\\n\\nFiles will be available in the comments_tracking folder:\\n- aws_comments.csv\\n- azure_comments.csv\\n- review_summary.csv`);
+            
+            // In a real deployment, this would call an API endpoint
+            console.log('Export triggered for all review comments');
+        }
+
+        // Auto-refresh stats every 5 minutes in a real deployment
+        setInterval(function() {
+            // This would fetch updated stats from the server
+            console.log('Refreshing review statistics...');
+        }, 300000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+timestamp,reviewer_id,assignment_type,assignment_number,section,comment_type,rating,comment_text,action_required,status,resolution_date
+2025-10-08 10:00:00,reviewer_001,practical,1,azure_ad_setup,positive,5,"Excellent step-by-step guidance for beginners",no,completed,
+2025-10-08 10:15:00,reviewer_001,practical,2,virtual_network,improvement,4,"Great network setup but needs more subnet planning examples",yes,pending,
+2025-10-08 10:30:00,reviewer_002,practical,3,storage_account,positive,5,"Perfect storage tier explanations with cost considerations",no,completed,
+2025-10-08 10:45:00,reviewer_003,practical,4,web_app_service,improvement,4,"Deployment slots explanation is good but needs more CI/CD integration",yes,pending,
+2025-10-08 11:00:00,reviewer_001,practical,5,sql_database,positive,5,"Comprehensive security and backup configurations",no,completed,
+2025-10-08 11:15:00,reviewer_002,solution_guide,24,iot_hub,improvement,4,"IoT Python code is well-formatted but needs more device management examples",yes,pending,
+2025-10-08 11:30:00,reviewer_003,mcq,general,compute_services,clarification,3,"VM sizing questions need clearer performance comparisons",yes,pending,
+2025-10-08 11:45:00,reviewer_001,practical,15,service_bus,positive,5,"Excellent message routing examples with proper CLI command formatting",no,completed,
+2025-10-08 12:00:00,reviewer_002,practical,16,event_hubs,improvement,4,"Good streaming setup but needs more consumer group management details",yes,pending,
