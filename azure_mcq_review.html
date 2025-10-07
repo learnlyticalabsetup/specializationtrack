@@ -457,6 +457,7 @@
         </div>
     </div>
 
+    <script src="js/comment-manager.js"></script>
     <script>
         let questions = [];
         let filteredQuestions = [];
@@ -675,9 +676,27 @@
         }
 
         function saveComment(comment) {
+            // Save to localStorage for backward compatibility
             const existingComments = JSON.parse(localStorage.getItem('azure_review_comments') || '[]');
             existingComments.push(comment);
             localStorage.setItem('azure_review_comments', JSON.stringify(existingComments));
+            
+            // Save to centralized CSV system
+            if (window.commentManager) {
+                const csvComment = {
+                    type: comment.type || 'mcq',
+                    assignmentNumber: comment.questionNumber || comment.assignmentNumber || '1',
+                    section: comment.section || 'question_review',
+                    commentType: comment.commentType || 'feedback',
+                    text: comment.comment,
+                    rating: comment.rating || 5,
+                    actionRequired: comment.needsImprovement || false
+                };
+                
+                window.commentManager.addComment('azure', csvComment);
+                console.log('Comment saved to Azure CSV system');
+            }
+            
             updateCommentsStats();
         }
 
@@ -794,39 +813,64 @@
         }
 
         function downloadCommentsCSV() {
-            const comments = JSON.parse(localStorage.getItem('azure_review_comments') || '[]');
-            
-            if (comments.length === 0) {
-                alert('No comments available to download.');
-                return;
+            // Use centralized comment manager for CSV export
+            if (window.commentManager) {
+                const azureStats = window.commentManager.getStats('azure');
+                const csvContent = localStorage.getItem('azure_comments_csv');
+                
+                if (csvContent) {
+                    const blob = new Blob([csvContent], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `azure_comments_${new Date().toISOString().split('T')[0]}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    
+                    alert(`✅ Azure Comments CSV Downloaded!\\n\\nTotal Comments: ${azureStats.total}\\nAction Items: ${azureStats.actionItems}\\nAverage Rating: ${azureStats.averageRating.toFixed(1)}/5`);
+                } else {
+                    alert('No comments available for download yet. Please add some comments first.');
+                }
+            } else {
+                // Fallback to old system
+                const comments = JSON.parse(localStorage.getItem('azure_review_comments') || '[]');
+                
+                if (comments.length === 0) {
+                    alert('No comments available to download.');
+                    return;
+                }
+
+                const csvContent = [
+                    ['Timestamp', 'User', 'Type', 'Category', 'Topic', 'Question/Item', 'Title', 'Comment', 'Rating', 'Difficulty', 'Additional Info'].join(','),
+                    ...comments.map(comment => [
+                        comment.timestamp,
+                        comment.user,
+                        comment.type,
+                        comment.category,
+                        comment.topic,
+                        comment.itemId,
+                        `"${comment.title}"`,
+                        `"${comment.comment}"`,
+                        comment.rating || '',
+                        comment.difficulty || '',
+                        comment.relevance || comment.complexity || comment.timeline || comment.businessRelevance || ''
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `azure_review_comments_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                alert(`✅ Comments downloaded successfully!\\nTotal: ${comments.length} comments`);
             }
-
-            const csvContent = [
-                ['Timestamp', 'User', 'Type', 'Category', 'Topic', 'Question/Item', 'Title', 'Comment', 'Rating', 'Difficulty', 'Additional Info'].join(','),
-                ...comments.map(comment => [
-                    comment.timestamp,
-                    comment.user,
-                    comment.type,
-                    comment.category,
-                    comment.topic,
-                    comment.itemId,
-                    `"${comment.title}"`,
-                    `"${comment.comment}"`,
-                    comment.rating || '',
-                    comment.difficulty || '',
-                    comment.relevance || comment.complexity || comment.timeline || comment.businessRelevance || ''
-                ].join(','))
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = `azure_review_comments_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
         }
 
         function clearAllComments() {

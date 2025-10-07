@@ -18,6 +18,105 @@
             padding: 20px;
         }
 
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #dc3545;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Dashboard Styles (hidden initially) */
         .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -25,11 +124,35 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .dashboard-container.show {
+            display: block;
         }
 
         .header {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
         }
 
         .header h1 {
@@ -251,8 +374,35 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
+    <!-- Login Screen -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h1 class="login-title">🔒 Admin Access</h1>
+            <p class="login-subtitle">Cloud Specialization Track Dashboard</p>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter admin username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Enter admin password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">🚀 Access Dashboard</button>
+                
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden Initially) -->
+    <div id="dashboardContainer" class="dashboard-container">
         <div class="header">
+            <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
             <h1>🚀 Cloud Specialization Track</h1>
             <p>Comprehensive Review Dashboard for AWS & Azure Learning Materials</p>
             <div style="margin-top: 15px;">
@@ -346,7 +496,7 @@
                         <span id="aws-total-comments">0 total comments</span>
                         <span id="aws-action-items">0 action items</span>
                     </div>
-                    <a href="deployment/comments_tracking/aws_comments.csv" class="download-link" download>
+                    <a href="comments_tracking/aws_comments.csv" class="download-link" download>
                         💾 Download AWS Comments CSV
                     </a>
                 </div>
@@ -357,7 +507,7 @@
                         <span id="azure-total-comments">0 total comments</span>
                         <span id="azure-action-items">0 action items</span>
                     </div>
-                    <a href="deployment/comments_tracking/azure_comments.csv" class="download-link" download>
+                    <a href="comments_tracking/azure_comments.csv" class="download-link" download>
                         💾 Download Azure Comments CSV
                     </a>
                 </div>
@@ -368,7 +518,7 @@
                         <span>Both platforms</span>
                         <span id="last-updated">Updated: Oct 8, 2025</span>
                     </div>
-                    <a href="deployment/comments_tracking/review_summary.csv" class="download-link" download>
+                    <a href="comments_tracking/review_summary.csv" class="download-link" download>
                         💾 Download Summary CSV
                     </a>
                 </div>
@@ -377,11 +527,111 @@
     </div>
 
     <script>
-        // Function to load real data from CSV files
+        // Admin credentials (in a real deployment, this should be handled server-side)
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'X9085565r@'
+        };
+
+        // Session management
+        let isAuthenticated = false;
+
+        // Check if user is already logged in (session storage)
+        function checkAuthStatus() {
+            const authToken = sessionStorage.getItem('dashboardAuth');
+            const authTime = sessionStorage.getItem('dashboardAuthTime');
+            
+            if (authToken && authTime) {
+                const currentTime = new Date().getTime();
+                const loginTime = parseInt(authTime);
+                const sessionDuration = 4 * 60 * 60 * 1000; // 4 hours
+                
+                if (currentTime - loginTime < sessionDuration) {
+                    isAuthenticated = true;
+                    showDashboard();
+                    return;
+                }
+            }
+            
+            showLogin();
+        }
+
+        // Show login screen
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('dashboardContainer').classList.remove('show');
+            isAuthenticated = false;
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboardContainer').classList.add('show');
+            isAuthenticated = true;
+            
+            // Load dashboard data
+            loadRealData();
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            // Clear previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Validate credentials
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                // Success
+                successDiv.textContent = 'Login successful! Redirecting...';
+                successDiv.style.display = 'block';
+                
+                // Set session
+                sessionStorage.setItem('dashboardAuth', 'authenticated');
+                sessionStorage.setItem('dashboardAuthTime', new Date().getTime().toString());
+                
+                // Show dashboard after brief delay
+                setTimeout(() => {
+                    showDashboard();
+                }, 1000);
+                
+            } else {
+                // Error
+                errorDiv.textContent = 'Invalid username or password. Please try again.';
+                errorDiv.style.display = 'block';
+                
+                // Clear password field
+                document.getElementById('password').value = '';
+                
+                // Log attempt (in real deployment, this should be server-side)
+                console.warn(`Failed login attempt at ${new Date().toISOString()}`);
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            sessionStorage.removeItem('dashboardAuth');
+            sessionStorage.removeItem('dashboardAuthTime');
+            showLogin();
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+
+        // Function to load real data from CSV files (only when authenticated)
         async function loadRealData() {
+            if (!isAuthenticated) return;
+            
             try {
-                // Try to load AWS comments
-                const awsResponse = await fetch('deployment/comments_tracking/aws_comments.csv');
+                // Try to load AWS comments (correct relative path from dashboard location)
+                const awsResponse = await fetch('comments_tracking/aws_comments.csv');
                 if (awsResponse.ok) {
                     const awsText = await awsResponse.text();
                     const awsLines = awsText.split('\n').filter(line => line.trim());
@@ -397,8 +647,8 @@
                     }
                 }
 
-                // Try to load Azure comments
-                const azureResponse = await fetch('deployment/comments_tracking/azure_comments.csv');
+                // Try to load Azure comments (correct relative path from dashboard location)
+                const azureResponse = await fetch('comments_tracking/azure_comments.csv');
                 if (azureResponse.ok) {
                     const azureText = await azureResponse.text();
                     const azureLines = azureText.split('\n').filter(line => line.trim());
@@ -418,7 +668,7 @@
                 document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleDateString()}`;
 
             } catch (error) {
-                console.log('CSV files not yet available. Using default values.');
+                console.log('CSV files not yet available. Using default values.', error);
                 // Show that the system is ready but no comments yet
                 document.getElementById('aws-progress').textContent = 'Ready';
                 document.getElementById('azure-progress').textContent = 'Ready';
@@ -428,20 +678,25 @@
         }
 
         function exportAllComments() {
+            if (!isAuthenticated) {
+                alert('Please log in to export comments.');
+                return;
+            }
+            
             // Create a comprehensive export of all comments
             const timestamp = new Date().toISOString().split('T')[0];
             
             // Check if files exist before attempting download
             const awsLink = document.createElement('a');
-            awsLink.href = 'deployment/comments_tracking/aws_comments.csv';
+            awsLink.href = 'comments_tracking/aws_comments.csv';
             awsLink.download = `aws_comments_${timestamp}.csv`;
             
             const azureLink = document.createElement('a');
-            azureLink.href = 'deployment/comments_tracking/azure_comments.csv';
+            azureLink.href = 'comments_tracking/azure_comments.csv';
             azureLink.download = `azure_comments_${timestamp}.csv`;
             
             const summaryLink = document.createElement('a');
-            summaryLink.href = 'deployment/comments_tracking/review_summary.csv';
+            summaryLink.href = 'comments_tracking/review_summary.csv';
             summaryLink.download = `review_summary_${timestamp}.csv`;
             
             // Trigger downloads
@@ -452,11 +707,25 @@
             alert(`Exporting all comments and feedback data as of ${timestamp}...\\n\\nDownloading:\\n- aws_comments.csv\\n- azure_comments.csv\\n- review_summary.csv`);
         }
 
-        // Load real data when page loads
-        document.addEventListener('DOMContentLoaded', loadRealData);
+        // Load real data when page loads (only if authenticated)
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            
+            // Listen for comment updates from assignment pages
+            window.addEventListener('commentsUpdated', function(event) {
+                if (isAuthenticated) {
+                    console.log('Comments updated:', event.detail);
+                    loadRealData(); // Refresh dashboard stats
+                }
+            });
+        });
 
-        // Auto-refresh stats every 5 minutes
-        setInterval(loadRealData, 300000);
+        // Auto-refresh stats every 5 minutes (only if authenticated)
+        setInterval(function() {
+            if (isAuthenticated) {
+                loadRealData();
+            }
+        }, 300000);
 
         // Add click handlers for assignment links
         document.addEventListener('DOMContentLoaded', function() {
@@ -464,12 +733,46 @@
             const assignmentLinks = document.querySelectorAll('.review-btn');
             assignmentLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
+                    if (!isAuthenticated) {
+                        e.preventDefault();
+                        alert('Please log in to access assignment links.');
+                        return;
+                    }
+                    
                     // All links should work since they point to existing files
                     // Just add a loading indicator
                     this.style.opacity = '0.7';
                     this.innerHTML += ' <span style="font-size: 0.8em;">⟳</span>';
                 });
             });
+        });
+
+        // Security: Clear auth on tab close
+        window.addEventListener('beforeunload', function() {
+            // Optional: Clear session on tab close for extra security
+            // sessionStorage.removeItem('dashboardAuth');
+            // sessionStorage.removeItem('dashboardAuthTime');
+        });
+
+        // Security: Auto-logout after inactivity
+        let inactivityTimer;
+        const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            if (isAuthenticated) {
+                inactivityTimer = setTimeout(() => {
+                    alert('Session expired due to inactivity. Please log in again.');
+                    sessionStorage.removeItem('dashboardAuth');
+                    sessionStorage.removeItem('dashboardAuthTime');
+                    showLogin();
+                }, INACTIVITY_TIMEOUT);
+            }
+        }
+
+        // Track user activity
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer, true);
         });
     </script>
 </body>
