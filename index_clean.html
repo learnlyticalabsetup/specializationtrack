@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Specialization Track - Main Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+
+        .aws-card::before {
+            background: linear-gradient(90deg, #FF9900, #FF6600);
+        }
+
+        .azure-card::before {
+            background: linear-gradient(90deg, #0078D4, #005A9E);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .platform-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 2.5em;
+            color: white;
+        }
+
+        .aws-logo {
+            background: linear-gradient(135deg, #FF9900, #FF6600);
+        }
+
+        .azure-logo {
+            background: linear-gradient(135deg, #0078D4, #005A9E);
+        }
+
+        .platform-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .management-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .management-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .quick-stats {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .quick-stats h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .quick-stats p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cloud Specialization Track</h1>
+            <p>Master AWS and Azure with comprehensive hands-on training</p>
+        </div>
+
+        <div class="platform-grid">
+            <!-- AWS Platform Card -->
+            <div class="platform-card aws-card">
+                <div class="platform-logo aws-logo">
+                    ☁️
+                </div>
+                <h2>Amazon Web Services</h2>
+                <ul class="features">
+                    <li>24 Comprehensive Assignments</li>
+                    <li>Hands-on Lab Exercises</li>
+                    <li>Real-world Projects</li>
+                    <li>Step-by-step Guidance</li>
+                    <li>Certificate Preparation</li>
+                </ul>
+                <div class="btn-group">
+                    <a href="aws_index.html" class="btn btn-primary">Start AWS Track</a>
+                    <a href="aws_practical_assignments.html" class="btn btn-secondary">View Assignments</a>
+                </div>
+            </div>
+
+            <!-- Azure Platform Card -->
+            <div class="platform-card azure-card">
+                <div class="platform-logo azure-logo">
+                    ⚡
+                </div>
+                <h2>Microsoft Azure</h2>
+                <ul class="features">
+                    <li>24 Detailed Assignments</li>
+                    <li>Interactive Tutorials</li>
+                    <li>Enterprise Scenarios</li>
+                    <li>Beginner-friendly Steps</li>
+                    <li>Professional Skills</li>
+                </ul>
+                <div class="btn-group">
+                    <a href="azure_solution_guide.html" class="btn btn-primary">Start Azure Track</a>
+                    <a href="azure_practical_assignments.html" class="btn btn-secondary">View Assignments</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Management Section -->
+        <div class="management-section">
+            <h2>Training Management</h2>
+            <div class="management-grid">
+                <div class="quick-stats">
+                    <h3>Review Dashboard</h3>
+                    <p>🎯</p>
+                    <a href="deployment/review_dashboard.html" class="btn btn-primary" style="margin-top: 10px;">Access Dashboard</a>
+                </div>
+                <div class="quick-stats">
+                    <h3>Progress Tracking</h3>
+                    <p>📊</p>
+                    <a href="deployment/comments_tracking/" class="btn btn-secondary" style="margin-top: 10px;">View Reports</a>
+                </div>
+                <div class="quick-stats">
+                    <h3>Resources</h3>
+                    <p>📚</p>
+                    <a href="azure_solution_guide.html" class="btn btn-secondary" style="margin-top: 10px;">Documentation</a>
+                </div>
+                <div class="quick-stats">
+                    <h3>Support</h3>
+                    <p>💬</p>
+                    <a href="deployment/comments_tracking/" class="btn btn-secondary" style="margin-top: 10px;">Get Help</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Cloud Specialization Track. Comprehensive training for cloud professionals.</p>
+            <p>Last updated: <span id="lastUpdate"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Display last update time
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString();
+
+        // Add smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add loading states for buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.href.startsWith('#')) {
+                    this.style.opacity = '0.7';
+                    this.innerHTML += ' <span style="font-size: 0.8em;">⟳</span>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

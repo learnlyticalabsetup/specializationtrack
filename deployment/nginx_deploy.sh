@@ -31,7 +31,17 @@ sudo cp -r $SOURCE_DIR/* $TARGET_DIR/
 
 # Set proper permissions
 echo "🔐 Setting permissions..."
-sudo chown -R www-data:www-data $TARGET_DIR
+# Check if www-data user exists, otherwise use nginx or apache user
+if id "www-data" &>/dev/null; then
+    sudo chown -R www-data:www-data $TARGET_DIR
+elif id "nginx" &>/dev/null; then
+    sudo chown -R nginx:nginx $TARGET_DIR
+elif id "apache" &>/dev/null; then
+    sudo chown -R apache:apache $TARGET_DIR
+else
+    echo "Using current user for permissions..."
+    sudo chown -R $(whoami):$(whoami) $TARGET_DIR
+fi
 sudo chmod -R 755 $TARGET_DIR
 sudo chmod -R 777 $TARGET_DIR/deployment/comments_tracking
 
