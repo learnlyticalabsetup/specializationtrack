@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 3: Neural Network Fundamentals - ML Specialization</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .assignment-meta {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+            border-left: 5px solid #667eea;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .task-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .task-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border: 1px solid #bee5eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+        }
+
+        .neural-network-diagram {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .deliverable-item {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            border: 1px solid #d4edda;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .deliverable-icon {
+            background: #28a745;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: auto;
+            }
+            
+            .assignment-meta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🧠 Assignment 3: Neural Network Fundamentals</h1>
+            <p>Build neural networks from scratch and understand forward propagation mechanics</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="assignment-meta">
+            <div>
+                <strong>🎯 Difficulty:</strong> Intermediate
+            </div>
+            <div>
+                <strong>⏱️ Duration:</strong> 6-8 hours
+            </div>
+            <div>
+                <strong>🛠️ Technologies:</strong> NumPy, Matplotlib, Math, Neural Networks
+            </div>
+            <div>
+                <strong>📊 Assignment:</strong> 3/25
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📋 Overview</button>
+            <button class="nav-tab" onclick="showTab('theory')">🧮 Theory</button>
+            <button class="nav-tab" onclick="showTab('setup')">⚙️ Setup</button>
+            <button class="nav-tab" onclick="showTab('tasks')">📝 Tasks</button>
+            <button class="nav-tab" onclick="showTab('code')">💻 Implementation</button>
+            <button class="nav-tab" onclick="showTab('evaluation')">📊 Evaluation</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h2>Assignment Overview</h2>
+            </div>
+
+            <div class="objective-card">
+                <h3>🎯 Learning Objectives</h3>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li>Understand the mathematical foundations of neural networks</li>
+                    <li>Implement forward propagation from scratch using NumPy</li>
+                    <li>Build multi-layer perceptrons with different architectures</li>
+                    <li>Visualize neural network decision boundaries and learning</li>
+                    <li>Compare hand-built networks with library implementations</li>
+                </ul>
+            </div>
+
+            <div class="objective-card">
+                <h3>🏢 Business Scenario: NeuroVision AI - Medical Diagnosis Assistant</h3>
+                <p><strong>Company:</strong> NeuroVision AI - A healthcare technology startup</p>
+                <p><strong>Challenge:</strong> Build a neural network-based system to assist radiologists in identifying potential abnormalities in medical scans, starting with basic pattern recognition.</p>
+                
+                <h4 style="margin-top: 20px;">📊 Problem Types:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Binary Classification:</strong> Normal vs. Abnormal tissue detection</li>
+                    <li><strong>Multi-class Classification:</strong> Different types of conditions</li>
+                    <li><strong>Pattern Recognition:</strong> Complex feature combinations</li>
+                    <li><strong>Regression:</strong> Severity scoring and risk assessment</li>
+                </ul>
+
+                <h4 style="margin-top: 20px;">🎯 Technical Goals:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Achieve >90% accuracy on pattern recognition tasks</li>
+                    <li>Understand why neural networks make specific predictions</li>
+                    <li>Build interpretable models for medical applications</li>
+                    <li>Create robust networks that generalize well</li>
+                </ul>
+            </div>
+
+            <div class="neural-network-diagram">
+                <h4>🧠 Neural Network Architecture Overview</h4>
+                <div style="font-family: monospace; margin-top: 20px;">
+                    <div>Input Layer → Hidden Layer(s) → Output Layer</div>
+                    <div style="margin-top: 10px;">
+                        X₁ ──┐<br>
+                        X₂ ──┤ → [Weights & Biases] → Activation → Y<br>
+                        X₃ ──┘
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">⚠️</span>
+                <div>
+                    <strong>Important:</strong> This assignment focuses on building neural networks from scratch to understand the underlying mathematics. You'll implement forward propagation, activation functions, and loss computation without using deep learning frameworks.
+                </div>
+            </div>
+        </div>
+
+        <!-- Theory Tab -->
+        <div id="theory" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">🧮</div>
+                <h2>Mathematical Foundations</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🔢 Core Mathematical Concepts</h3>
+                
+                <h4>1. Linear Transformation</h4>
+                <div class="math-formula">
+                    <strong>z = W·x + b</strong><br>
+                    where:<br>
+                    • W = weight matrix<br>
+                    • x = input vector<br>
+                    • b = bias vector<br>
+                    • z = linear output
+                </div>
+
+                <h4>2. Activation Functions</h4>
+                <div class="math-formula">
+                    <strong>Sigmoid:</strong> σ(z) = 1/(1 + e^(-z))<br>
+                    <strong>Tanh:</strong> tanh(z) = (e^z - e^(-z))/(e^z + e^(-z))<br>
+                    <strong>ReLU:</strong> ReLU(z) = max(0, z)<br>
+                    <strong>Softmax:</strong> softmax(z_i) = e^(z_i)/Σe^(z_j)
+                </div>
+
+                <h4>3. Loss Functions</h4>
+                <div class="math-formula">
+                    <strong>Binary Cross-Entropy:</strong><br>
+                    L = -[y·log(ŷ) + (1-y)·log(1-ŷ)]<br><br>
+                    <strong>Categorical Cross-Entropy:</strong><br>
+                    L = -Σ(y_i·log(ŷ_i))<br><br>
+                    <strong>Mean Squared Error:</strong><br>
+                    L = (1/2)·(y - ŷ)²
+                </div>
+
+                <h4>4. Forward Propagation Process</h4>
+                <div class="math-formula">
+                    <strong>Layer l:</strong><br>
+                    z^[l] = W^[l]·a^[l-1] + b^[l]<br>
+                    a^[l] = g^[l](z^[l])<br><br>
+                    where g^[l] is the activation function for layer l
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Key Concepts to Understand</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Universal Approximation Theorem</h4>
+                        <p>Neural networks with sufficient hidden units can approximate any continuous function to arbitrary accuracy. This is why they're so powerful for complex pattern recognition.</p>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Non-linearity Importance</h4>
+                        <p>Without activation functions, neural networks would be just linear transformations. Non-linear activations enable learning complex patterns and decision boundaries.</p>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Architecture Design Principles</h4>
+                        <p>Width vs. depth trade-offs, choosing appropriate activation functions, and designing networks for specific problem types (classification vs. regression).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">⚙️</div>
+                <h2>Environment Setup</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>📦 Required Libraries</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Core libraries for neural network implementation
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from mpl_toolkits.mplot3d import Axes3D
+
+# For data generation and preprocessing
+from sklearn.datasets import make_classification, make_regression, make_circles, make_moons
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+# For comparison with library implementations
+from sklearn.neural_network import MLPClassifier, MLPRegressor
+from sklearn.metrics import accuracy_score, mean_squared_error
+
+# For animation and visualization
+import matplotlib.animation as animation
+from matplotlib.colors import ListedColormap
+
+# Math and utilities
+import math
+import time
+import warnings
+warnings.filterwarnings('ignore')
+
+# Set up plotting style
+plt.style.use('seaborn-v0_8')
+np.random.seed(42)
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🔧 Installation Commands</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Install required packages
+pip install numpy matplotlib seaborn scikit-learn
+
+# For enhanced visualizations
+pip install plotly ipywidgets
+
+# For 3D plotting and animations
+pip install matplotlib
+
+# Optional: For interactive notebooks
+pip install jupyter ipython
+</pre>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span style="font-size: 1.5em;">💡</span>
+                <div>
+                    <strong>Mathematical Prerequisites:</strong> This assignment requires understanding of linear algebra (matrix multiplication), calculus (derivatives), and basic probability. Review these concepts if needed before starting.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2>Assignment Tasks</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 1: Foundation Implementation (2 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Activation Functions Implementation</h4>
+                        <p>Implement all major activation functions (sigmoid, tanh, ReLU, leaky ReLU, softmax) with their derivatives. Create visualizations showing their shapes and properties.</p>
+                        <strong>Deliverable:</strong> Activation function library with comparative analysis
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Basic Neuron Implementation</h4>
+                        <p>Build a single neuron class that can perform forward propagation with configurable weights, bias, and activation function.</p>
+                        <strong>Deliverable:</strong> Neuron class with test cases
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Layer Implementation</h4>
+                        <p>Create a layer class that contains multiple neurons and can process batch inputs efficiently using matrix operations.</p>
+                        <strong>Deliverable:</strong> Layer class with batch processing capability
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 2: Network Architecture (2.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Multi-Layer Perceptron Implementation</h4>
+                        <p>Build a complete MLP class that can handle multiple layers, different architectures, and forward propagation through the entire network.</p>
+                        <strong>Deliverable:</strong> MLP class with configurable architecture
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Loss Function Implementation</h4>
+                        <p>Implement various loss functions for classification and regression tasks with proper mathematical formulations.</p>
+                        <strong>Deliverable:</strong> Loss function library with gradient computation
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Network Initialization Strategies</h4>
+                        <p>Implement different weight initialization methods (Xavier, He, random) and analyze their impact on network performance.</p>
+                        <strong>Deliverable:</strong> Initialization strategy comparison
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 3: Problem Solving Applications (2 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Binary Classification Problem</h4>
+                        <p>Apply your neural network to a binary classification task (e.g., medical diagnosis simulation) and visualize decision boundaries.</p>
+                        <strong>Deliverable:</strong> Working binary classifier with boundary visualization
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Multi-class Classification</h4>
+                        <p>Extend your network to handle multi-class problems and implement proper softmax output layer.</p>
+                        <strong>Deliverable:</strong> Multi-class classifier with class probability outputs
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">9</div>
+                    <div>
+                        <h4>Regression Task</h4>
+                        <p>Configure your network for regression problems and compare performance with different architectures.</p>
+                        <strong>Deliverable:</strong> Neural network regressor with performance analysis
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 4: Analysis and Visualization (1.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">10</div>
+                    <div>
+                        <h4>Network Behavior Analysis</h4>
+                        <p>Analyze how different network architectures, activation functions, and initialization strategies affect learning and performance.</p>
+                        <strong>Deliverable:</strong> Comprehensive analysis report with visualizations
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">11</div>
+                    <div>
+                        <h4>Comparison with Scikit-learn</h4>
+                        <p>Compare your implementation with scikit-learn's MLPClassifier and MLPRegressor on the same datasets.</p>
+                        <strong>Deliverable:</strong> Performance comparison and implementation differences analysis
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Implementation Tab -->
+        <div id="code" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">💻</div>
+                <h2>Code Implementation</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Activation Functions Library</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+class ActivationFunctions:
+    """Complete library of activation functions and their derivatives"""
+    
+    @staticmethod
+    def sigmoid(z):
+        """Sigmoid activation function"""
+        # Clip z to prevent overflow
+        z = np.clip(z, -500, 500)
+        return 1 / (1 + np.exp(-z))
+    
+    @staticmethod
+    def sigmoid_derivative(z):
+        """Derivative of sigmoid function"""
+        s = ActivationFunctions.sigmoid(z)
+        return s * (1 - s)
+    
+    @staticmethod
+    def tanh(z):
+        """Hyperbolic tangent activation function"""
+        return np.tanh(z)
+    
+    @staticmethod
+    def tanh_derivative(z):
+        """Derivative of tanh function"""
+        return 1 - np.tanh(z)**2
+    
+    @staticmethod
+    def relu(z):
+        """ReLU activation function"""
+        return np.maximum(0, z)
+    
+    @staticmethod
+    def relu_derivative(z):
+        """Derivative of ReLU function"""
+        return (z > 0).astype(float)
+    
+    @staticmethod
+    def leaky_relu(z, alpha=0.01):
+        """Leaky ReLU activation function"""
+        return np.where(z > 0, z, alpha * z)
+    
+    @staticmethod
+    def leaky_relu_derivative(z, alpha=0.01):
+        """Derivative of Leaky ReLU function"""
+        return np.where(z > 0, 1, alpha)
+    
+    @staticmethod
+    def softmax(z):
+        """Softmax activation function for multi-class classification"""
+        # Subtract max for numerical stability
+        exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
+        return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+    
+    @staticmethod
+    def linear(z):
+        """Linear activation function (for regression output)"""
+        return z
+    
+    @staticmethod
+    def linear_derivative(z):
+        """Derivative of linear function"""
+        return np.ones_like(z)
+
+def visualize_activation_functions():
+    """Visualize all activation functions and their derivatives"""
+    
+    x = np.linspace(-5, 5, 1000)
+    
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    fig.suptitle('Activation Functions and Their Derivatives', fontsize=16)
+    
+    # Sigmoid
+    axes[0, 0].plot(x, ActivationFunctions.sigmoid(x), 'b-', label='Sigmoid', linewidth=2)
+    axes[0, 0].plot(x, ActivationFunctions.sigmoid_derivative(x), 'r--', label="Sigmoid'", linewidth=2)
+    axes[0, 0].set_title('Sigmoid')
+    axes[0, 0].grid(True, alpha=0.3)
+    axes[0, 0].legend()
+    
+    # Tanh
+    axes[0, 1].plot(x, ActivationFunctions.tanh(x), 'b-', label='Tanh', linewidth=2)
+    axes[0, 1].plot(x, ActivationFunctions.tanh_derivative(x), 'r--', label="Tanh'", linewidth=2)
+    axes[0, 1].set_title('Tanh')
+    axes[0, 1].grid(True, alpha=0.3)
+    axes[0, 1].legend()
+    
+    # ReLU
+    axes[0, 2].plot(x, ActivationFunctions.relu(x), 'b-', label='ReLU', linewidth=2)
+    axes[0, 2].plot(x, ActivationFunctions.relu_derivative(x), 'r--', label="ReLU'", linewidth=2)
+    axes[0, 2].set_title('ReLU')
+    axes[0, 2].grid(True, alpha=0.3)
+    axes[0, 2].legend()
+    
+    # Leaky ReLU
+    axes[1, 0].plot(x, ActivationFunctions.leaky_relu(x), 'b-', label='Leaky ReLU', linewidth=2)
+    axes[1, 0].plot(x, ActivationFunctions.leaky_relu_derivative(x), 'r--', label="Leaky ReLU'", linewidth=2)
+    axes[1, 0].set_title('Leaky ReLU')
+    axes[1, 0].grid(True, alpha=0.3)
+    axes[1, 0].legend()
+    
+    # Softmax (for 2D case)
+    z_2d = np.array([[x, x*0.5]]).T
+    softmax_output = ActivationFunctions.softmax(z_2d)
+    axes[1, 1].plot(x, softmax_output[:, 0], 'b-', label='Softmax Class 1', linewidth=2)
+    axes[1, 1].plot(x, softmax_output[:, 1], 'g-', label='Softmax Class 2', linewidth=2)
+    axes[1, 1].set_title('Softmax (2 classes)')
+    axes[1, 1].grid(True, alpha=0.3)
+    axes[1, 1].legend()
+    
+    # Linear
+    axes[1, 2].plot(x, ActivationFunctions.linear(x), 'b-', label='Linear', linewidth=2)
+    axes[1, 2].plot(x, ActivationFunctions.linear_derivative(x), 'r--', label="Linear'", linewidth=2)
+    axes[1, 2].set_title('Linear')
+    axes[1, 2].grid(True, alpha=0.3)
+    axes[1, 2].legend()
+    
+    plt.tight_layout()
+    plt.show()
+
+# Run visualization
+visualize_activation_functions()
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🧠 Neural Network Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+class NeuralNetwork:
+    """Complete neural network implementation from scratch"""
+    
+    def __init__(self, layers, activations=None, learning_rate=0.01):
+        """
+        Initialize neural network
+        
+        Args:
+            layers: List of layer sizes [input_size, hidden1, hidden2, ..., output_size]
+            activations: List of activation functions for each layer
+            learning_rate: Learning rate for parameter updates
+        """
+        self.layers = layers
+        self.num_layers = len(layers)
+        self.learning_rate = learning_rate
+        
+        # Default activations: ReLU for hidden layers, sigmoid for output
+        if activations is None:
+            self.activations = ['relu'] * (self.num_layers - 2) + ['sigmoid']
+        else:
+            self.activations = activations
+        
+        # Initialize weights and biases
+        self.weights = {}
+        self.biases = {}
+        self.initialize_parameters()
+        
+        # For storing forward propagation values
+        self.z_values = {}
+        self.a_values = {}
+        
+    def initialize_parameters(self, method='xavier'):
+        """Initialize network parameters"""
+        for i in range(1, self.num_layers):
+            if method == 'xavier':
+                # Xavier/Glorot initialization
+                self.weights[i] = np.random.randn(self.layers[i], self.layers[i-1]) * np.sqrt(1/self.layers[i-1])
+            elif method == 'he':
+                # He initialization (good for ReLU)
+                self.weights[i] = np.random.randn(self.layers[i], self.layers[i-1]) * np.sqrt(2/self.layers[i-1])
+            else:
+                # Random initialization
+                self.weights[i] = np.random.randn(self.layers[i], self.layers[i-1]) * 0.01
+            
+            self.biases[i] = np.zeros((self.layers[i], 1))
+    
+    def get_activation_function(self, name):
+        """Get activation function by name"""
+        activation_map = {
+            'sigmoid': (ActivationFunctions.sigmoid, ActivationFunctions.sigmoid_derivative),
+            'tanh': (ActivationFunctions.tanh, ActivationFunctions.tanh_derivative),
+            'relu': (ActivationFunctions.relu, ActivationFunctions.relu_derivative),
+            'leaky_relu': (ActivationFunctions.leaky_relu, ActivationFunctions.leaky_relu_derivative),
+            'softmax': (ActivationFunctions.softmax, None),
+            'linear': (ActivationFunctions.linear, ActivationFunctions.linear_derivative)
+        }
+        return activation_map[name]
+    
+    def forward_propagation(self, X):
+        """Perform forward propagation through the network"""
+        # Store input as first activation
+        self.a_values[0] = X.T  # Transpose for proper matrix dimensions
+        
+        for i in range(1, self.num_layers):
+            # Linear transformation
+            self.z_values[i] = np.dot(self.weights[i], self.a_values[i-1]) + self.biases[i]
+            
+            # Apply activation function
+            activation_func, _ = self.get_activation_function(self.activations[i-1])
+            
+            if self.activations[i-1] == 'softmax':
+                self.a_values[i] = activation_func(self.z_values[i].T).T
+            else:
+                self.a_values[i] = activation_func(self.z_values[i])
+        
+        return self.a_values[self.num_layers - 1].T  # Return as (samples, features)
+    
+    def predict(self, X):
+        """Make predictions on new data"""
+        output = self.forward_propagation(X)
+        
+        # For binary classification, return class predictions
+        if output.shape[1] == 1:
+            return (output > 0.5).astype(int)
+        # For multi-class, return argmax
+        else:
+            return np.argmax(output, axis=1)
+    
+    def predict_proba(self, X):
+        """Return prediction probabilities"""
+        return self.forward_propagation(X)
+
+# Loss Functions
+class LossFunctions:
+    """Collection of loss functions for neural networks"""
+    
+    @staticmethod
+    def binary_crossentropy(y_true, y_pred):
+        """Binary cross-entropy loss"""
+        # Clip predictions to prevent log(0)
+        y_pred = np.clip(y_pred, 1e-7, 1 - 1e-7)
+        return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    @staticmethod
+    def categorical_crossentropy(y_true, y_pred):
+        """Categorical cross-entropy loss"""
+        y_pred = np.clip(y_pred, 1e-7, 1 - 1e-7)
+        return -np.mean(np.sum(y_true * np.log(y_pred), axis=1))
+    
+    @staticmethod
+    def mean_squared_error(y_true, y_pred):
+        """Mean squared error loss"""
+        return np.mean((y_true - y_pred)**2)
+    
+    @staticmethod
+    def mean_absolute_error(y_true, y_pred):
+        """Mean absolute error loss"""
+        return np.mean(np.abs(y_true - y_pred))
+
+# Test the implementation
+def test_neural_network():
+    """Test neural network implementation with simple dataset"""
+    
+    # Generate sample data
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=10, 
+                              n_redundant=10, n_clusters_per_class=1, random_state=42)
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Standardize features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    # Create neural network
+    nn = NeuralNetwork(layers=[20, 10, 5, 1], activations=['relu', 'relu', 'sigmoid'])
+    
+    # Test forward propagation
+    output = nn.forward_propagation(X_train_scaled[:10])
+    print(f"Network output shape: {output.shape}")
+    print(f"Sample predictions: {output[:5].flatten()}")
+    
+    # Test predictions
+    predictions = nn.predict(X_test_scaled)
+    print(f"Prediction accuracy (random weights): {np.mean(predictions.flatten() == y_test):.4f}")
+    
+    return nn, X_train_scaled, X_test_scaled, y_train, y_test
+
+# Run test
+nn, X_train, X_test, y_train, y_test = test_neural_network()
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📊 Visualization and Analysis</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+def visualize_decision_boundary(X, y, model, title="Decision Boundary"):
+    """Visualize decision boundary for 2D data"""
+    
+    h = 0.02  # Step size in mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    
+    mesh_points = np.c_[xx.ravel(), yy.ravel()]
+    
+    if hasattr(model, 'predict_proba'):
+        Z = model.predict_proba(mesh_points)
+        if Z.shape[1] == 1:
+            Z = Z[:, 0]
+        else:
+            Z = Z[:, 1]  # For binary classification, take positive class
+    else:
+        Z = model.predict(mesh_points)
+        if Z.ndim > 1:
+            Z = Z[:, 0]
+    
+    Z = Z.reshape(xx.shape)
+    
+    plt.figure(figsize=(10, 8))
+    plt.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.RdBu)
+    scatter = plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.RdBu, edgecolors='black')
+    plt.colorbar(scatter)
+    plt.title(title)
+    plt.xlabel('Feature 1')
+    plt.ylabel('Feature 2')
+    plt.show()
+
+def compare_with_sklearn(X_train, X_test, y_train, y_test):
+    """Compare custom implementation with scikit-learn"""
+    
+    # Our implementation (using random weights for demonstration)
+    custom_nn = NeuralNetwork(layers=[X_train.shape[1], 10, 5, 1])
+    custom_predictions = custom_nn.predict(X_test)
+    custom_proba = custom_nn.predict_proba(X_test)
+    
+    # Scikit-learn implementation
+    sklearn_nn = MLPClassifier(hidden_layer_sizes=(10, 5), max_iter=1000, random_state=42)
+    sklearn_nn.fit(X_train, y_train)
+    sklearn_predictions = sklearn_nn.predict(X_test)
+    sklearn_proba = sklearn_nn.predict_proba(X_test)
+    
+    # Calculate accuracies
+    custom_accuracy = accuracy_score(y_test, custom_predictions)
+    sklearn_accuracy = accuracy_score(y_test, sklearn_predictions)
+    
+    print("=== Model Comparison ===")
+    print(f"Custom Neural Network Accuracy: {custom_accuracy:.4f}")
+    print(f"Scikit-learn MLP Accuracy: {sklearn_accuracy:.4f}")
+    
+    # Plot comparison
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+    
+    # Prediction comparison
+    axes[0].scatter(range(len(y_test)), y_test, alpha=0.7, label='True Labels', marker='o')
+    axes[0].scatter(range(len(y_test)), custom_predictions.flatten(), alpha=0.7, 
+                   label='Custom NN', marker='x')
+    axes[0].scatter(range(len(y_test)), sklearn_predictions, alpha=0.7, 
+                   label='Sklearn MLP', marker='+')
+    axes[0].set_title('Prediction Comparison')
+    axes[0].set_xlabel('Sample Index')
+    axes[0].set_ylabel('Prediction')
+    axes[0].legend()
+    
+    # Probability comparison (for trained sklearn model)
+    axes[1].scatter(sklearn_proba[:, 1], custom_proba[:, 0], alpha=0.7)
+    axes[1].plot([0, 1], [0, 1], 'r--', label='Perfect Agreement')
+    axes[1].set_title('Probability Predictions Comparison')
+    axes[1].set_xlabel('Sklearn Probability')
+    axes[1].set_ylabel('Custom NN Probability')
+    axes[1].legend()
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return custom_nn, sklearn_nn
+
+def analyze_network_behavior():
+    """Analyze how different architectures affect performance"""
+    
+    # Generate complex dataset
+    X, y = make_moons(n_samples=1000, noise=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Test different architectures
+    architectures = [
+        ([2, 1], "Single Neuron"),
+        ([2, 5, 1], "Shallow Network"),
+        ([2, 10, 5, 1], "Deep Network"),
+        ([2, 20, 10, 5, 1], "Very Deep Network")
+    ]
+    
+    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+    axes = axes.ravel()
+    
+    for i, (arch, name) in enumerate(architectures):
+        # Create and test network
+        nn = NeuralNetwork(layers=arch)
+        
+        # For visualization, let's create a simple trained version
+        # (In practice, you would implement backpropagation for training)
+        
+        # Plot decision boundary
+        plt.subplot(2, 2, i+1)
+        h = 0.02
+        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                             np.arange(y_min, y_max, h))
+        
+        mesh_points = np.c_[xx.ravel(), yy.ravel()]
+        Z = nn.predict_proba(mesh_points)[:, 0]
+        Z = Z.reshape(xx.shape)
+        
+        plt.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.RdBu)
+        scatter = plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.RdBu, edgecolors='black')
+        plt.title(f'{name}\nArchitecture: {arch}')
+        plt.xlabel('Feature 1')
+        plt.ylabel('Feature 2')
+    
+    plt.tight_layout()
+    plt.show()
+
+# Run analysis
+compare_with_sklearn(X_train, X_test, y_train, y_test)
+analyze_network_behavior()
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Evaluation Criteria</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Technical Implementation (50 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Mathematical Accuracy (15 points)</h4>
+                        <ul>
+                            <li><strong>Activation Functions (5 pts):</strong> Correct implementation of all functions and derivatives</li>
+                            <li><strong>Forward Propagation (5 pts):</strong> Proper matrix operations and dimension handling</li>
+                            <li><strong>Loss Calculations (5 pts):</strong> Accurate loss function implementations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Architecture Design (15 points)</h4>
+                        <ul>
+                            <li><strong>Network Flexibility (5 pts):</strong> Configurable layers and architectures</li>
+                            <li><strong>Initialization Methods (5 pts):</strong> Multiple weight initialization strategies</li>
+                            <li><strong>Activation Choices (5 pts):</strong> Appropriate activation function selection</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Code Quality and Efficiency (10 points)</h4>
+                        <ul>
+                            <li><strong>Vectorization (4 pts):</strong> Efficient NumPy operations, no loops</li>
+                            <li><strong>Code Structure (3 pts):</strong> Clean, modular, and reusable code</li>
+                            <li><strong>Documentation (3 pts):</strong> Clear comments and docstrings</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Problem Solving Applications (10 points)</h4>
+                        <ul>
+                            <li><strong>Classification Tasks (5 pts):</strong> Binary and multi-class implementations</li>
+                            <li><strong>Regression Tasks (5 pts):</strong> Continuous output prediction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📊 Analysis and Understanding (30 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Mathematical Understanding (15 points)</h4>
+                        <ul>
+                            <li>Explanation of forward propagation mathematics</li>
+                            <li>Analysis of activation function properties and use cases</li>
+                            <li>Understanding of universal approximation theorem</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Experimental Analysis (15 points)</h4>
+                        <ul>
+                            <li>Architecture comparison and performance analysis</li>
+                            <li>Initialization strategy impact assessment</li>
+                            <li>Comparison with scikit-learn implementations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📈 Visualization and Presentation (20 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Visual Analysis (12 points)</h4>
+                        <ul>
+                            <li><strong>Decision Boundaries (4 pts):</strong> Clear visualization of model decisions</li>
+                            <li><strong>Activation Functions (4 pts):</strong> Comprehensive function comparisons</li>
+                            <li><strong>Network Behavior (4 pts):</strong> Architecture impact visualizations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Report Quality (8 points)</h4>
+                        <ul>
+                            <li>Clear explanation of implementation choices</li>
+                            <li>Professional presentation of results</li>
+                            <li>Insightful analysis and conclusions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">📋</span>
+                <div>
+                    <strong>Submission Requirements:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Complete Jupyter notebook with all implementations</li>
+                        <li>Neural network class library (separate .py file)</li>
+                        <li>Visualization suite showing all analysis</li>
+                        <li>Written report explaining mathematical foundations</li>
+                        <li>Comparison analysis with scikit-learn</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="ml_practical_assignment_2.html" class="btn">
+                ← Previous: Scikit-learn Mastery
+            </a>
+            <a href="ml_specialization_assignments_index.html" class="btn" style="margin: 0 15px;">
+                Back to All Assignments
+            </a>
+            <a href="ml_practical_assignment_4.html" class="btn">
+                Next: Backpropagation →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab and mark as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(button) {
+            const codeBlock = button.parentNode;
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

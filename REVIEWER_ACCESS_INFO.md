@@ -16,6 +16,12 @@
 - **Username:** `reviewer`
 - **Password:** `AzureReview2025!`
 
+Login Credentials:
+Admin: username=admin, password=X9085565r@
+Reviewer: username=reviewer1, password=MLReview2024!
+Guest: username=guest, password=MLGuest2024
+
+
 ## Platform Features Available to Reviewers:
 
 ### 📝 MCQ Question Bank

@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 5: PyTorch/Keras MLP Implementation - ML Specialization</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .assignment-meta {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+            border-left: 5px solid #667eea;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .task-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .task-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .framework-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .framework-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .framework-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .pytorch-color {
+            border-left: 5px solid #ee4c2c;
+        }
+
+        .keras-color {
+            border-left: 5px solid #d00000;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border: 1px solid #bee5eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: auto;
+            }
+            
+            .assignment-meta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🔥 Assignment 5: PyTorch/Keras MLP Implementation</h1>
+            <p>Build Multi-Layer Perceptrons using modern deep learning frameworks with automatic differentiation</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="assignment-meta">
+            <div>
+                <strong>🎯 Difficulty:</strong> Intermediate
+            </div>
+            <div>
+                <strong>⏱️ Duration:</strong> 6-8 hours
+            </div>
+            <div>
+                <strong>🛠️ Technologies:</strong> PyTorch, Keras, TensorFlow, Autograd, GPU
+            </div>
+            <div>
+                <strong>📊 Assignment:</strong> 5/25
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📋 Overview</button>
+            <button class="nav-tab" onclick="showTab('frameworks')">🔧 Frameworks</button>
+            <button class="nav-tab" onclick="showTab('setup')">⚙️ Setup</button>
+            <button class="nav-tab" onclick="showTab('tasks')">📝 Tasks</button>
+            <button class="nav-tab" onclick="showTab('code')">💻 Implementation</button>
+            <button class="nav-tab" onclick="showTab('evaluation')">📊 Evaluation</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h2>Assignment Overview</h2>
+            </div>
+
+            <div class="objective-card">
+                <h3>🎯 Learning Objectives</h3>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li>Master PyTorch and Keras/TensorFlow for neural network development</li>
+                    <li>Understand automatic differentiation and computational graphs</li>
+                    <li>Implement MLPs using both frameworks and compare approaches</li>
+                    <li>Leverage GPU acceleration for deep learning workloads</li>
+                    <li>Build production-ready models with proper training loops</li>
+                </ul>
+            </div>
+
+            <div class="objective-card">
+                <h3>🏢 Business Scenario: DeepTech Solutions - Computer Vision Platform</h3>
+                <p><strong>Company:</strong> DeepTech Solutions - AI consulting firm specializing in computer vision</p>
+                <p><strong>Challenge:</strong> Build a scalable deep learning platform that can handle multiple computer vision tasks using modern frameworks, with the flexibility to deploy on various hardware configurations.</p>
+                
+                <h4 style="margin-top: 20px;">📊 Technical Requirements:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Framework Flexibility:</strong> Support both PyTorch and TensorFlow deployments</li>
+                    <li><strong>Scalability:</strong> Efficient GPU utilization for large-scale training</li>
+                    <li><strong>Model Comparison:</strong> A/B testing framework for different architectures</li>
+                    <li><strong>Production Deployment:</strong> Export models for inference in production</li>
+                </ul>
+
+                <h4 style="margin-top: 20px;">🎯 Project Goals:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Reduce model development time by 50% using modern frameworks</li>
+                    <li>Achieve 10x speedup using GPU acceleration</li>
+                    <li>Build reusable components for rapid prototyping</li>
+                    <li>Establish best practices for framework selection</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">⚠️</span>
+                <div>
+                    <strong>Framework Mastery:</strong> This assignment requires learning two major deep learning frameworks. Focus on understanding the fundamental differences in their approaches to automatic differentiation, model definition, and training loops.
+                </div>
+            </div>
+        </div>
+
+        <!-- Frameworks Tab -->
+        <div id="frameworks" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">🔧</div>
+                <h2>Framework Comparison</h2>
+            </div>
+
+            <div class="framework-comparison">
+                <div class="framework-card pytorch-color">
+                    <h3>🔥 PyTorch</h3>
+                    <h4>Strengths:</h4>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Dynamic computational graphs</li>
+                        <li>Pythonic and intuitive API</li>
+                        <li>Excellent for research and prototyping</li>
+                        <li>Strong community support</li>
+                        <li>Easy debugging with standard Python tools</li>
+                    </ul>
+                    <h4>Best For:</h4>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Research and experimentation</li>
+                        <li>Custom model architectures</li>
+                        <li>Educational purposes</li>
+                        <li>Complex training loops</li>
+                    </ul>
+                </div>
+
+                <div class="framework-card keras-color">
+                    <h3>🎯 Keras/TensorFlow</h3>
+                    <h4>Strengths:</h4>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>High-level, user-friendly API</li>
+                        <li>Excellent production deployment tools</li>
+                        <li>Strong ecosystem (TensorBoard, TFX)</li>
+                        <li>Mobile and web deployment support</li>
+                        <li>Industry-standard for production</li>
+                    </ul>
+                    <h4>Best For:</h4>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Production deployments</li>
+                        <li>Standard architectures</li>
+                        <li>Team collaboration</li>
+                        <li>Model serving at scale</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🔄 Key Conceptual Differences</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Computational Graphs</h4>
+                        <p><strong>PyTorch:</strong> Dynamic graphs built on-the-fly during forward pass</p>
+                        <p><strong>TensorFlow:</strong> Static graphs (TF 1.x) or eager execution (TF 2.x)</p>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Model Definition</h4>
+                        <p><strong>PyTorch:</strong> Object-oriented approach with nn.Module classes</p>
+                        <p><strong>Keras:</strong> Sequential and Functional API approaches</p>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Training Loops</h4>
+                        <p><strong>PyTorch:</strong> Manual training loops with explicit forward/backward calls</p>
+                        <p><strong>Keras:</strong> High-level fit() method with built-in training logic</p>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Deployment</h4>
+                        <p><strong>PyTorch:</strong> TorchScript, ONNX, TorchServe</p>
+                        <p><strong>TensorFlow:</strong> SavedModel, TensorFlow Serving, TensorFlow Lite</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">⚙️</div>
+                <h2>Environment Setup</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>📦 Installation Commands</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# PyTorch Installation (CPU version)
+pip install torch torchvision torchaudio
+
+# PyTorch Installation (CUDA version - if GPU available)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# TensorFlow/Keras Installation
+pip install tensorflow
+
+# Additional utilities
+pip install numpy pandas matplotlib seaborn scikit-learn
+pip install tensorboard  # For TensorFlow visualization
+pip install torchinfo    # For PyTorch model summaries
+
+# For model comparison and visualization
+pip install plotly
+pip install torchviz     # For computational graph visualization
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🧪 Environment Verification</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import torch
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+print("=== ENVIRONMENT CHECK ===")
+
+# PyTorch version and CUDA
+print(f"PyTorch version: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+if torch.cuda.is_available():
+    print(f"CUDA version: {torch.version.cuda}")
+    print(f"GPU device: {torch.cuda.get_device_name(0)}")
+
+# TensorFlow version and GPU
+print(f"\nTensorFlow version: {tf.__version__}")
+print(f"TF GPU available: {len(tf.config.list_physical_devices('GPU')) > 0}")
+if len(tf.config.list_physical_devices('GPU')) > 0:
+    print(f"GPU devices: {tf.config.list_physical_devices('GPU')}")
+
+# Check other libraries
+print(f"\nNumPy version: {np.__version__}")
+print(f"Pandas version: {pd.__version__}")
+
+print("\n✅ Environment setup complete!")
+</pre>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span style="font-size: 1.5em;">💡</span>
+                <div>
+                    <strong>GPU Recommendation:</strong> While this assignment can be completed on CPU, having GPU access (Google Colab, local GPU, or cloud instance) will significantly improve training speed and allow you to experiment with larger models.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2>Assignment Tasks</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 1: PyTorch Implementation (2.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Basic PyTorch MLP</h4>
+                        <p>Create a Multi-Layer Perceptron using PyTorch's nn.Module, implementing custom forward pass and understanding autograd mechanics.</p>
+                        <strong>Deliverable:</strong> PyTorch MLP class with detailed documentation
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Custom Training Loop</h4>
+                        <p>Implement a complete training loop with loss computation, backpropagation, and parameter updates using PyTorch optimizers.</p>
+                        <strong>Deliverable:</strong> Training function with progress tracking and validation
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>GPU Acceleration</h4>
+                        <p>Modify your PyTorch implementation to leverage GPU acceleration when available, with proper device management.</p>
+                        <strong>Deliverable:</strong> GPU-enabled training with performance benchmarks
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 2: Keras/TensorFlow Implementation (2 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Keras Sequential Model</h4>
+                        <p>Build equivalent MLP using Keras Sequential API, exploring different layer types and activation functions.</p>
+                        <strong>Deliverable:</strong> Keras model with comprehensive configuration options
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Functional API Implementation</h4>
+                        <p>Recreate the same model using Keras Functional API for more complex architectures and multiple inputs/outputs.</p>
+                        <strong>Deliverable:</strong> Functional API model with advanced features
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Custom Training with Keras</h4>
+                        <p>Implement custom training loops in TensorFlow for more control over the training process, similar to PyTorch approach.</p>
+                        <strong>Deliverable:</strong> Custom TensorFlow training loop with gradient tape
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 3: Framework Comparison (1.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Performance Benchmarking</h4>
+                        <p>Compare training speed, memory usage, and convergence behavior between PyTorch and Keras implementations.</p>
+                        <strong>Deliverable:</strong> Comprehensive benchmarking report with visualizations
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Model Export and Interoperability</h4>
+                        <p>Export models from both frameworks and explore conversion between formats (ONNX, SavedModel, TorchScript).</p>
+                        <strong>Deliverable:</strong> Model export pipeline with format conversion
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">9</div>
+                    <div>
+                        <h4>Computer Vision Application</h4>
+                        <p>Apply both frameworks to a computer vision task (image classification) and compare development experience and results.</p>
+                        <strong>Deliverable:</strong> Complete computer vision pipeline in both frameworks
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Implementation Tab -->
+        <div id="code" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">💻</div>
+                <h2>Implementation Examples</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🔥 PyTorch Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import time
+
+class PyTorchMLP(nn.Module):
+    """Multi-Layer Perceptron implementation in PyTorch"""
+    
+    def __init__(self, input_size, hidden_sizes, output_size, dropout_rate=0.2):
+        super(PyTorchMLP, self).__init__()
+        
+        self.input_size = input_size
+        self.hidden_sizes = hidden_sizes
+        self.output_size = output_size
+        
+        # Build layers dynamically
+        layer_sizes = [input_size] + hidden_sizes + [output_size]
+        self.layers = nn.ModuleList()
+        
+        for i in range(len(layer_sizes) - 1):
+            self.layers.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(dropout_rate)
+        
+        # Initialize weights
+        self.init_weights()
+    
+    def init_weights(self):
+        """Initialize weights using Xavier/He initialization"""
+        for layer in self.layers:
+            if isinstance(layer, nn.Linear):
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+    
+    def forward(self, x):
+        """Forward pass through the network"""
+        for i, layer in enumerate(self.layers[:-1]):
+            x = layer(x)
+            x = F.relu(x)  # ReLU activation for hidden layers
+            x = self.dropout(x)
+        
+        # Output layer (no activation for regression, sigmoid/softmax for classification)
+        x = self.layers[-1](x)
+        return x
+    
+    def get_device(self):
+        """Get the device of the model"""
+        return next(self.parameters()).device
+
+class PyTorchTrainer:
+    """Training wrapper for PyTorch models"""
+    
+    def __init__(self, model, criterion, optimizer, device=None):
+        self.model = model
+        self.criterion = criterion
+        self.optimizer = optimizer
+        
+        # Set device
+        if device is None:
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            self.device = device
+        
+        self.model.to(self.device)
+        
+        # Training history
+        self.train_losses = []
+        self.val_losses = []
+        self.train_accuracies = []
+        self.val_accuracies = []
+    
+    def train_epoch(self, train_loader):
+        """Train for one epoch"""
+        self.model.train()
+        total_loss = 0
+        correct = 0
+        total = 0
+        
+        for batch_idx, (data, target) in enumerate(train_loader):
+            data, target = data.to(self.device), target.to(self.device)
+            
+            # Zero gradients
+            self.optimizer.zero_grad()
+            
+            # Forward pass
+            output = self.model(data)
+            loss = self.criterion(output, target)
+            
+            # Backward pass
+            loss.backward()
+            self.optimizer.step()
+            
+            # Statistics
+            total_loss += loss.item()
+            if len(target.shape) == 1 or target.shape[1] == 1:  # Classification
+                predicted = (torch.sigmoid(output) > 0.5).float()
+                if len(target.shape) > 1:
+                    target = target.squeeze()
+                if len(predicted.shape) > 1:
+                    predicted = predicted.squeeze()
+                correct += (predicted == target).sum().item()
+                total += target.size(0)
+        
+        avg_loss = total_loss / len(train_loader)
+        accuracy = correct / total if total > 0 else 0
+        
+        return avg_loss, accuracy
+    
+    def validate(self, val_loader):
+        """Validate the model"""
+        self.model.eval()
+        total_loss = 0
+        correct = 0
+        total = 0
+        
+        with torch.no_grad():
+            for data, target in val_loader:
+                data, target = data.to(self.device), target.to(self.device)
+                
+                output = self.model(data)
+                loss = self.criterion(output, target)
+                
+                total_loss += loss.item()
+                if len(target.shape) == 1 or target.shape[1] == 1:  # Classification
+                    predicted = (torch.sigmoid(output) > 0.5).float()
+                    if len(target.shape) > 1:
+                        target = target.squeeze()
+                    if len(predicted.shape) > 1:
+                        predicted = predicted.squeeze()
+                    correct += (predicted == target).sum().item()
+                    total += target.size(0)
+        
+        avg_loss = total_loss / len(val_loader)
+        accuracy = correct / total if total > 0 else 0
+        
+        return avg_loss, accuracy
+    
+    def train(self, train_loader, val_loader, epochs, verbose=True):
+        """Complete training loop"""
+        print(f"Training on device: {self.device}")
+        start_time = time.time()
+        
+        for epoch in range(epochs):
+            # Train
+            train_loss, train_acc = self.train_epoch(train_loader)
+            
+            # Validate
+            val_loss, val_acc = self.validate(val_loader)
+            
+            # Store history
+            self.train_losses.append(train_loss)
+            self.val_losses.append(val_loss)
+            self.train_accuracies.append(train_acc)
+            self.val_accuracies.append(val_acc)
+            
+            if verbose and (epoch + 1) % (epochs // 10) == 0:
+                print(f'Epoch [{epoch+1}/{epochs}]')
+                print(f'  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}')
+                print(f'  Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.4f}')
+        
+        training_time = time.time() - start_time
+        print(f"\nTraining completed in {training_time:.2f} seconds")
+        
+        return self.train_losses, self.val_losses, training_time
+    
+    def plot_history(self):
+        """Plot training history"""
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+        
+        # Loss plot
+        ax1.plot(self.train_losses, label='Training Loss', color='blue')
+        ax1.plot(self.val_losses, label='Validation Loss', color='red')
+        ax1.set_title('Training History - Loss')
+        ax1.set_xlabel('Epoch')
+        ax1.set_ylabel('Loss')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Accuracy plot
+        ax2.plot(self.train_accuracies, label='Training Accuracy', color='blue')
+        ax2.plot(self.val_accuracies, label='Validation Accuracy', color='red')
+        ax2.set_title('Training History - Accuracy')
+        ax2.set_xlabel('Epoch')
+        ax2.set_ylabel('Accuracy')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.show()
+
+# Example usage
+def create_pytorch_example():
+    """Create and train a PyTorch model example"""
+    
+    # Generate sample data
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, 
+                              n_redundant=5, n_clusters_per_class=1, random_state=42)
+    
+    # Preprocess data
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_scaled, y, test_size=0.2, random_state=42
+    )
+    
+    # Convert to PyTorch tensors
+    X_train_tensor = torch.FloatTensor(X_train)
+    y_train_tensor = torch.FloatTensor(y_train).view(-1, 1)
+    X_test_tensor = torch.FloatTensor(X_test)
+    y_test_tensor = torch.FloatTensor(y_test).view(-1, 1)
+    
+    # Create data loaders
+    train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+    test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
+    
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+    
+    # Create model
+    model = PyTorchMLP(input_size=20, hidden_sizes=[64, 32, 16], output_size=1)
+    
+    # Define loss and optimizer
+    criterion = nn.BCEWithLogitsLoss()  # Binary classification
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    
+    # Create trainer
+    trainer = PyTorchTrainer(model, criterion, optimizer)
+    
+    # Train model
+    print("=== PyTorch Training ===")
+    train_losses, val_losses, training_time = trainer.train(
+        train_loader, test_loader, epochs=100, verbose=True
+    )
+    
+    # Plot results
+    trainer.plot_history()
+    
+    return model, trainer, training_time
+
+# Run PyTorch example
+pytorch_model, pytorch_trainer, pytorch_time = create_pytorch_example()
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Keras/TensorFlow Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, optimizers, losses, metrics
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import time
+
+class KerasMLPBuilder:
+    """Builder class for Keras MLP models"""
+    
+    @staticmethod
+    def create_sequential_model(input_size, hidden_sizes, output_size, dropout_rate=0.2):
+        """Create MLP using Sequential API"""
+        model = keras.Sequential([
+            layers.Dense(hidden_sizes[0], activation='relu', input_shape=(input_size,))
+        ])
+        
+        # Add hidden layers
+        for hidden_size in hidden_sizes[1:]:
+            model.add(layers.Dense(hidden_size, activation='relu'))
+            model.add(layers.Dropout(dropout_rate))
+        
+        # Output layer
+        model.add(layers.Dense(output_size, activation='sigmoid'))  # For binary classification
+        
+        return model
+    
+    @staticmethod
+    def create_functional_model(input_size, hidden_sizes, output_size, dropout_rate=0.2):
+        """Create MLP using Functional API"""
+        
+        # Input layer
+        inputs = layers.Input(shape=(input_size,))
+        x = inputs
+        
+        # Hidden layers
+        for i, hidden_size in enumerate(hidden_sizes):
+            x = layers.Dense(hidden_size, activation='relu', name=f'hidden_{i+1}')(x)
+            x = layers.Dropout(dropout_rate, name=f'dropout_{i+1}')(x)
+        
+        # Output layer
+        outputs = layers.Dense(output_size, activation='sigmoid', name='output')(x)
+        
+        model = keras.Model(inputs=inputs, outputs=outputs, name='functional_mlp')
+        
+        return model
+
+class KerasTrainer:
+    """Training wrapper for Keras models"""
+    
+    def __init__(self, model, loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']):
+        self.model = model
+        
+        # Compile model
+        self.model.compile(
+            loss=loss,
+            optimizer=optimizer,
+            metrics=metrics
+        )
+        
+        self.history = None
+    
+    def train(self, X_train, y_train, X_val, y_val, epochs=100, batch_size=32, verbose=1):
+        """Train the model using Keras fit method"""
+        
+        print("=== Keras Training ===")
+        print(f"Training on: {len(tf.config.list_physical_devices('GPU'))} GPU(s)")
+        
+        start_time = time.time()
+        
+        # Define callbacks
+        callbacks = [
+            keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
+            keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5, min_lr=1e-7)
+        ]
+        
+        # Train model
+        self.history = self.model.fit(
+            X_train, y_train,
+            validation_data=(X_val, y_val),
+            epochs=epochs,
+            batch_size=batch_size,
+            callbacks=callbacks,
+            verbose=verbose
+        )
+        
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        
+        return self.history, training_time
+    
+    def plot_history(self):
+        """Plot training history"""
+        if self.history is None:
+            print("No training history available. Train the model first.")
+            return
+        
+        history_dict = self.history.history
+        
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+        
+        # Loss plot
+        axes[0].plot(history_dict['loss'], label='Training Loss', color='blue')
+        axes[0].plot(history_dict['val_loss'], label='Validation Loss', color='red')
+        axes[0].set_title('Training History - Loss')
+        axes[0].set_xlabel('Epoch')
+        axes[0].set_ylabel('Loss')
+        axes[0].legend()
+        axes[0].grid(True, alpha=0.3)
+        
+        # Accuracy plot
+        if 'accuracy' in history_dict:
+            axes[1].plot(history_dict['accuracy'], label='Training Accuracy', color='blue')
+            axes[1].plot(history_dict['val_accuracy'], label='Validation Accuracy', color='red')
+            axes[1].set_title('Training History - Accuracy')
+            axes[1].set_xlabel('Epoch')
+            axes[1].set_ylabel('Accuracy')
+            axes[1].legend()
+            axes[1].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.show()
+    
+    def evaluate(self, X_test, y_test):
+        """Evaluate the model"""
+        return self.model.evaluate(X_test, y_test, verbose=0)
+
+class CustomKerasTrainer:
+    """Custom training loop using GradientTape for more control"""
+    
+    def __init__(self, model, loss_fn, optimizer):
+        self.model = model
+        self.loss_fn = loss_fn
+        self.optimizer = optimizer
+        
+        # Metrics
+        self.train_loss = keras.metrics.Mean()
+        self.train_accuracy = keras.metrics.BinaryAccuracy()
+        self.val_loss = keras.metrics.Mean()
+        self.val_accuracy = keras.metrics.BinaryAccuracy()
+        
+        # History
+        self.history = {
+            'loss': [], 'val_loss': [],
+            'accuracy': [], 'val_accuracy': []
+        }
+    
+    @tf.function
+    def train_step(self, x, y):
+        """Single training step"""
+        with tf.GradientTape() as tape:
+            predictions = self.model(x, training=True)
+            loss = self.loss_fn(y, predictions)
+        
+        gradients = tape.gradient(loss, self.model.trainable_variables)
+        self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
+        
+        self.train_loss.update_state(loss)
+        self.train_accuracy.update_state(y, predictions)
+        
+        return loss
+    
+    @tf.function
+    def val_step(self, x, y):
+        """Single validation step"""
+        predictions = self.model(x, training=False)
+        loss = self.loss_fn(y, predictions)
+        
+        self.val_loss.update_state(loss)
+        self.val_accuracy.update_state(y, predictions)
+        
+        return loss
+    
+    def train(self, train_dataset, val_dataset, epochs):
+        """Custom training loop"""
+        
+        print("=== Custom Keras Training Loop ===")
+        start_time = time.time()
+        
+        for epoch in range(epochs):
+            # Reset metrics
+            self.train_loss.reset_states()
+            self.train_accuracy.reset_states()
+            self.val_loss.reset_states()
+            self.val_accuracy.reset_states()
+            
+            # Training
+            for x_batch, y_batch in train_dataset:
+                self.train_step(x_batch, y_batch)
+            
+            # Validation
+            for x_batch, y_batch in val_dataset:
+                self.val_step(x_batch, y_batch)
+            
+            # Store history
+            self.history['loss'].append(float(self.train_loss.result()))
+            self.history['val_loss'].append(float(self.val_loss.result()))
+            self.history['accuracy'].append(float(self.train_accuracy.result()))
+            self.history['val_accuracy'].append(float(self.val_accuracy.result()))
+            
+            # Print progress
+            if (epoch + 1) % (epochs // 10) == 0:
+                print(f'Epoch {epoch+1}/{epochs}')
+                print(f'  Loss: {self.train_loss.result():.4f}, '
+                      f'Accuracy: {self.train_accuracy.result():.4f}')
+                print(f'  Val Loss: {self.val_loss.result():.4f}, '
+                      f'Val Accuracy: {self.val_accuracy.result():.4f}')
+        
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        
+        return self.history, training_time
+
+# Example usage
+def create_keras_example():
+    """Create and train Keras models example"""
+    
+    # Generate sample data
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, 
+                              n_redundant=5, n_clusters_per_class=1, random_state=42)
+    
+    # Preprocess data
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_scaled, y, test_size=0.2, random_state=42
+    )
+    
+    results = {}
+    
+    # Sequential API model
+    print("1. Training Sequential API Model")
+    sequential_model = KerasMLPBuilder.create_sequential_model(
+        input_size=20, hidden_sizes=[64, 32, 16], output_size=1
+    )
+    
+    sequential_trainer = KerasTrainer(sequential_model)
+    seq_history, seq_time = sequential_trainer.train(
+        X_train, y_train, X_test, y_test, epochs=100, verbose=0
+    )
+    
+    sequential_trainer.plot_history()
+    results['sequential'] = seq_time
+    
+    # Functional API model
+    print("\n2. Training Functional API Model")
+    functional_model = KerasMLPBuilder.create_functional_model(
+        input_size=20, hidden_sizes=[64, 32, 16], output_size=1
+    )
+    
+    functional_trainer = KerasTrainer(functional_model)
+    func_history, func_time = functional_trainer.train(
+        X_train, y_train, X_test, y_test, epochs=100, verbose=0
+    )
+    
+    functional_trainer.plot_history()
+    results['functional'] = func_time
+    
+    # Custom training loop
+    print("\n3. Training with Custom Loop")
+    custom_model = KerasMLPBuilder.create_functional_model(
+        input_size=20, hidden_sizes=[64, 32, 16], output_size=1
+    )
+    
+    # Create datasets
+    train_dataset = tf.data.Dataset.from_tensor_slices((X_train, y_train)).batch(32)
+    val_dataset = tf.data.Dataset.from_tensor_slices((X_test, y_test)).batch(32)
+    
+    custom_trainer = CustomKerasTrainer(
+        custom_model,
+        loss_fn=keras.losses.BinaryCrossentropy(),
+        optimizer=keras.optimizers.Adam()
+    )
+    
+    custom_history, custom_time = custom_trainer.train(train_dataset, val_dataset, epochs=100)
+    results['custom'] = custom_time
+    
+    return results
+
+# Run Keras example
+keras_results = create_keras_example()
+print("\n=== KERAS TRAINING TIMES ===")
+for approach, time_taken in keras_results.items():
+    print(f"{approach.capitalize()}: {time_taken:.2f} seconds")
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Evaluation Criteria</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Technical Implementation (40 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>PyTorch Mastery (15 points)</h4>
+                        <ul>
+                            <li><strong>Model Architecture (5 pts):</strong> Proper nn.Module implementation</li>
+                            <li><strong>Training Loop (5 pts):</strong> Complete custom training with autograd</li>
+                            <li><strong>GPU Utilization (5 pts):</strong> Efficient device management and acceleration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Keras/TensorFlow Proficiency (15 points)</h4>
+                        <ul>
+                            <li><strong>API Usage (5 pts):</strong> Both Sequential and Functional API implementations</li>
+                            <li><strong>High-level Training (5 pts):</strong> Effective use of fit() method with callbacks</li>
+                            <li><strong>Custom Training (5 pts):</strong> GradientTape implementation for advanced control</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Code Quality and Best Practices (10 points)</h4>
+                        <ul>
+                            <li><strong>Framework Conventions (4 pts):</strong> Following framework-specific best practices</li>
+                            <li><strong>Modularity (3 pts):</strong> Reusable and well-structured code</li>
+                            <li><strong>Documentation (3 pts):</strong> Clear explanations and comments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📊 Framework Comparison Analysis (35 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Performance Benchmarking (15 points)</h4>
+                        <ul>
+                            <li>Training speed comparison across frameworks</li>
+                            <li>Memory usage analysis and optimization</li>
+                            <li>GPU acceleration effectiveness</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Development Experience Analysis (10 points)</h4>
+                        <ul>
+                            <li>Ease of implementation and debugging</li>
+                            <li>API design and usability comparison</li>
+                            <li>Learning curve and documentation quality</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Model Export and Deployment (10 points)</h4>
+                        <ul>
+                            <li>Successful model export to multiple formats</li>
+                            <li>Cross-framework compatibility testing</li>
+                            <li>Deployment readiness assessment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📈 Computer Vision Application (25 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Implementation Quality (15 points)</h4>
+                        <ul>
+                            <li>Complete image classification pipeline in both frameworks</li>
+                            <li>Proper data preprocessing and augmentation</li>
+                            <li>Model architecture appropriate for computer vision</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Results Analysis (10 points)</h4>
+                        <ul>
+                            <li>Comprehensive performance comparison</li>
+                            <li>Framework-specific advantages identification</li>
+                            <li>Recommendations for framework selection</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">📋</span>
+                <div>
+                    <strong>Submission Requirements:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>PyTorch implementation notebook with custom training loops</li>
+                        <li>Keras/TensorFlow implementation with multiple API approaches</li>
+                        <li>Comprehensive framework comparison report</li>
+                        <li>Computer vision application in both frameworks</li>
+                        <li>Performance benchmarking results and analysis</li>
+                        <li>Model export examples and deployment considerations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="ml_practical_assignment_4.html" class="btn">
+                ← Previous: Backpropagation
+            </a>
+            <a href="ml_specialization_assignments_index.html" class="btn" style="margin: 0 15px;">
+                Back to All Assignments
+            </a>
+            <a href="ml_practical_assignment_6.html" class="btn">
+                Next: Model Evaluation →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab and mark as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(button) {
+            const codeBlock = button.parentNode;
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

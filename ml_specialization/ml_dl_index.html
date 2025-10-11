@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML/DL Specialization Track - Complete Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .resource-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .resource-card h3 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resource-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .difficulty {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8em;
+        }
+
+        .difficulty.beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: #6c757d;
+        }
+
+        .btn.success {
+            background: #28a745;
+        }
+
+        .btn.info {
+            background: #17a2b8;
+        }
+
+        .btn.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .progress-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #667eea;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .navigation {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .curriculum-path {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .curriculum-path h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .path-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .path-step {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .step-number {
+            background: white;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 ML/DL Specialization Track</h1>
+            <p>Complete Machine Learning & Deep Learning Curriculum with Hands-on Projects</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">600</div>
+                    <div class="stat-label">MCQ Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Practical Labs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Capstone Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Topics Covered</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-links">
+                <a href="#mcq-assessments" class="nav-link">📝 MCQ Assessments</a>
+                <a href="#practical-labs" class="nav-link">🔬 Practical Labs</a>
+                <a href="#capstone-projects" class="nav-link">🚀 Capstone Projects</a>
+                <a href="ml_dl_mcq_review.html" class="nav-link">📋 Review Dashboard</a>
+            </div>
+        </div>
+
+        <div class="curriculum-path">
+            <h2>🎯 Learning Path</h2>
+            <div class="path-steps">
+                <div class="path-step">
+                    <div class="step-number">1</div>
+                    <h4>ML Fundamentals</h4>
+                    <p>Master core concepts, algorithms, and evaluation techniques</p>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">2</div>
+                    <h4>Deep Learning</h4>
+                    <p>Neural networks, CNNs, RNNs, and advanced architectures</p>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">3</div>
+                    <h4>NLP & Transformers</h4>
+                    <p>Natural language processing with modern transformer models</p>
+                </div>
+                <div class="path-step">
+                    <div class="step-number">4</div>
+                    <h4>Advanced Systems</h4>
+                    <p>RAG, MCP, vector databases, and production deployment</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="mcq-assessments">
+            <h2><span class="icon">📝</span> MCQ Assessments</h2>
+            <p>Comprehensive multiple-choice question sets covering all aspects of machine learning and deep learning. Each set contains case-study driven questions with detailed explanations.</p>
+            
+            <div class="cards-grid">
+                <div class="resource-card">
+                    <div class="progress-indicator" style="width: 100%;"></div>
+                    <h3><span class="icon">🎯</span> Set 1: ML Fundamentals & Neural Networks</h3>
+                    <div class="resource-meta">
+                        <span>200 Questions</span>
+                        <span class="difficulty beginner">Beginner-Intermediate</span>
+                    </div>
+                    <p>Covers machine learning types, evaluation metrics, data preprocessing, neural network basics, forward/backward propagation, CNN/RNN architectures, and model optimization.</p>
+                    <a href="ml_dl_mcq_set1.html" class="btn">
+                        <span class="icon">🚀</span> Start Assessment
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="progress-indicator" style="width: 100%;"></div>
+                    <h3><span class="icon">🤖</span> Set 2: NLP, Transformers & LLMs</h3>
+                    <div class="resource-meta">
+                        <span>200 Questions</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <p>Deep dive into natural language processing, word embeddings, transformer architecture, BERT/GPT models, fine-tuning techniques, and advanced NLP applications.</p>
+                    <a href="ml_dl_mcq_set2.html" class="btn">
+                        <span class="icon">🚀</span> Start Assessment
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="progress-indicator" style="width: 100%;"></div>
+                    <h3><span class="icon">🔬</span> Set 3: RAG, MCP & Advanced Deployment</h3>
+                    <div class="resource-meta">
+                        <span>200 Questions</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Advanced topics including RAG systems, vector databases, Model Context Protocol, LLM deployment, production ML systems, and emerging AI architectures.</p>
+                    <a href="ml_dl_mcq_set3.html" class="btn">
+                        <span class="icon">🚀</span> Start Assessment
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <div class="progress-indicator" style="width: 100%;"></div>
+                    <h3><span class="icon">📊</span> MCQ Review Dashboard</h3>
+                    <div class="resource-meta">
+                        <span>All 600 Questions</span>
+                        <span class="difficulty intermediate">Review Mode</span>
+                    </div>
+                    <p>Comprehensive review interface with filtering, search, pagination, and comment system for quality feedback and collaborative improvement.</p>
+                    <a href="ml_dl_mcq_review.html" class="btn secondary">
+                        <span class="icon">📋</span> Open Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="practical-labs">
+            <h2><span class="icon">🔬</span> Practical Laboratory Assignments</h2>
+            <p>Hands-on coding assignments that reinforce theoretical concepts with real-world implementation. Each lab includes step-by-step guides, starter code, and comprehensive solutions.</p>
+            
+            <div class="cards-grid">
+                <div class="resource-card">
+                    <h3><span class="icon">📊</span> Lab 1: Data Preprocessing & EDA</h3>
+                    <div class="resource-meta">
+                        <span>2-3 hours</span>
+                        <span class="difficulty beginner">Beginner</span>
+                    </div>
+                    <p>Master data cleaning, feature engineering, exploratory data analysis, and visualization techniques using pandas, numpy, and matplotlib.</p>
+                    <a href="ml_practical_lab1.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🎯</span> Lab 2: Classification Algorithms</h3>
+                    <div class="resource-meta">
+                        <span>3-4 hours</span>
+                        <span class="difficulty beginner">Beginner</span>
+                    </div>
+                    <p>Implement and compare various classification algorithms: logistic regression, SVM, random forest, and evaluate their performance.</p>
+                    <a href="ml_practical_lab2.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">📈</span> Lab 3: Regression & Model Selection</h3>
+                    <div class="resource-meta">
+                        <span>3-4 hours</span>
+                        <span class="difficulty beginner">Beginner</span>
+                    </div>
+                    <p>Build regression models, perform hyperparameter tuning, cross-validation, and implement model selection strategies.</p>
+                    <a href="ml_practical_lab3.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🧠</span> Lab 4: Neural Networks from Scratch</h3>
+                    <div class="resource-meta">
+                        <span>4-5 hours</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <p>Implement feedforward neural networks from scratch using numpy, understanding backpropagation and gradient descent.</p>
+                    <a href="ml_practical_lab4.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🖼️</span> Lab 5: CNN for Image Classification</h3>
+                    <div class="resource-meta">
+                        <span>4-5 hours</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <p>Build convolutional neural networks using PyTorch for image classification on CIFAR-10 dataset with data augmentation.</p>
+                    <a href="ml_practical_lab5.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">📝</span> Lab 6: RNN for Text Processing</h3>
+                    <div class="resource-meta">
+                        <span>4-5 hours</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <p>Implement RNNs and LSTMs for sentiment analysis and text generation using PyTorch and natural language processing.</p>
+                    <a href="ml_practical_lab6.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🔧</span> Lab 7: Transfer Learning</h3>
+                    <div class="resource-meta">
+                        <span>3-4 hours</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                    </div>
+                    <p>Apply transfer learning using pre-trained models for image classification and fine-tuning techniques.</p>
+                    <a href="ml_practical_lab7.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🤖</span> Lab 8: Transformer Implementation</h3>
+                    <div class="resource-meta">
+                        <span>5-6 hours</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Build a transformer model from scratch, understanding attention mechanisms and positional encoding.</p>
+                    <a href="ml_practical_lab8.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🗣️</span> Lab 9: BERT Fine-tuning</h3>
+                    <div class="resource-meta">
+                        <span>4-5 hours</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Fine-tune BERT for named entity recognition and text classification using Hugging Face transformers.</p>
+                    <a href="ml_practical_lab9.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🔍</span> Lab 10: RAG System Implementation</h3>
+                    <div class="resource-meta">
+                        <span>5-6 hours</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Build a complete RAG system with vector database, document indexing, and retrieval-augmented generation.</p>
+                    <a href="ml_practical_lab10.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🚀</span> Lab 11: Model Deployment</h3>
+                    <div class="resource-meta">
+                        <span>4-5 hours</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Deploy ML models using Flask, Docker, and cloud platforms with monitoring and scaling considerations.</p>
+                    <a href="ml_practical_lab11.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">📦</span> Lab 12: MLOps Pipeline</h3>
+                    <div class="resource-meta">
+                        <span>5-6 hours</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Implement complete MLOps pipeline with automated training, testing, deployment, and monitoring.</p>
+                    <a href="ml_practical_lab12.html" class="btn success">
+                        <span class="icon">🔬</span> Start Lab
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="capstone-projects">
+            <h2><span class="icon">🚀</span> Capstone Projects</h2>
+            <p>Comprehensive end-to-end projects that demonstrate mastery of ML/DL concepts and real-world application skills. Each project includes detailed requirements, evaluation criteria, and industry-relevant challenges.</p>
+            
+            <div class="cards-grid">
+                <div class="resource-card">
+                    <h3><span class="icon">🏥</span> Healthcare AI: Medical Image Analysis</h3>
+                    <div class="resource-meta">
+                        <span>3-4 weeks</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Build a complete medical image classification system for detecting diseases from X-rays, including data preprocessing, model architecture design, evaluation, and deployment considerations.</p>
+                    <a href="ml_capstone_healthcare.html" class="btn warning">
+                        <span class="icon">🏥</span> View Project
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">💬</span> Conversational AI: Customer Support Bot</h3>
+                    <div class="resource-meta">
+                        <span>3-4 weeks</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Develop an intelligent customer support chatbot using NLP, transformers, and retrieval-augmented generation to handle complex customer queries across multiple domains.</p>
+                    <a href="ml_capstone_chatbot.html" class="btn warning">
+                        <span class="icon">💬</span> View Project
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">📈</span> Financial AI: Algorithmic Trading System</h3>
+                    <div class="resource-meta">
+                        <span>4-5 weeks</span>
+                        <span class="difficulty advanced">Advanced</span>
+                    </div>
+                    <p>Create a sophisticated algorithmic trading system using time series analysis, reinforcement learning, and risk management strategies for financial market prediction.</p>
+                    <a href="ml_capstone_trading.html" class="btn warning">
+                        <span class="icon">📈</span> View Project
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><span class="icon">📚</span> Additional Resources</h2>
+            <div class="cards-grid">
+                <div class="resource-card">
+                    <h3><span class="icon">📖</span> Study Guides</h3>
+                    <p>Comprehensive study materials, cheat sheets, and quick reference guides for all ML/DL topics.</p>
+                    <a href="ml_study_guides.html" class="btn info">
+                        <span class="icon">📖</span> Access Guides
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🎥</span> Video Tutorials</h3>
+                    <p>Curated collection of video explanations for complex concepts and practical demonstrations.</p>
+                    <a href="ml_video_tutorials.html" class="btn info">
+                        <span class="icon">🎥</span> Watch Videos
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">💻</span> Code Repository</h3>
+                    <p>Complete code solutions, templates, and reusable components for all assignments and projects.</p>
+                    <a href="https://github.com/ml-dl-specialization" class="btn info" target="_blank">
+                        <span class="icon">💻</span> View GitHub
+                    </a>
+                </div>
+
+                <div class="resource-card">
+                    <h3><span class="icon">🏆</span> Certification Path</h3>
+                    <p>Track your progress and earn certificates upon completion of assessments and projects.</p>
+                    <a href="ml_certification.html" class="btn info">
+                        <span class="icon">🏆</span> View Progress
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loading animation for external links
+        document.querySelectorAll('a[href$=".html"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="icon">⏳</span> Loading...';
+                btn.style.pointerEvents = 'none';
+                
+                // Reset after a short delay (in case the page doesn't load)
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.pointerEvents = 'auto';
+                }, 2000);
+            });
+        });
+
+        // Add progress tracking (simulated)
+        function updateProgress() {
+            const progressIndicators = document.querySelectorAll('.progress-indicator');
+            progressIndicators.forEach(indicator => {
+                const randomProgress = Math.floor(Math.random() * 30) + 70; // 70-100%
+                indicator.style.width = randomProgress + '%';
+            });
+        }
+
+        // Initialize progress on load
+        updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 2: Scikit-learn Mastery - ML Specialization</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .assignment-meta {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+            border-left: 5px solid #667eea;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .task-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .task-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border: 1px solid #bee5eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-tracker {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 10px;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .deliverable-item {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            border: 1px solid #d4edda;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .deliverable-icon {
+            background: #28a745;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: auto;
+            }
+            
+            .assignment-meta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🔬 Assignment 2: Scikit-learn Mastery</h1>
+            <p>Deep dive into scikit-learn for preprocessing, feature engineering, and model building</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="assignment-meta">
+            <div>
+                <strong>🎯 Difficulty:</strong> Foundations
+            </div>
+            <div>
+                <strong>⏱️ Duration:</strong> 5-7 hours
+            </div>
+            <div>
+                <strong>🛠️ Technologies:</strong> Scikit-learn, NumPy, Pandas, Matplotlib
+            </div>
+            <div>
+                <strong>📊 Assignment:</strong> 2/25
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📋 Overview</button>
+            <button class="nav-tab" onclick="showTab('setup')">⚙️ Setup</button>
+            <button class="nav-tab" onclick="showTab('tasks')">📝 Tasks</button>
+            <button class="nav-tab" onclick="showTab('code')">💻 Code Implementation</button>
+            <button class="nav-tab" onclick="showTab('evaluation')">📊 Evaluation</button>
+            <button class="nav-tab" onclick="showTab('deliverables')">📦 Deliverables</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h2>Assignment Overview</h2>
+            </div>
+
+            <div class="objective-card">
+                <h3>🎯 Learning Objectives</h3>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li>Master scikit-learn's preprocessing tools and pipelines</li>
+                    <li>Implement comprehensive feature engineering techniques</li>
+                    <li>Build and compare multiple ML models systematically</li>
+                    <li>Apply cross-validation and hyperparameter tuning</li>
+                    <li>Create production-ready ML pipelines</li>
+                </ul>
+            </div>
+
+            <div class="objective-card">
+                <h3>🏢 Business Scenario: FinanceFlow Bank Customer Analytics</h3>
+                <p><strong>Company:</strong> FinanceFlow Bank - A digital-first banking institution</p>
+                <p><strong>Challenge:</strong> The bank needs to predict customer loan default risk and customer lifetime value to optimize their lending strategy and customer relationship management.</p>
+                
+                <h4 style="margin-top: 20px;">📊 Available Datasets:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Customer Demographics:</strong> Age, income, employment status, education</li>
+                    <li><strong>Transaction History:</strong> Monthly spending patterns, account balances</li>
+                    <li><strong>Credit History:</strong> Previous loans, credit score, payment history</li>
+                    <li><strong>Digital Engagement:</strong> App usage, digital transaction frequency</li>
+                </ul>
+
+                <h4 style="margin-top: 20px;">🎯 Business Goals:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Reduce loan default rates by 15%</li>
+                    <li>Increase customer lifetime value by 20%</li>
+                    <li>Automate risk assessment process</li>
+                    <li>Improve customer segmentation for targeted marketing</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">⚠️</span>
+                <div>
+                    <strong>Important:</strong> This assignment requires working with multiple datasets, missing values, and categorical variables. Focus on building robust preprocessing pipelines that can handle real-world data complexities.
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">⚙️</div>
+                <h2>Environment Setup</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>📦 Required Libraries</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Core libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+
+# Scikit-learn preprocessing
+from sklearn.preprocessing import (
+    StandardScaler, MinMaxScaler, RobustScaler,
+    LabelEncoder, OneHotEncoder, OrdinalEncoder,
+    PolynomialFeatures, PowerTransformer
+)
+
+# Feature selection and engineering
+from sklearn.feature_selection import (
+    SelectKBest, f_classif, f_regression,
+    RFE, SelectFromModel
+)
+
+# Model selection and evaluation
+from sklearn.model_selection import (
+    train_test_split, cross_val_score,
+    GridSearchCV, RandomizedSearchCV,
+    StratifiedKFold, KFold
+)
+
+# Models
+from sklearn.ensemble import (
+    RandomForestClassifier, RandomForestRegressor,
+    GradientBoostingClassifier, GradientBoostingRegressor
+)
+from sklearn.linear_model import (
+    LogisticRegression, LinearRegression,
+    Ridge, Lasso, ElasticNet
+)
+from sklearn.svm import SVC, SVR
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+
+# Metrics
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    mean_squared_error, mean_absolute_error, r2_score,
+    classification_report, confusion_matrix,
+    roc_auc_score, roc_curve
+)
+
+# Pipelines
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+# Data generation (for synthetic dataset)
+from sklearn.datasets import make_classification, make_regression
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🔧 Installation Commands</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Install required packages
+pip install scikit-learn pandas numpy matplotlib seaborn
+
+# For enhanced visualization
+pip install plotly
+
+# For data generation
+pip install faker
+
+# Optional: For advanced preprocessing
+pip install category_encoders
+</pre>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span style="font-size: 1.5em;">💡</span>
+                <div>
+                    <strong>Pro Tip:</strong> Create a virtual environment for this assignment to maintain clean dependencies and avoid conflicts with other projects.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2>Assignment Tasks</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 1: Data Generation and Exploration (1.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Generate Banking Dataset</h4>
+                        <p>Create a realistic banking dataset with customer demographics, transaction history, and loan default labels. Include missing values and categorical variables to simulate real-world conditions.</p>
+                        <strong>Deliverable:</strong> Customer dataset with 5000+ records and 15+ features
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Exploratory Data Analysis</h4>
+                        <p>Perform comprehensive EDA including distribution analysis, correlation matrices, missing value patterns, and outlier detection.</p>
+                        <strong>Deliverable:</strong> EDA report with visualizations and insights
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Data Quality Assessment</h4>
+                        <p>Identify data quality issues, missing value patterns, and feature distributions. Document data quality metrics and cleaning requirements.</p>
+                        <strong>Deliverable:</strong> Data quality report with recommendations
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 2: Preprocessing Pipeline Development (2 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Missing Value Handling</h4>
+                        <p>Implement and compare different imputation strategies (mean, median, mode, KNN, iterative). Analyze the impact of each method on model performance.</p>
+                        <strong>Deliverable:</strong> Imputation strategy comparison report
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Feature Scaling and Normalization</h4>
+                        <p>Apply and compare StandardScaler, MinMaxScaler, RobustScaler, and PowerTransformer. Visualize the effects on feature distributions.</p>
+                        <strong>Deliverable:</strong> Scaling method comparison with visualizations
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Categorical Encoding</h4>
+                        <p>Implement LabelEncoder, OneHotEncoder, and OrdinalEncoder. Handle high-cardinality categorical variables using target encoding or frequency encoding.</p>
+                        <strong>Deliverable:</strong> Encoded features with performance comparison
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Feature Engineering Pipeline</h4>
+                        <p>Create polynomial features, interaction terms, and domain-specific features (e.g., debt-to-income ratio, transaction velocity).</p>
+                        <strong>Deliverable:</strong> Engineered features with business relevance documentation
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 3: Model Building and Comparison (2 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Baseline Model Creation</h4>
+                        <p>Build simple baseline models (Logistic Regression, Decision Tree) to establish performance benchmarks.</p>
+                        <strong>Deliverable:</strong> Baseline model results with performance metrics
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">9</div>
+                    <div>
+                        <h4>Advanced Model Implementation</h4>
+                        <p>Implement Random Forest, Gradient Boosting, and SVM models. Compare performance across different algorithms.</p>
+                        <strong>Deliverable:</strong> Model comparison table with metrics
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">10</div>
+                    <div>
+                        <h4>Cross-Validation Strategy</h4>
+                        <p>Implement stratified k-fold cross-validation and analyze model stability across folds.</p>
+                        <strong>Deliverable:</strong> Cross-validation results with variance analysis
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>Phase 4: Hyperparameter Tuning and Optimization (1.5 hours)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">11</div>
+                    <div>
+                        <h4>Grid Search Optimization</h4>
+                        <p>Perform comprehensive grid search for top-performing models. Document parameter sensitivity analysis.</p>
+                        <strong>Deliverable:</strong> Optimized models with parameter importance analysis
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">12</div>
+                    <div>
+                        <h4>Feature Selection</h4>
+                        <p>Apply univariate selection, recursive feature elimination, and model-based feature selection. Compare feature importance across methods.</p>
+                        <strong>Deliverable:</strong> Selected features with importance ranking
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Implementation Tab -->
+        <div id="code" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">💻</div>
+                <h2>Code Implementation</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎲 Data Generation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import numpy as np
+import pandas as pd
+from faker import Faker
+from sklearn.datasets import make_classification
+from datetime import datetime, timedelta
+
+fake = Faker()
+np.random.seed(42)
+
+def generate_banking_dataset(n_samples=5000):
+    """Generate realistic banking dataset for loan default prediction"""
+    
+    # Basic demographics
+    data = {
+        'customer_id': [f'CUST_{i:06d}' for i in range(n_samples)],
+        'age': np.random.normal(45, 15, n_samples).clip(18, 80).astype(int),
+        'annual_income': np.random.lognormal(10.5, 0.5, n_samples).clip(20000, 500000),
+        'employment_length': np.random.exponential(5, n_samples).clip(0, 40),
+        'education_level': np.random.choice(['High School', 'Bachelor', 'Master', 'PhD', 'Some College'], 
+                                          n_samples, p=[0.3, 0.35, 0.2, 0.05, 0.1]),
+        'marital_status': np.random.choice(['Single', 'Married', 'Divorced', 'Widowed'], 
+                                         n_samples, p=[0.35, 0.45, 0.15, 0.05]),
+        'dependents': np.random.poisson(1.2, n_samples).clip(0, 5)
+    }
+    
+    # Financial information
+    data['credit_score'] = (np.random.beta(2, 2, n_samples) * 350 + 300).astype(int)
+    data['existing_loans'] = np.random.poisson(1.5, n_samples).clip(0, 5)
+    data['monthly_debt'] = data['annual_income'] * np.random.uniform(0.1, 0.4, n_samples) / 12
+    data['account_balance'] = np.random.lognormal(8, 1.5, n_samples).clip(100, 100000)
+    
+    # Digital engagement
+    data['app_usage_days'] = np.random.poisson(15, n_samples).clip(0, 30)
+    data['digital_transactions'] = np.random.poisson(25, n_samples).clip(0, 100)
+    data['customer_tenure'] = np.random.exponential(3, n_samples).clip(0.1, 15)
+    
+    # Create target variable with realistic correlations
+    risk_score = (
+        -0.3 * (data['credit_score'] - 300) / 350 +
+        0.2 * (data['monthly_debt'] / (data['annual_income'] / 12)) +
+        -0.1 * data['customer_tenure'] +
+        0.1 * data['existing_loans'] +
+        np.random.normal(0, 0.3, n_samples)
+    )
+    
+    data['default_risk'] = (risk_score > np.percentile(risk_score, 80)).astype(int)
+    
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    
+    # Introduce missing values realistically
+    missing_patterns = {
+        'employment_length': 0.05,
+        'education_level': 0.03,
+        'account_balance': 0.02,
+        'app_usage_days': 0.08
+    }
+    
+    for col, missing_rate in missing_patterns.items():
+        missing_mask = np.random.random(n_samples) < missing_rate
+        df.loc[missing_mask, col] = np.nan
+    
+    # Add some outliers
+    outlier_indices = np.random.choice(n_samples, int(n_samples * 0.02), replace=False)
+    df.loc[outlier_indices, 'annual_income'] *= np.random.uniform(5, 10, len(outlier_indices))
+    
+    return df
+
+# Generate the dataset
+banking_data = generate_banking_dataset(5000)
+print("Dataset shape:", banking_data.shape)
+print("\nDataset info:")
+banking_data.info()
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🔍 Exploratory Data Analysis</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def comprehensive_eda(df):
+    """Perform comprehensive exploratory data analysis"""
+    
+    plt.style.use('seaborn-v0_8')
+    fig = plt.figure(figsize=(20, 15))
+    
+    # 1. Target distribution
+    plt.subplot(3, 4, 1)
+    df['default_risk'].value_counts().plot(kind='bar', color=['skyblue', 'salmon'])
+    plt.title('Default Risk Distribution')
+    plt.xticks(rotation=0)
+    
+    # 2. Age distribution by default risk
+    plt.subplot(3, 4, 2)
+    sns.boxplot(data=df, x='default_risk', y='age')
+    plt.title('Age Distribution by Default Risk')
+    
+    # 3. Income distribution
+    plt.subplot(3, 4, 3)
+    plt.hist(df['annual_income'], bins=50, alpha=0.7, color='green')
+    plt.title('Annual Income Distribution')
+    plt.xlabel('Annual Income')
+    
+    # 4. Credit score by default risk
+    plt.subplot(3, 4, 4)
+    sns.boxplot(data=df, x='default_risk', y='credit_score')
+    plt.title('Credit Score by Default Risk')
+    
+    # 5. Correlation heatmap
+    plt.subplot(3, 4, 5)
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    corr_matrix = df[numeric_cols].corr()
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f')
+    plt.title('Feature Correlation Matrix')
+    
+    # 6. Missing values pattern
+    plt.subplot(3, 4, 6)
+    missing_data = df.isnull().sum()
+    missing_data = missing_data[missing_data > 0]
+    if len(missing_data) > 0:
+        missing_data.plot(kind='bar', color='red')
+        plt.title('Missing Values by Feature')
+        plt.xticks(rotation=45)
+    else:
+        plt.text(0.5, 0.5, 'No Missing Values', ha='center', va='center')
+        plt.title('Missing Values by Feature')
+    
+    # 7. Education level distribution
+    plt.subplot(3, 4, 7)
+    df['education_level'].value_counts().plot(kind='bar', color='purple')
+    plt.title('Education Level Distribution')
+    plt.xticks(rotation=45)
+    
+    # 8. Debt-to-income ratio
+    plt.subplot(3, 4, 8)
+    debt_to_income = (df['monthly_debt'] * 12) / df['annual_income']
+    plt.hist(debt_to_income, bins=50, alpha=0.7, color='orange')
+    plt.title('Debt-to-Income Ratio Distribution')
+    plt.xlabel('Debt-to-Income Ratio')
+    
+    # 9. Customer tenure vs default risk
+    plt.subplot(3, 4, 9)
+    sns.boxplot(data=df, x='default_risk', y='customer_tenure')
+    plt.title('Customer Tenure by Default Risk')
+    
+    # 10. Digital engagement
+    plt.subplot(3, 4, 10)
+    plt.scatter(df['app_usage_days'], df['digital_transactions'], 
+                c=df['default_risk'], alpha=0.6, cmap='viridis')
+    plt.xlabel('App Usage Days')
+    plt.ylabel('Digital Transactions')
+    plt.title('Digital Engagement Pattern')
+    plt.colorbar(label='Default Risk')
+    
+    # 11. Employment length distribution
+    plt.subplot(3, 4, 11)
+    df['employment_length'].hist(bins=30, alpha=0.7, color='brown')
+    plt.title('Employment Length Distribution')
+    plt.xlabel('Years')
+    
+    # 12. Account balance by default risk
+    plt.subplot(3, 4, 12)
+    sns.boxplot(data=df, x='default_risk', y='account_balance')
+    plt.title('Account Balance by Default Risk')
+    plt.yscale('log')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Statistical summary
+    print("=== STATISTICAL SUMMARY ===")
+    print(df.describe())
+    
+    print("\n=== MISSING VALUES ===")
+    print(df.isnull().sum())
+    
+    print("\n=== CATEGORICAL VARIABLES ===")
+    categorical_cols = df.select_dtypes(include=['object']).columns
+    for col in categorical_cols:
+        if col != 'customer_id':
+            print(f"\n{col}:")
+            print(df[col].value_counts())
+
+# Perform EDA
+comprehensive_eda(banking_data)
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🔧 Preprocessing Pipeline</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+class BankingDataPreprocessor:
+    def __init__(self):
+        self.preprocessing_pipeline = None
+        self.feature_names = None
+    
+    def create_preprocessing_pipeline(self, df):
+        """Create comprehensive preprocessing pipeline"""
+        
+        # Identify column types
+        numeric_features = df.select_dtypes(include=[np.number]).columns.tolist()
+        numeric_features = [col for col in numeric_features if col not in ['customer_id', 'default_risk']]
+        
+        categorical_features = df.select_dtypes(include=['object']).columns.tolist()
+        categorical_features = [col for col in categorical_features if col != 'customer_id']
+        
+        print(f"Numeric features: {numeric_features}")
+        print(f"Categorical features: {categorical_features}")
+        
+        # Numeric preprocessing pipeline
+        numeric_pipeline = Pipeline([
+            ('imputer', KNNImputer(n_neighbors=5)),
+            ('scaler', RobustScaler())  # Robust to outliers
+        ])
+        
+        # Categorical preprocessing pipeline
+        categorical_pipeline = Pipeline([
+            ('imputer', SimpleImputer(strategy='most_frequent')),
+            ('encoder', OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore'))
+        ])
+        
+        # Combine preprocessing steps
+        self.preprocessing_pipeline = ColumnTransformer([
+            ('numeric', numeric_pipeline, numeric_features),
+            ('categorical', categorical_pipeline, categorical_features)
+        ])
+        
+        return self.preprocessing_pipeline
+    
+    def fit_transform(self, X, y=None):
+        """Fit and transform the data"""
+        return self.preprocessing_pipeline.fit_transform(X)
+    
+    def transform(self, X):
+        """Transform new data"""
+        return self.preprocessing_pipeline.transform(X)
+    
+    def get_feature_names(self):
+        """Get feature names after preprocessing"""
+        if self.preprocessing_pipeline is None:
+            return None
+        
+        # Get numeric feature names
+        numeric_features = self.preprocessing_pipeline.named_transformers_['numeric']
+        numeric_feature_names = self.preprocessing_pipeline.transformers_[0][2]
+        
+        # Get categorical feature names
+        categorical_transformer = self.preprocessing_pipeline.named_transformers_['categorical']
+        categorical_feature_names = categorical_transformer.named_steps['encoder'].get_feature_names_out(
+            self.preprocessing_pipeline.transformers_[1][2]
+        )
+        
+        return list(numeric_feature_names) + list(categorical_feature_names)
+
+# Feature Engineering
+def create_engineered_features(df):
+    """Create domain-specific engineered features"""
+    df_eng = df.copy()
+    
+    # Financial ratios
+    df_eng['debt_to_income_ratio'] = (df_eng['monthly_debt'] * 12) / df_eng['annual_income']
+    df_eng['balance_to_income_ratio'] = df_eng['account_balance'] / df_eng['annual_income']
+    df_eng['loans_per_tenure'] = df_eng['existing_loans'] / (df_eng['customer_tenure'] + 1)
+    
+    # Age-related features
+    df_eng['age_group'] = pd.cut(df_eng['age'], bins=[0, 30, 45, 60, 100], 
+                                labels=['Young', 'Middle', 'Senior', 'Elder'])
+    
+    # Digital engagement features
+    df_eng['digital_engagement_score'] = (
+        df_eng['app_usage_days'] * 0.3 + 
+        df_eng['digital_transactions'] * 0.7
+    )
+    
+    # Credit utilization proxy
+    df_eng['credit_utilization'] = df_eng['monthly_debt'] / (df_eng['credit_score'] / 100)
+    
+    # Risk indicators
+    df_eng['high_debt_indicator'] = (df_eng['debt_to_income_ratio'] > 0.3).astype(int)
+    df_eng['low_balance_indicator'] = (df_eng['account_balance'] < 5000).astype(int)
+    df_eng['new_customer'] = (df_eng['customer_tenure'] < 1).astype(int)
+    
+    return df_eng
+
+# Apply feature engineering
+banking_data_eng = create_engineered_features(banking_data)
+print("Original features:", banking_data.shape[1])
+print("After feature engineering:", banking_data_eng.shape[1])
+print("New features:", [col for col in banking_data_eng.columns if col not in banking_data.columns])
+</pre>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>🤖 Model Building and Comparison</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+
+class ModelComparison:
+    def __init__(self):
+        self.models = {}
+        self.results = {}
+        self.best_model = None
+    
+    def prepare_data(self, df, target_col='default_risk'):
+        """Prepare data for modeling"""
+        # Separate features and target
+        X = df.drop(['customer_id', target_col], axis=1)
+        y = df[target_col]
+        
+        # Preprocess features
+        preprocessor = BankingDataPreprocessor()
+        preprocessing_pipeline = preprocessor.create_preprocessing_pipeline(X)
+        X_processed = preprocessor.fit_transform(X)
+        
+        # Split data
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_processed, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        return X_train, X_test, y_train, y_test, preprocessor
+    
+    def initialize_models(self):
+        """Initialize models for comparison"""
+        self.models = {
+            'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
+            'Random Forest': RandomForestClassifier(random_state=42, n_estimators=100),
+            'Gradient Boosting': GradientBoostingClassifier(random_state=42, n_estimators=100),
+            'SVM': SVC(random_state=42, probability=True),
+            'K-Nearest Neighbors': KNeighborsClassifier(n_neighbors=5)
+        }
+    
+    def evaluate_models(self, X_train, X_test, y_train, y_test):
+        """Evaluate all models with cross-validation"""
+        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        
+        for name, model in self.models.items():
+            print(f"\n=== Evaluating {name} ===")
+            
+            # Cross-validation scores
+            cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='roc_auc')
+            
+            # Train model and predict
+            model.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
+            y_pred_proba = model.predict_proba(X_test)[:, 1]
+            
+            # Calculate metrics
+            auc_score = roc_auc_score(y_test, y_pred_proba)
+            
+            self.results[name] = {
+                'cv_auc_mean': cv_scores.mean(),
+                'cv_auc_std': cv_scores.std(),
+                'test_auc': auc_score,
+                'model': model
+            }
+            
+            print(f"CV AUC: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")
+            print(f"Test AUC: {auc_score:.4f}")
+            print("\nClassification Report:")
+            print(classification_report(y_test, y_pred))
+    
+    def get_best_model(self):
+        """Get the best performing model"""
+        best_name = max(self.results.keys(), key=lambda k: self.results[k]['test_auc'])
+        self.best_model = self.results[best_name]['model']
+        return best_name, self.best_model
+    
+    def plot_model_comparison(self):
+        """Plot model comparison results"""
+        plt.figure(figsize=(12, 8))
+        
+        models = list(self.results.keys())
+        cv_scores = [self.results[model]['cv_auc_mean'] for model in models]
+        test_scores = [self.results[model]['test_auc'] for model in models]
+        cv_stds = [self.results[model]['cv_auc_std'] for model in models]
+        
+        x = np.arange(len(models))
+        width = 0.35
+        
+        plt.subplot(2, 1, 1)
+        plt.bar(x - width/2, cv_scores, width, label='CV AUC', yerr=cv_stds, capsize=5)
+        plt.bar(x + width/2, test_scores, width, label='Test AUC')
+        plt.xlabel('Models')
+        plt.ylabel('AUC Score')
+        plt.title('Model Performance Comparison')
+        plt.xticks(x, models, rotation=45)
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        
+        # Feature importance for best model
+        best_name, best_model = self.get_best_model()
+        if hasattr(best_model, 'feature_importances_'):
+            plt.subplot(2, 1, 2)
+            importances = best_model.feature_importances_
+            indices = np.argsort(importances)[::-1][:10]  # Top 10 features
+            
+            plt.bar(range(10), importances[indices])
+            plt.title(f'Top 10 Feature Importances - {best_name}')
+            plt.xlabel('Feature Index')
+            plt.ylabel('Importance')
+        
+        plt.tight_layout()
+        plt.show()
+
+# Run model comparison
+X_train, X_test, y_train, y_test, preprocessor = ModelComparison().prepare_data(banking_data_eng)
+
+model_comparison = ModelComparison()
+model_comparison.initialize_models()
+model_comparison.evaluate_models(X_train, X_test, y_train, y_test)
+model_comparison.plot_model_comparison()
+
+print("\n=== BEST MODEL ===")
+best_name, best_model = model_comparison.get_best_model()
+print(f"Best Model: {best_name}")
+print(f"Best Test AUC: {model_comparison.results[best_name]['test_auc']:.4f}")
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Evaluation Criteria</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Technical Evaluation (60 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Data Preprocessing Excellence (20 points)</h4>
+                        <ul>
+                            <li><strong>Missing Value Handling (5 pts):</strong> Proper imputation strategies with justification</li>
+                            <li><strong>Feature Scaling (5 pts):</strong> Appropriate scaling methods with comparison</li>
+                            <li><strong>Categorical Encoding (5 pts):</strong> Effective encoding strategies for different variable types</li>
+                            <li><strong>Pipeline Implementation (5 pts):</strong> Clean, reusable preprocessing pipelines</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Feature Engineering Innovation (15 points)</h4>
+                        <ul>
+                            <li><strong>Domain Knowledge (5 pts):</strong> Meaningful financial domain features</li>
+                            <li><strong>Feature Selection (5 pts):</strong> Statistical and model-based selection methods</li>
+                            <li><strong>Interaction Features (5 pts):</strong> Relevant feature interactions and polynomial terms</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Model Implementation and Comparison (15 points)</h4>
+                        <ul>
+                            <li><strong>Algorithm Diversity (5 pts):</strong> Implementation of 5+ different algorithms</li>
+                            <li><strong>Cross-validation (5 pts):</strong> Proper CV strategy with stability analysis</li>
+                            <li><strong>Hyperparameter Tuning (5 pts):</strong> Systematic optimization approach</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Performance Analysis (10 points)</h4>
+                        <ul>
+                            <li><strong>Metric Selection (3 pts):</strong> Appropriate metrics for business context</li>
+                            <li><strong>Model Interpretation (4 pts):</strong> Feature importance and model explanation</li>
+                            <li><strong>Comparison Analysis (3 pts):</strong> Comprehensive model comparison</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📈 Business Impact Evaluation (25 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Business Understanding (10 points)</h4>
+                        <ul>
+                            <li>Clear articulation of business problem and objectives</li>
+                            <li>Relevant feature engineering based on domain knowledge</li>
+                            <li>Appropriate model selection for business constraints</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">6</div>
+                    <div>
+                        <h4>Insights and Recommendations (15 points)</h4>
+                        <ul>
+                            <li>Actionable insights from model results</li>
+                            <li>Risk assessment and mitigation strategies</li>
+                            <li>Business value quantification and ROI analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📝 Documentation and Presentation (15 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">7</div>
+                    <div>
+                        <h4>Code Quality and Documentation (8 points)</h4>
+                        <ul>
+                            <li>Clean, well-commented, and modular code</li>
+                            <li>Proper use of scikit-learn conventions</li>
+                            <li>Reproducible results with random seeds</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">8</div>
+                    <div>
+                        <h4>Visualization and Reporting (7 points)</h4>
+                        <ul>
+                            <li>Clear and informative visualizations</li>
+                            <li>Professional presentation of results</li>
+                            <li>Comprehensive analysis report</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">📋</span>
+                <div>
+                    <strong>Submission Requirements:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Jupyter notebook with complete implementation</li>
+                        <li>Generated dataset (CSV format)</li>
+                        <li>Executive summary (2-page PDF)</li>
+                        <li>Presentation slides (10-15 slides)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deliverables Tab -->
+        <div id="deliverables" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📦</div>
+                <h2>Project Deliverables</h2>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📊</div>
+                <div>
+                    <h4>1. Banking Dataset with Feature Engineering</h4>
+                    <p>Generated realistic banking dataset (5000+ records) with comprehensive feature engineering including financial ratios, risk indicators, and domain-specific variables.</p>
+                    <strong>Format:</strong> CSV file with data dictionary
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">🔍</div>
+                <div>
+                    <h4>2. Exploratory Data Analysis Report</h4>
+                    <p>Comprehensive EDA with visualizations, statistical summaries, correlation analysis, and data quality assessment with actionable insights.</p>
+                    <strong>Format:</strong> Jupyter notebook section with markdown explanations
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">⚙️</div>
+                <div>
+                    <h4>3. Preprocessing Pipeline Implementation</h4>
+                    <p>Production-ready preprocessing pipeline with missing value handling, feature scaling, categorical encoding, and feature selection components.</p>
+                    <strong>Format:</strong> Python classes and functions with documentation
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">🤖</div>
+                <div>
+                    <h4>4. Model Comparison Analysis</h4>
+                    <p>Comprehensive comparison of 5+ machine learning algorithms with cross-validation results, hyperparameter tuning, and performance analysis.</p>
+                    <strong>Format:</strong> Results table, visualizations, and model comparison report
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📈</div>
+                <div>
+                    <h4>5. Business Impact Assessment</h4>
+                    <p>Analysis of model performance in business context with ROI calculations, risk assessment, and actionable recommendations for FinanceFlow Bank.</p>
+                    <strong>Format:</strong> Executive summary with business metrics and recommendations
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">🔬</div>
+                <div>
+                    <h4>6. Feature Importance and Model Interpretation</h4>
+                    <p>Detailed analysis of feature importance, model coefficients, and SHAP values (if applicable) with business interpretation of key predictors.</p>
+                    <strong>Format:</strong> Visualization dashboard with explanations
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📋</div>
+                <div>
+                    <h4>7. Complete Implementation Notebook</h4>
+                    <p>Jupyter notebook containing all code, analysis, visualizations, and markdown explanations in a logical flow from data generation to final recommendations.</p>
+                    <strong>Format:</strong> .ipynb file with clear section organization
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📑</div>
+                <div>
+                    <h4>8. Technical Documentation</h4>
+                    <p>Comprehensive documentation including methodology justification, parameter choices, assumptions, limitations, and future improvement suggestions.</p>
+                    <strong>Format:</strong> PDF report (5-10 pages)
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span style="font-size: 1.5em;">💡</span>
+                <div>
+                    <strong>Bonus Deliverables (+10 points):</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Interactive dashboard using Plotly or Streamlit</li>
+                        <li>A/B testing framework for model comparison</li>
+                        <li>Advanced feature selection using wrapper methods</li>
+                        <li>Ensemble method implementation and analysis</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="ml_specialization_assignments_index.html" class="btn">
+                    ← Back to All Assignments
+                </a>
+                <a href="ml_practical_assignment_3.html" class="btn" style="margin-left: 15px;">
+                    Next Assignment: Neural Networks →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab and mark as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Update progress if tasks tab is viewed
+            if (tabName === 'tasks') {
+                updateProgress();
+            }
+        }
+
+        function copyToClipboard(button) {
+            const codeBlock = button.parentNode;
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            const currentProgress = parseInt(localStorage.getItem('assignment2-progress') || '0');
+            progressFill.style.width = currentProgress + '%';
+        }
+
+        // Track assignment completion
+        function markTaskComplete(taskNumber) {
+            const currentProgress = parseInt(localStorage.getItem('assignment2-progress') || '0');
+            const newProgress = Math.min(currentProgress + 12.5, 100); // 8 main tasks
+            localStorage.setItem('assignment2-progress', newProgress);
+            updateProgress();
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

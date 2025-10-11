@@ -48,9 +48,9 @@
 
         .track-selection {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
-            max-width: 1100px;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -198,6 +198,31 @@
             box-shadow: 0 12px 32px rgba(0, 120, 212, 0.4);
         }
 
+        .ml-card .track-title {
+            color: #4caf50;
+        }
+
+        .ml-card .stat-item {
+            border-left-color: #4caf50;
+        }
+
+        .ml-card .stat-number {
+            color: #2e7d32;
+        }
+
+        .ml-card .track-features li:before {
+            background: #4caf50;
+        }
+
+        .ml-card .access-button {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .ml-card .access-button:hover {
+            box-shadow: 0 12px 32px rgba(76, 175, 80, 0.4);
+        }
+
         .platform-info {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
@@ -325,6 +350,44 @@
 
                 <button class="access-button">Access Azure Track</button>
             </div>
+
+            <div class="track-card ml-card" onclick="accessTrack('ml')">
+                <div class="track-icon">🤖</div>
+                <h2 class="track-title">ML Specialization Track</h2>
+                <p class="track-description">
+                    Complete Machine Learning and Deep Learning specialization covering foundations, NLP, deployment, and advanced AI systems with hands-on industry projects.
+                </p>
+                
+                <div class="track-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">600</div>
+                        <div class="stat-label">MCQ Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">25</div>
+                        <div class="stat-label">Assignments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Capstone Projects</div>
+                    </div>
+                </div>
+
+                <ul class="track-features">
+                    <li>ML Foundations & Scikit-learn Mastery</li>
+                    <li>Neural Networks & Deep Learning</li>
+                    <li>CNN, RNN & LSTM Architectures</li>
+                    <li>NLP & Transformer Models (BERT/GPT)</li>
+                    <li>Model Evaluation & Optimization</li>
+                    <li>MLOps & Production Deployment</li>
+                    <li>LLM Fine-tuning & Optimization</li>
+                    <li>RAG Systems & AI Agents</li>
+                    <li>Azure OpenAI & LangChain</li>
+                    <li>Advanced AI System Integration</li>
+                </ul>
+
+                <button class="access-button">Access ML Track</button>
+            </div>
         </div>
 
         <div class="platform-info">
@@ -344,6 +407,8 @@
                 window.location.href = './aws_index.html';
             } else if (track === 'azure') {
                 window.location.href = './azure_index.html';
+            } else if (track === 'ml') {
+                window.location.href = './ml_specialization/ml_specialization_assignments_index.html';
             }
         }
     </script>

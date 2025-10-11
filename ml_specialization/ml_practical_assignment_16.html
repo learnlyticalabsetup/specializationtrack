@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 16: Real-world Log Processing - ML Specialization</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .assignment-meta {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .task-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .task-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            position: relative;
+            border-left: 5px solid #667eea;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border: 1px solid #bee5eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .deliverable-item {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            border: 1px solid #d4edda;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .deliverable-icon {
+            background: #28a745;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: auto;
+            }
+            
+            .assignment-meta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>📚 Assignment 16: Real-world Log Processing</h1>
+            <p>Clean and process messy real-world log data</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="assignment-meta">
+            <div>
+                <strong>🎯 Difficulty:</strong> Intermediate
+            </div>
+            <div>
+                <strong>⏱️ Duration:</strong> 5-7 hours
+            </div>
+            <div>
+                <strong>🛠️ Technologies:</strong> Log Processing, Data Cleaning, Regex, Text Processing
+            </div>
+            <div>
+                <strong>📊 Assignment:</strong> 16/25
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📋 Overview</button>
+            <button class="nav-tab" onclick="showTab('setup')">⚙️ Setup</button>
+            <button class="nav-tab" onclick="showTab('tasks')">📝 Tasks</button>
+            <button class="nav-tab" onclick="showTab('code')">💻 Implementation</button>
+            <button class="nav-tab" onclick="showTab('evaluation')">📊 Evaluation</button>
+            <button class="nav-tab" onclick="showTab('deliverables')">📦 Deliverables</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h2>Assignment Overview</h2>
+            </div>
+
+            <div class="objective-card">
+                <h3>🎯 Learning Objectives</h3>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li>Master the core concepts and techniques for this assignment</li>
+                    <li>Implement practical solutions to real-world problems</li>
+                    <li>Develop hands-on experience with industry-standard tools</li>
+                    <li>Build production-ready implementations</li>
+                    <li>Analyze and evaluate solution performance</li>
+                </ul>
+            </div>
+
+            <div class="objective-card">
+                <h3>🏢 Business Scenario: LogAnalytics Plus</h3>
+                <p><strong>Challenge:</strong> Process and analyze large-scale system logs for anomaly detection</p>
+                
+                <h4 style="margin-top: 20px;">🎯 Project Goals:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Automated log processing</li>
+                    <li>Pattern recognition</li>
+                    <li>Anomaly detection</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <span style="font-size: 1.5em;">⚠️</span>
+                <div>
+                    <strong>Important:</strong> This assignment builds upon previous concepts and requires a solid understanding of the fundamentals. Make sure to complete prerequisites before starting.
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">⚙️</div>
+                <h2>Environment Setup</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>📦 Required Libraries</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Core libraries for Assignment 16
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Assignment-specific libraries
+import sklearn
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, classification_report
+
+# Additional tools based on assignment requirements
+import warnings
+warnings.filterwarnings('ignore')
+
+# Set random seed for reproducibility
+np.random.seed(42)
+</pre>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span style="font-size: 1.5em;">💡</span>
+                <div>
+                    <strong>Setup Note:</strong> Ensure all required libraries are installed and your environment is properly configured before starting the assignment tasks.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2>Assignment Tasks</h2>
+            </div>
+            <div class="task-list">
+                <h3>Phase 1: Log Parsing</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Log Parsing Implementation</h4>
+                        <p>Complete the implementation and analysis for log parsing. Focus on best practices and thorough documentation.</p>
+                        <strong>Deliverable:</strong> Working implementation with analysis and documentation
+                    </div>
+                </div>
+            </div>
+            <div class="task-list">
+                <h3>Phase 2: Data Cleaning</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Data Cleaning Implementation</h4>
+                        <p>Complete the implementation and analysis for data cleaning. Focus on best practices and thorough documentation.</p>
+                        <strong>Deliverable:</strong> Working implementation with analysis and documentation
+                    </div>
+                </div>
+            </div>
+            <div class="task-list">
+                <h3>Phase 3: Pattern Extraction</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Pattern Extraction Implementation</h4>
+                        <p>Complete the implementation and analysis for pattern extraction. Focus on best practices and thorough documentation.</p>
+                        <strong>Deliverable:</strong> Working implementation with analysis and documentation
+                    </div>
+                </div>
+            </div>
+            <div class="task-list">
+                <h3>Phase 4: Anomaly Detection</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Anomaly Detection Implementation</h4>
+                        <p>Complete the implementation and analysis for anomaly detection. Focus on best practices and thorough documentation.</p>
+                        <strong>Deliverable:</strong> Working implementation with analysis and documentation
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Implementation Tab -->
+        <div id="code" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">💻</div>
+                <h2>Code Implementation</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🚀 Getting Started</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+                    <pre>
+# Assignment 16: Real-world Log Processing
+# Implementation template
+
+print("Assignment 16: Real-world Log Processing")
+print("Technologies: Log Processing, Data Cleaning, Regex, Text Processing")
+
+# TODO: Implement your solution here
+# Follow the phases outlined in the tasks section
+# Remember to document your code thoroughly
+
+class Assignment16Solution:
+    def __init__(self):
+        self.name = "Real-world Log Processing"
+        self.phase = 1
+    
+    def phase_1(self):
+        """Implement Phase 1: Log parsing"""
+        pass
+    
+    def phase_2(self):
+        """Implement Phase 2: Data cleaning"""
+        pass
+    
+    def evaluate_solution(self):
+        """Evaluate the complete solution"""
+        pass
+
+# Initialize solution
+solution = Assignment16Solution()
+print(f"Ready to implement: {solution.name}")
+</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Evaluation Criteria</h2>
+            </div>
+
+            <div class="task-list">
+                <h3>🎯 Technical Implementation (50 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h4>Core Implementation (25 points)</h4>
+                        <ul>
+                            <li>Correct implementation of key algorithms and techniques</li>
+                            <li>Proper use of libraries and frameworks</li>
+                            <li>Code quality and best practices</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h4>Performance and Optimization (25 points)</h4>
+                        <ul>
+                            <li>Solution efficiency and optimization</li>
+                            <li>Proper evaluation metrics and analysis</li>
+                            <li>Comparison with baseline approaches</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>📈 Analysis and Documentation (35 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h4>Comprehensive Analysis (20 points)</h4>
+                        <ul>
+                            <li>Thorough analysis of results and findings</li>
+                            <li>Clear explanation of methodology and approach</li>
+                            <li>Insights and recommendations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h4>Documentation Quality (15 points)</h4>
+                        <ul>
+                            <li>Clear and comprehensive documentation</li>
+                            <li>Professional presentation of results</li>
+                            <li>Code comments and explanations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <h3>💼 Business Application (15 points)</h3>
+                
+                <div class="task-item">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h4>Real-world Application (15 points)</h4>
+                        <ul>
+                            <li>Practical application to business scenario</li>
+                            <li>Actionable insights and recommendations</li>
+                            <li>Consideration of deployment and scalability</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deliverables Tab -->
+        <div id="deliverables" class="tab-content">
+            <div class="section-header">
+                <div class="section-icon">📦</div>
+                <h2>Project Deliverables</h2>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📊</div>
+                <div>
+                    <h4>1. Complete Implementation</h4>
+                    <p>Fully working implementation of all assignment requirements with comprehensive testing.</p>
+                    <strong>Format:</strong> Jupyter notebook with detailed explanations
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">📈</div>
+                <div>
+                    <h4>2. Analysis Report</h4>
+                    <p>Comprehensive analysis of results, methodology, and performance evaluation.</p>
+                    <strong>Format:</strong> Technical report with visualizations and insights
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">🔬</div>
+                <div>
+                    <h4>3. Business Application</h4>
+                    <p>Application of solution to the business scenario with actionable recommendations.</p>
+                    <strong>Format:</strong> Executive summary with business metrics and recommendations
+                </div>
+            </div>
+
+            <div class="deliverable-item">
+                <div class="deliverable-icon">💻</div>
+                <div>
+                    <h4>4. Source Code</h4>
+                    <p>Clean, well-documented source code with proper structure and comments.</p>
+                    <strong>Format:</strong> Python files or notebook with clear organization
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="ml_practical_assignment_15.html" class="btn">
+                    ← Previous Assignment
+                </a>
+                <a href="ml_specialization_assignments_index.html" class="btn" style="margin: 0 15px;">
+                    Back to All Assignments
+                </a>
+                <a href="ml_practical_assignment_17.html" class="btn">
+                    Next Assignment →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab and mark as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(button) {
+            const codeBlock = button.parentNode;
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
